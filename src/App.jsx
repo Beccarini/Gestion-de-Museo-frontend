@@ -36,7 +36,7 @@ function App() {
 
         <NavLink
           to="/integrantes"
-          style={({ isActive }) => ({re
+          style={({ isActive }) => ({
             padding: '6px 14px',
             borderRadius: '6px',
             textDecoration: 'none',
