@@ -6,12 +6,15 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
 
 const estadoInicialFormulario = { 
-    integranteId: '',
+    integranteId: null,
+    eventoId:null,
     fecha: null,
-    esAsistencia: false
+    esAsistencia: false,
+    esApertura: false,
+    tokenLeido: 'A1B2C3D4'
 };
 
-export function AltaRegistro({ registros, setRegistros }) {
+export function AltaRegistro({nuevoRegistro}) {
     const [formData, setFormData] = useState(estadoInicialFormulario);
 
     // Manejador para inputs nativos (texto, checkbox)
@@ -30,21 +33,19 @@ export function AltaRegistro({ registros, setRegistros }) {
             fecha: nuevaFecha
         }));
     };
-
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        const nuevoRegistro = {
+        if (!formData.fecha) {
+            console.error("La fecha es obligatoria");
+            return;
+        }
+        const datosParaBackend = {
             ...formData,
-            id: crypto.randomUUID(),
-            // Convertimos el objeto dayjs a un string ISO para guardarlo limpiamente
-            fecha: formData.fecha ? formData.fecha.toISOString() : '' 
+            fecha: formData.fecha.toISOString() 
         };
-        
-        setRegistros([...registros, nuevoRegistro]);
+        nuevoRegistro(datosParaBackend);
         setFormData(estadoInicialFormulario);
     };
-
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Paper sx={{ p: 3, mb: 4 }}>
@@ -53,16 +54,6 @@ export function AltaRegistro({ registros, setRegistros }) {
                 </Typography>
                 <form onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
-                        <Grid xs={12} sm={6}>
-                            <TextField
-                                fullWidth
-                                label="ID Integrante (UUID)"
-                                name="integranteId" // CORRECCIÓN: Coincide con la clave del estado
-                                value={formData.integranteId}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Grid>
                         <Grid xs={12} sm={6}>
                             <DateTimePicker
                                 label="Fecha y Hora"
