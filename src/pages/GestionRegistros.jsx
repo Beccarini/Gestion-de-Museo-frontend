@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { AltaRegistro } from '../components/AltaRegistro'; // Asegúrate de que la ruta sea correcta
+import { AltaRegistro } from '../components/AltaRegistro';
 import { MostrarBaja } from '../components/MostrarBaja';
 import dayjs from 'dayjs';
+
 export function GestionRegistro() {
     const [registros, setRegistros] = useState([]);
     return (
