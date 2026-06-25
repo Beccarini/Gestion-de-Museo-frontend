@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { Button, TextField, Checkbox, FormControlLabel, Typography, Paper, Grid } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import dayjs from 'dayjs';
 
 const estadoInicialFormulario = { 
-    integranteId: '', 
-    eventoId: '', 
-    tokenLeido: '', 
-    fecha: '', 
-    esAsistencia: false, 
-    esApertura: false, 
-    mensajeError: ''
+    integranteId: '',
+    fecha: null,
+    esAsistencia: false
 };
 
-// CORRECCIÓN AQUÍ: Se agregan las llaves { } para desestructurar las props
 export function AltaRegistro({ registros, setRegistros }) {
     const [formData, setFormData] = useState(estadoInicialFormulario);
 
+    // Manejador para inputs nativos (texto, checkbox)
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData((prev) => ({
@@ -23,12 +23,22 @@ export function AltaRegistro({ registros, setRegistros }) {
         }));
     };
 
+    // CORRECCIÓN: Manejador específico para el DateTimePicker
+    const handleDateChange = (nuevaFecha) => {
+        setFormData((prev) => ({
+            ...prev,
+            fecha: nuevaFecha
+        }));
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         
         const nuevoRegistro = {
             ...formData,
-            id: crypto.randomUUID() 
+            id: crypto.randomUUID(),
+            // Convertimos el objeto dayjs a un string ISO para guardarlo limpiamente
+            fecha: formData.fecha ? formData.fecha.toISOString() : '' 
         };
         
         setRegistros([...registros, nuevoRegistro]);
@@ -36,92 +46,56 @@ export function AltaRegistro({ registros, setRegistros }) {
     };
 
     return (
-        <Paper sx={{ p: 3, mb: 4 }}>
-            <Typography variant="h6" gutterBottom>
-                Nuevo Registro
-            </Typography>
-            <form onSubmit={handleSubmit}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="ID Integrante (UUID)"
-                            name="integranteId"
-                            value={formData.integranteId}
-                            onChange={handleChange}
-                            required
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="ID Evento (UUID)"
-                            name="eventoId"
-                            value={formData.eventoId}
-                            onChange={handleChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="Token Leído"
-                            name="tokenLeido"
-                            value={formData.tokenLeido}
-                            onChange={handleChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            fullWidth
-                            label="Fecha"
-                            type="datetime-local"
-                            name="fecha"
-                            value={formData.fecha}
-                            onChange={handleChange}
-                            InputLabelProps={{ shrink: true }}
-                            required
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            fullWidth
-                            label="Mensaje de Error"
-                            name="mensajeError"
-                            value={formData.mensajeError}
-                            onChange={handleChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <FormControlLabel
-                            control={
-                            <Checkbox
-                                name="esAsistencia"
-                                checked={formData.esAsistencia}
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Paper sx={{ p: 3, mb: 4 }}>
+                <Typography variant="h6" gutterBottom>
+                    Nuevo Registro
+                </Typography>
+                <form onSubmit={handleSubmit}>
+                    <Grid container spacing={2}>
+                        <Grid xs={12} sm={6}>
+                            <TextField
+                                fullWidth
+                                label="ID Integrante (UUID)"
+                                name="integranteId" // CORRECCIÓN: Coincide con la clave del estado
+                                value={formData.integranteId}
                                 onChange={handleChange}
+                                required
                             />
-                            }
-                            label="Es Asistencia"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <FormControlLabel
-                            control={
-                            <Checkbox
-                                name="esApertura"
-                                checked={formData.esApertura}
-                                onChange={handleChange}
+                        </Grid>
+                        <Grid xs={12} sm={6}>
+                            <DateTimePicker
+                                label="Fecha y Hora"
+                                value={formData.fecha}
+                                onChange={handleDateChange} // CORRECCIÓN: Usa la función específica
+                                slotProps={{
+                                    textField: { 
+                                        fullWidth: true, 
+                                        required: true 
+                                    }
+                                }}
                             />
-                            }
-                            label="Es Apertura"
-                        />
+                        </Grid>
+                        <Grid xs={12} sm={6}>
+                            <FormControlLabel
+                                control={
+                                <Checkbox
+                                    name="esAsistencia"
+                                    checked={formData.esAsistencia}
+                                    onChange={handleChange}
+                                />
+                                }
+                                label="Es Asistencia"
+                            />
+                        </Grid>
+                        <Grid xs={12}>
+                            <Button type="submit" variant="contained" color="primary">
+                                Guardar Registro
+                            </Button>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <Button type="submit" variant="contained" color="primary">
-                            Guardar Registro
-                        </Button>
-                    </Grid>
-                </Grid>
-            </form>
-        </Paper>
+                </form>
+            </Paper>
+        </LocalizationProvider>
     );
 }
