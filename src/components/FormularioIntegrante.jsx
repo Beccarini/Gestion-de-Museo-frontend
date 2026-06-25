@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material';
+import { 
+    Dialog, DialogTitle, DialogContent, DialogActions, 
+    Button, TextField, FormControl, InputLabel, Select, MenuItem 
+} from '@mui/material';
+
+import { CARRERAS_UTN } from '../constants/carreras';
 
 const FormularioIntegrante = ({ open, onClose, onGuardar, integrante }) => {
     const [formData, setFormData] = useState({ nombre: '', legajo: '', token: '', carrera: '' });
+    
+    const [errores, setErrores] = useState({});
 
     useEffect(() => {
+        setErrores({});
+        
         if (integrante) {
             setFormData({
                 nombre: integrante.nombre || '',
@@ -19,10 +28,33 @@ const FormularioIntegrante = ({ open, onClose, onGuardar, integrante }) => {
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+        
+        if (errores[e.target.name]) {
+            setErrores({ ...errores, [e.target.name]: '' });
+        }
+    };
+
+    const validar = () => {
+        let tempErrores = {};
+        
+        if (!formData.nombre.trim()) {
+            tempErrores.nombre = "El nombre no puede estar vacío.";
+        }
+        
+        if (!formData.legajo.toString().trim()) {
+            tempErrores.legajo = "El legajo no puede estar vacío.";
+        } else if (!/^\d+$/.test(formData.legajo)) {
+            tempErrores.legajo = "El legajo debe contener solo números.";
+        }
+
+        setErrores(tempErrores);
+                return Object.keys(tempErrores).length === 0;
     };
 
     const handleSubmit = () => {
-        onGuardar(formData);
+        if (validar()) {
+            onGuardar(formData);
+        }
     };
 
     return (
@@ -35,7 +67,9 @@ const FormularioIntegrante = ({ open, onClose, onGuardar, integrante }) => {
                     fullWidth 
                     margin="dense" 
                     value={formData.nombre} 
-                    onChange={handleChange} 
+                    onChange={handleChange}
+                    error={!!errores.nombre}
+                    helperText={errores.nombre}
                 />
                 <TextField 
                     name="legajo"
@@ -43,7 +77,9 @@ const FormularioIntegrante = ({ open, onClose, onGuardar, integrante }) => {
                     fullWidth 
                     margin="dense" 
                     value={formData.legajo}
-                    onChange={handleChange} 
+                    onChange={handleChange}
+                    error={!!errores.legajo}
+                    helperText={errores.legajo}
                 />
                 <TextField 
                     name="token"
@@ -53,14 +89,23 @@ const FormularioIntegrante = ({ open, onClose, onGuardar, integrante }) => {
                     value={formData.token}
                     onChange={handleChange} 
                 />
-                <TextField 
-                    name="carrera"
-                    label="Carrera"
-                    fullWidth 
-                    margin="dense" 
-                    value={formData.carrera}
-                    onChange={handleChange} 
-                />
+                
+                <FormControl fullWidth margin="dense">
+                    <InputLabel id="carrera-label">Carrera</InputLabel>
+                    <Select
+                        labelId="carrera-label"
+                        name="carrera"
+                        value={formData.carrera}
+                        label="Carrera"
+                        onChange={handleChange}
+                    >
+                        <MenuItem value=""><em>Seleccionar...</em></MenuItem>
+                        {CARRERAS_UTN.map((carrera) => (
+                            <MenuItem key={carrera} value={carrera}>{carrera}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancelar</Button>

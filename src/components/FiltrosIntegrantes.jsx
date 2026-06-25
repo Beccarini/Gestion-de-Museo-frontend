@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
 
-const CARRERAS_UTN = ["Sistemas", "Electromecánica", "Electrónica", "Química", "Industrial", "Administración Rural"];
+import { CARRERAS_UTN } from '../constants/carreras';
 
 const FiltrosIntegrantes = ({ filtroNombre, setFiltroNombre, filtroCarrera, setFiltroCarrera }) => {
     return (

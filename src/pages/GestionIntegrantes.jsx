@@ -28,7 +28,7 @@ const GestionIntegrantes = () => {
     const [filtroCarrera, setFiltroCarrera] = useState('');
     const [pagina, setPagina] = useState(1);
     const [totalPaginas, setTotalPaginas] = useState(1);
-    const [limite, setLimite] = useState(2); 
+    const [limite, setLimite] = useState(20); 
 
     const obtenerIntegrantes = () => {
         setLoading(true);

@@ -5,7 +5,6 @@ import {
     CircularProgress, Box, Tooltip, IconButton, Switch
 } from '@mui/material';
 
-// Íconos de Material Design
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -26,7 +25,6 @@ const TablaIntegrantes = ({ integrantes, cargando, onToggleEstado, onEliminar, o
         <TableContainer component={Paper} elevation={3} sx={{ borderRadius: 2, overflow: 'hidden' }}>
             <Table sx={{ minWidth: 650 }} aria-label="tabla de integrantes">
                 
-                {/* Cabecera con un tono gris moderno y tipografía más firme */}
                 <TableHead sx={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #edf2f7' }}>
                     <TableRow>
                         <TableCell sx={{ fontWeight: 'bold', color: '#4a5568' }}>Nombre</TableCell>
@@ -45,7 +43,7 @@ const TablaIntegrantes = ({ integrantes, cargando, onToggleEstado, onEliminar, o
                                 key={integrante.id} 
                                 sx={{ 
                                     '&:last-child td, &:last-child th': { border: 0 },
-                                    '&:hover': { backgroundColor: '#fcfcfc' } // Efecto hover sutil al pasar el mouse
+                                    '&:hover': { backgroundColor: '#fcfcfc' } 
                                 }}
                             >
                                 <TableCell component="th" scope="row" sx={{ fontWeight: 500 }}>
@@ -54,14 +52,12 @@ const TablaIntegrantes = ({ integrantes, cargando, onToggleEstado, onEliminar, o
                                 
                                 <TableCell>{integrante.legajo || '—'}</TableCell>
                                 
-                                {/* Si no hay token, mostramos un guion gris en vez de dejar el hueco */}
                                 <TableCell sx={{ fontFamily: 'monospace', color: integrante.token ? 'inherit' : 'text.disabled' }}>
                                     {integrante.token || '—'}
                                 </TableCell>
                                 
                                 <TableCell>{integrante.carrera || 'Sistemas'}</TableCell>
                                 
-                                {/* Reemplazamos las flechas por un Switch interactivo */}
                                 <TableCell align="center">
                                     <Tooltip title={integrante.esActivo ? "Desactivar" : "Activar"}>
                                         <Switch 
@@ -74,7 +70,6 @@ const TablaIntegrantes = ({ integrantes, cargando, onToggleEstado, onEliminar, o
                                 </TableCell>
 
                                 <TableCell align="center">
-                                    {/* Botón Editar */}
                                     <Tooltip title="Editar">
                                         <IconButton 
                                             color="primary" 
@@ -90,7 +85,6 @@ const TablaIntegrantes = ({ integrantes, cargando, onToggleEstado, onEliminar, o
                                         </IconButton>
                                     </Tooltip>
 
-                                    {/* Botón Eliminar */}
                                     <Tooltip title="Eliminar">
                                         <IconButton 
                                             color="error" 
