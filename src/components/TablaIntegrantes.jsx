@@ -2,42 +2,39 @@ import React from 'react';
 import { 
     Table, TableBody, TableCell, TableContainer, 
     TableHead, TableRow, Paper, Typography, 
-    CircularProgress, Box, Chip, Tooltip, IconButton 
+    CircularProgress, Box, Tooltip, IconButton, Switch
 } from '@mui/material';
 
 // Íconos de Material Design
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import SwapVertIcon from '@mui/icons-material/SwapVert';
 
-const TablaIntegrantes = ({ integrantes, cargando, onToggleEstado, onEliminar }) => {
+const TablaIntegrantes = ({ integrantes, cargando, onToggleEstado, onEliminar, onEditar }) => {
     
     if (cargando) {
         return (
-            <Box display="flex" sx={{
-                flexDirection:'column', 
-                alignItems:'center', 
-                py: 10
-            }}>
+            <Box display="flex" sx={{ flexDirection: 'column', alignItems: 'center', py: 10 }}>
                 <CircularProgress size={50} />
                 <Typography variant="body1" color="textSecondary" sx={{ mt: 2 }}>
                     Cargando base de datos...
                 </Typography>
             </Box>
-
         );
     }
 
     return (
-        <TableContainer component={Paper} elevation={2}>
+        <TableContainer component={Paper} elevation={3} sx={{ borderRadius: 2, overflow: 'hidden' }}>
             <Table sx={{ minWidth: 650 }} aria-label="tabla de integrantes">
                 
-                <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+                {/* Cabecera con un tono gris moderno y tipografía más firme */}
+                <TableHead sx={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #edf2f7' }}>
                     <TableRow>
-                        <TableCell sx={{ fontWeight: 'bold' }}>Nombre</TableCell>
-                        <TableCell sx={{ fontWeight: 'bold' }}>Carrera</TableCell>
-                        <TableCell align="center" sx={{ fontWeight: 'bold' }}>Estado</TableCell>
-                        <TableCell align="center" sx={{ fontWeight: 'bold' }}>Acciones</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: '#4a5568' }}>Nombre</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: '#4a5568' }}>Legajo</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: '#4a5568' }}>Token</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: '#4a5568' }}>Carrera</TableCell>
+                        <TableCell align="center" sx={{ fontWeight: 'bold', color: '#4a5568' }}>Estado</TableCell>
+                        <TableCell align="center" sx={{ fontWeight: 'bold', color: '#4a5568' }}>Acciones</TableCell>
                     </TableRow>
                 </TableHead>
 
@@ -46,49 +43,66 @@ const TablaIntegrantes = ({ integrantes, cargando, onToggleEstado, onEliminar })
                         integrantes.map((integrante) => (
                             <TableRow 
                                 key={integrante.id} 
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                sx={{ 
+                                    '&:last-child td, &:last-child th': { border: 0 },
+                                    '&:hover': { backgroundColor: '#fcfcfc' } // Efecto hover sutil al pasar el mouse
+                                }}
                             >
-                                <TableCell component="th" scope="row">
+                                <TableCell component="th" scope="row" sx={{ fontWeight: 500 }}>
                                     {integrante.nombre}
                                 </TableCell>
                                 
-                                <TableCell>
-                                    {integrante.carrera || 'ISI'}
+                                <TableCell>{integrante.legajo || '—'}</TableCell>
+                                
+                                {/* Si no hay token, mostramos un guion gris en vez de dejar el hueco */}
+                                <TableCell sx={{ fontFamily: 'monospace', color: integrante.token ? 'inherit' : 'text.disabled' }}>
+                                    {integrante.token || '—'}
                                 </TableCell>
                                 
+                                <TableCell>{integrante.carrera || 'Sistemas'}</TableCell>
+                                
+                                {/* Reemplazamos las flechas por un Switch interactivo */}
                                 <TableCell align="center">
-                                    <Chip 
-                                        label={integrante.esActivo ? 'Activo' : 'Inactivo'} 
-                                        color={integrante.esActivo ? 'success' : 'default'}
-                                        size="small"
-                                        variant={integrante.esActivo ? "filled" : "outlined"}
-                                    />
+                                    <Tooltip title={integrante.esActivo ? "Desactivar" : "Activar"}>
+                                        <Switch 
+                                            checked={Boolean(integrante.esActivo)}
+                                            onChange={() => onToggleEstado(integrante.id)}
+                                            color="success"
+                                            size="medium"
+                                        />
+                                    </Tooltip>
                                 </TableCell>
 
                                 <TableCell align="center">
-                                    <Tooltip title={integrante.esActivo ? "Desactivar" : "Activar"}>
-                                        <IconButton 
-                                            color={integrante.esActivo ? "warning" : "success"}
-                                            onClick={() => onToggleEstado(integrante.id)}
-                                            size="small"
-                                        >
-                                            <SwapVertIcon />
-                                        </IconButton>
-                                    </Tooltip>
-
+                                    {/* Botón Editar */}
                                     <Tooltip title="Editar">
-                                        <IconButton color="primary" size="small" sx={{ mx: 1 }}>
-                                            <EditIcon />
+                                        <IconButton 
+                                            color="primary" 
+                                            size="small" 
+                                            sx={{ 
+                                                mx: 0.5, 
+                                                backgroundColor: '#ebf8ff', 
+                                                '&:hover': { backgroundColor: '#bee3f8' } 
+                                            }}
+                                            onClick={() => onEditar(integrante)}
+                                        >
+                                            <EditIcon fontSize="small" />
                                         </IconButton>
                                     </Tooltip>
 
+                                    {/* Botón Eliminar */}
                                     <Tooltip title="Eliminar">
                                         <IconButton 
                                             color="error" 
                                             size="small"
+                                            sx={{ 
+                                                mx: 0.5, 
+                                                backgroundColor: '#fff5f5', 
+                                                '&:hover': { backgroundColor: '#fed7d7' } 
+                                            }}
                                             onClick={() => onEliminar(integrante.id)}
                                         >
-                                            <DeleteIcon />
+                                            <DeleteIcon fontSize="small" />
                                         </IconButton>
                                     </Tooltip>
                                 </TableCell>
@@ -96,7 +110,7 @@ const TablaIntegrantes = ({ integrantes, cargando, onToggleEstado, onEliminar })
                         ))
                     ) : (
                         <TableRow>
-                            <TableCell colSpan={4} align="center" sx={{ py: 3 }}>
+                            <TableCell colSpan={6} align="center" sx={{ py: 5 }}>
                                 <Typography variant="body1" color="textSecondary">
                                     No se encontraron integrantes.
                                 </Typography>

@@ -3,11 +3,14 @@ import { Container, Typography, Box, Button, TextField, Alert } from '@mui/mater
 import AddIcon from '@mui/icons-material/Add';
 
 import TablaIntegrantes from '../components/TablaIntegrantes'; 
+import FormularioIntegrante from '../components/FormularioIntegrante';
 
 import { 
     getIntegrantes, 
     deleteIntegrante, 
-    toggleEstadoIntegrante 
+    toggleEstadoIntegrante,
+    createIntegrante,
+    updateIntegrante 
 } from '../services/integranteService';
 
 const GestionIntegrantes = () => {
@@ -15,6 +18,8 @@ const GestionIntegrantes = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [busqueda, setBusqueda] = useState('');
+    const [openModal, setOpenModal] = useState(false);
+    const [integranteAEditar, setIntegranteAEditar] = useState(null);
 
     const obtenerIntegrantes = () => {
         setLoading(true);
@@ -35,6 +40,41 @@ const GestionIntegrantes = () => {
     useEffect(() => {
         obtenerIntegrantes();
     }, []);
+
+    const handleGuardar = (datosForm) => {
+        if (integranteAEditar) {
+            updateIntegrante(integranteAEditar.id, datosForm)
+                .then(() => {
+                    obtenerIntegrantes();
+                    setOpenModal(false);
+                    setIntegranteAEditar(null);
+                })
+                .catch((err) => {
+                    setError('Hubo un problema al intentar actualizar el registro.');
+                    console.error(err);
+                });
+        } else {
+            createIntegrante(datosForm)
+                .then(() => {
+                    obtenerIntegrantes();
+                    setOpenModal(false);
+                })
+                .catch((err) => {
+                    setError('Hubo un problema al intentar crear el registro.');
+                    console.error(err);
+                });
+        }
+    };
+
+    const handleAbrirEditar = (integrante) => {
+        setIntegranteAEditar(integrante);
+        setOpenModal(true);
+    };
+
+    const handleCerrarModal = () => {
+        setOpenModal(false);
+        setIntegranteAEditar(null);
+    };
 
     const handleEliminar = (id) => {
         const confirmar = window.confirm('¿Estás seguro de eliminar este integrante?');
@@ -73,20 +113,40 @@ const GestionIntegrantes = () => {
         int.nombre.toLowerCase().includes(busqueda.toLowerCase())
     );
 
-    return (
-        <Container maxWidth="lg" sx={{ mt: 5, mb: 5 }}>
+return (
+        <Box sx={{ 
+            width: '100%', 
+            maxWidth: '1300px', 
+            mx: 'auto',         
+            px: { xs: 2, md: 3 }, 
+            mt: 5, 
+            mb: 5 
+        }}>
+            {/* CONTENEDOR DEL ENCABEZADO (Flexbox para alinear a los lados) */}
             <Box sx={{ 
                 display: 'flex', 
                 justifyContent: 'space-between', 
                 alignItems: 'center',
-                mb: 4 // margin-bottom
+                mb: 4 
             }}>
                 <Typography variant="h4" component="h1" fontWeight="bold" color="primary">
                     Gestión de Integrantes
                 </Typography>
-                <Button variant="contained" color="primary" startIcon={<AddIcon />} disableElevation>
+                <Button 
+                    variant="contained" 
+                    color="primary" 
+                    startIcon={<AddIcon />} 
+                    disableElevation
+                    onClick={() => setOpenModal(true)} 
+                >                  
                     Nuevo Integrante
                 </Button>
+                <FormularioIntegrante 
+                    open={openModal} 
+                    onClose={handleCerrarModal} 
+                    onGuardar={handleGuardar} 
+                    integrante={integranteAEditar}
+                />
             </Box>
 
             {error && (
@@ -95,6 +155,7 @@ const GestionIntegrantes = () => {
                 </Alert>
             )}
 
+            {/* BUSCADOR */}
             <TextField
                 fullWidth
                 label="Buscar por Nombre..."
@@ -104,13 +165,15 @@ const GestionIntegrantes = () => {
                 sx={{ mb: 4, backgroundColor: 'white' }}
             />
 
+            {/* TABLA */}
             <TablaIntegrantes 
                 integrantes={integrantesFiltrados} 
                 cargando={loading}
                 onToggleEstado={handleToggleEstado}
                 onEliminar={handleEliminar}
+                onEditar={handleAbrirEditar}
             />
-        </Container>
+        </Box>
     );
 };
 
