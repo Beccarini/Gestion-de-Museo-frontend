@@ -1,7 +1,11 @@
 import api from './api';
 
-export const getIntegrantes = async () => {
-    const response = await api.get('/integrantes');
+export const getIntegrantes = async (nombre = '', carrera = '', pagina= 1, limite=2) => {
+    const params = { pagina, limite };
+    if (nombre) params.nombre = nombre;
+    if (carrera) params.carrera = carrera;
+
+    const response = await api.get('/integrantes', {params});
     return response.data; 
 };
 
@@ -18,7 +22,7 @@ export const createIntegrante = async (datosIntegrante) => {
 export const updateIntegrante = async (id, datosActualizados) => {
     const response = await api.put(`/integrantes/${id}`, datosActualizados);
     return response.data;
-};
+};  
 
 export const deleteIntegrante = async (id) => {
     const response = await api.delete(`/integrantes/${id}`);

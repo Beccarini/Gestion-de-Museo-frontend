@@ -36,7 +36,7 @@ function App() {
 
         <NavLink
           to="/integrantes"
-          style={({ isActive }) => ({
+          style={({ isActive }) => ({re
             padding: '6px 14px',
             borderRadius: '6px',
             textDecoration: 'none',
@@ -52,7 +52,7 @@ function App() {
 
       <main style={{ backgroundColor: '#fafafa', minHeight: '100vh', paddingTop: '20px' }}>
         <Routes>
-          <Route path="/" element={<GestionRegistro />} />
+          <Route path="/registros" element={<GestionRegistro />} />
           <Route path="/integrantes" element={<GestionIntegrantes />} />
         </Routes>
       </main>

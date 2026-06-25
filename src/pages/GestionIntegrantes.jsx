@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, Button, TextField, Alert } from '@mui/material';
+import { 
+    Box, Button, TextField, Alert, Typography, 
+    FormControl, InputLabel, Select, MenuItem,
+    Pagination 
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-
 import TablaIntegrantes from '../components/TablaIntegrantes'; 
 import FormularioIntegrante from '../components/FormularioIntegrante';
+import FiltrosIntegrantes from '../components/FiltrosIntegrantes';
+import EncabezadoIntegrantes from '../components/EncabezadoIntegrantes';
 
 import { 
     getIntegrantes, 
@@ -17,18 +22,23 @@ const GestionIntegrantes = () => {
     const [listaIntegrantes, setListaIntegrantes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [busqueda, setBusqueda] = useState('');
     const [openModal, setOpenModal] = useState(false);
-    const [integranteAEditar, setIntegranteAEditar] = useState(null);
+    const [integranteAEditar, setIntegranteAEditar] = useState(null); 
+    const [filtroNombre, setFiltroNombre] = useState('');
+    const [filtroCarrera, setFiltroCarrera] = useState('');
+    const [pagina, setPagina] = useState(1);
+    const [totalPaginas, setTotalPaginas] = useState(1);
+    const [limite, setLimite] = useState(20); 
 
     const obtenerIntegrantes = () => {
         setLoading(true);
         setError(null);
 
-        getIntegrantes()
+        getIntegrantes(filtroNombre, filtroCarrera, pagina, limite)
             .then((data) => {
                 setLoading(false);
-                setListaIntegrantes(data.integrantes || data);
+                setListaIntegrantes(data.integrantes || []);
+                setTotalPaginas(data.totalPaginas || 1); 
             })
             .catch((err) => {
                 setLoading(false);
@@ -38,8 +48,16 @@ const GestionIntegrantes = () => {
     };
 
     useEffect(() => {
-        obtenerIntegrantes();
-    }, []);
+        setPagina(1);
+    }, [filtroNombre, filtroCarrera]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            obtenerIntegrantes();
+        }, 500); 
+
+        return () => clearTimeout(timer); 
+    }, [filtroNombre, filtroCarrera, pagina]);
 
     const handleGuardar = (datosForm) => {
         if (integranteAEditar) {
@@ -82,16 +100,13 @@ const GestionIntegrantes = () => {
 
         deleteIntegrante(id)
             .then((response) => {
-                if (response.status === 204) {
-                    setListaIntegrantes(listaIntegrantes.filter((int) => int.id !== id));
+                if (response.status === 204 || response.status === 200) {
+                    // Refrescamos desde el backend para mantener la paginación/orden correcto
+                    obtenerIntegrantes(); 
                 }
             })
             .catch((err) => {
-                if (err.response && err.response.status === 409) {
-                    setError(err.response.data.error);
-                } else {
-                    setError('Hubo un problema al intentar eliminar el registro.');
-                }
+                setError('Hubo un problema al intentar eliminar el registro.');
                 console.error(err);
             });
     };
@@ -109,11 +124,11 @@ const GestionIntegrantes = () => {
             });
     };
 
-    const integrantesFiltrados = listaIntegrantes.filter(int => 
-        int.nombre.toLowerCase().includes(busqueda.toLowerCase())
-    );
+    const handleChangePagina = (event, value) => {
+        setPagina(value);
+    };
 
-return (
+    return (
         <Box sx={{ 
             width: '100%', 
             maxWidth: '1300px', 
@@ -122,32 +137,15 @@ return (
             mt: 5, 
             mb: 5 
         }}>
-            {/* CONTENEDOR DEL ENCABEZADO (Flexbox para alinear a los lados) */}
-            <Box sx={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center',
-                mb: 4 
-            }}>
-                <Typography variant="h4" component="h1" fontWeight="bold" color="primary">
-                    Gestión de Integrantes
-                </Typography>
-                <Button 
-                    variant="contained" 
-                    color="primary" 
-                    startIcon={<AddIcon />} 
-                    disableElevation
-                    onClick={() => setOpenModal(true)} 
-                >                  
-                    Nuevo Integrante
-                </Button>
-                <FormularioIntegrante 
-                    open={openModal} 
-                    onClose={handleCerrarModal} 
-                    onGuardar={handleGuardar} 
-                    integrante={integranteAEditar}
-                />
-            </Box>
+            
+            <EncabezadoIntegrantes onAbrirModal={() => setOpenModal(true)} />
+
+            <FormularioIntegrante 
+                open={openModal} 
+                onClose={handleCerrarModal} 
+                onGuardar={handleGuardar} 
+                integrante={integranteAEditar}
+            />
 
             {error && (
                 <Alert severity="error" onClose={() => setError(null)} sx={{ mb: 3 }}>
@@ -155,24 +153,33 @@ return (
                 </Alert>
             )}
 
-            {/* BUSCADOR */}
-            <TextField
-                fullWidth
-                label="Buscar por Nombre..."
-                variant="outlined"
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-                sx={{ mb: 4, backgroundColor: 'white' }}
+            <FiltrosIntegrantes 
+                filtroNombre={filtroNombre}
+                setFiltroNombre={setFiltroNombre}
+                filtroCarrera={filtroCarrera}
+                setFiltroCarrera={setFiltroCarrera}
             />
 
-            {/* TABLA */}
             <TablaIntegrantes 
-                integrantes={integrantesFiltrados} 
+                integrantes={listaIntegrantes} 
                 cargando={loading}
                 onToggleEstado={handleToggleEstado}
                 onEliminar={handleEliminar}
                 onEditar={handleAbrirEditar}
             />
+
+            {!loading && totalPaginas > 1 && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                    <Pagination 
+                        count={totalPaginas} 
+                        page={pagina} 
+                        onChange={handleChangePagina} 
+                        color="primary" 
+                        size="large"
+                    />
+                </Box>
+            )}
+
         </Box>
     );
 };
