@@ -1,7 +1,7 @@
 import api from './api';
 
-export const getIntegrantes = async (nombre = '', carrera = '') => {
-    const params = {};
+export const getIntegrantes = async (nombre = '', carrera = '', pagina= 1, limite=2) => {
+    const params = { pagina, limite };
     if (nombre) params.nombre = nombre;
     if (carrera) params.carrera = carrera;
 

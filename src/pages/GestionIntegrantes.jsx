@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
     Box, Button, TextField, Alert, Typography, 
-    FormControl, InputLabel, Select, MenuItem 
+    FormControl, InputLabel, Select, MenuItem,
+    Pagination 
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import TablaIntegrantes from '../components/TablaIntegrantes'; 
@@ -23,20 +24,21 @@ const GestionIntegrantes = () => {
     const [error, setError] = useState(null);
     const [openModal, setOpenModal] = useState(false);
     const [integranteAEditar, setIntegranteAEditar] = useState(null); 
-
-    // Nuevos estados para los filtros del Backend
     const [filtroNombre, setFiltroNombre] = useState('');
     const [filtroCarrera, setFiltroCarrera] = useState('');
+    const [pagina, setPagina] = useState(1);
+    const [totalPaginas, setTotalPaginas] = useState(1);
+    const [limite, setLimite] = useState(2); 
 
     const obtenerIntegrantes = () => {
         setLoading(true);
         setError(null);
 
-        // Le pasamos los estados actuales al servicio
-        getIntegrantes(filtroNombre, filtroCarrera)
+        getIntegrantes(filtroNombre, filtroCarrera, pagina, limite)
             .then((data) => {
                 setLoading(false);
-                setListaIntegrantes(data.integrantes || data);
+                setListaIntegrantes(data.integrantes || []);
+                setTotalPaginas(data.totalPaginas || 1); 
             })
             .catch((err) => {
                 setLoading(false);
@@ -45,15 +47,17 @@ const GestionIntegrantes = () => {
             });
     };
 
-    // MAGIA ACÁ: Efecto con Debounce. 
-    // Se ejecuta al cargar la página y cada vez que cambian los filtros.
+    useEffect(() => {
+        setPagina(1);
+    }, [filtroNombre, filtroCarrera]);
+
     useEffect(() => {
         const timer = setTimeout(() => {
             obtenerIntegrantes();
-        }, 500); // Espera medio segundo sin teclear para llamar al backend
+        }, 500); 
 
-        return () => clearTimeout(timer); // Limpia el timer si el usuario sigue tecleando
-    }, [filtroNombre, filtroCarrera]);
+        return () => clearTimeout(timer); 
+    }, [filtroNombre, filtroCarrera, pagina]);
 
     const handleGuardar = (datosForm) => {
         if (integranteAEditar) {
@@ -120,6 +124,10 @@ const GestionIntegrantes = () => {
             });
     };
 
+    const handleChangePagina = (event, value) => {
+        setPagina(value);
+    };
+
     return (
         <Box sx={{ 
             width: '100%', 
@@ -159,6 +167,19 @@ const GestionIntegrantes = () => {
                 onEliminar={handleEliminar}
                 onEditar={handleAbrirEditar}
             />
+
+            {!loading && totalPaginas > 1 && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                    <Pagination 
+                        count={totalPaginas} 
+                        page={pagina} 
+                        onChange={handleChangePagina} 
+                        color="primary" 
+                        size="large"
+                    />
+                </Box>
+            )}
+
         </Box>
     );
 };
