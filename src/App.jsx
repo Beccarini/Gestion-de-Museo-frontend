@@ -19,7 +19,7 @@ function App() {
         <span style={{ marginRight: 'auto', fontWeight: 500 }}>Mi App</span>
 
         <NavLink
-          to="/"
+          to="/registros"
           end
           style={({ isActive }) => ({
             padding: '6px 14px',

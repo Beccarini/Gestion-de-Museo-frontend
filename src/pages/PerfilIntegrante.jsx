@@ -4,30 +4,40 @@ import { Box, Grid, Alert, CircularProgress } from '@mui/material';
 
 import CardInfoBasica from '../components/perfilIntegrantes/CardInfoBasica';
 import FormularioIntegrante from '../components/FormularioIntegrante'
+import TablaUltimosRegistros from '../components/perfilIntegrantes/TablaUltimosRegistros';
 
 import { getIntegranteById, updateIntegrante } from '../services/integranteService';
+import { getRegistros} from '../services/registrosService'
 
 const PerfilIntegrante = () => {
+    //Temporal, dsp se usara useParams
     const id = 'a6b70eb8-9487-4528-9ef1-bc86ebeef9f6';
+
     const [integrante, setIntegrante] = useState(null);
+    const [registros, setRegistros] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [openModal, setOpenModal] = useState(false);
 
-    const cargarDatosPerfil = () => {
+const cargarDatosPerfil = () => {
         setLoading(true);
         setError(null);
         
-        getIntegranteById(id)
-            .then((datos) => {
-                setIntegrante(datos);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error(err);
-                setError("No se pudo cargar el perfil del integrante. Verificá la conexión.");
-                setLoading(false);
-            });
+        Promise.all([
+            getIntegranteById(id),
+            getRegistros(id, 1, 5) 
+        ])
+        .then(([datosIntegrante, datosRegistros]) => {
+            console.log("Respuesta del backend para registros:", datosRegistros);
+            setIntegrante(datosIntegrante);            
+            setRegistros(datosRegistros.registros);
+            setLoading(false);
+        })
+        .catch((err) => {
+            console.error(err);
+            setError("No se pudo cargar el perfil del integrante. Verificá la conexión.");
+            setLoading(false);
+        });
     };
 
     useEffect(() => {
@@ -56,8 +66,10 @@ const PerfilIntegrante = () => {
         );
     }
 
-    return (
-        <Box sx={{ width: '100%', mx: 'auto', px: { xs: 2, md: 3 }, mt: 5, mb: 5 }}>            
+return (
+        // Le puse 1000px de máximo temporalmente para que no se vea tan vacío a los costados
+        <Box sx={{ width: '100%', maxWidth: '1000px', mx: 'auto', px: { xs: 2, md: 3 }, mt: 5, mb: 5 }}>
+            
             {error && (
                 <Alert severity="error" onClose={() => setError(null)} sx={{ mb: 3 }}>
                     {error}
@@ -66,40 +78,32 @@ const PerfilIntegrante = () => {
 
             {integrante && (
                 <>
-                    
-                    {/* FILA 1: Tarjeta Principal (xs={12} para que ocupe el 100% del ancho) */}
-                    <Box sx={{ width: '100%', maxWidth: '1000px', mx: 'auto', px: { xs: 2, md: 3 }, mt: 5, mb: 5 }}>                        <CardInfoBasica 
+                    {/* BLOQUE SUPERIOR: Tarjeta Principal */}
+                    <Box sx={{ width: '100%', mb: 3 }}>
+                        <CardInfoBasica 
                             integrante={integrante} 
                             onAbrirEditar={() => setOpenModal(true)} 
                         />
                     </Box>
 
-                    <Grid container spacing={3}>
-                        
-                        {/* Proyectos y Permisos (md={6} para que se dividan mitad y mitad) */}
-                        <Grid item xs={12} md={6}>
-                            {/* ACÁ IRÁ SECCION PROYECTOS */}
-                        </Grid>
-                        
-                        <Grid item xs={12} md={6}>
-                            {/* ACÁ IRÁ SECCION PERMISOS */}
-                        </Grid>
-
-                        {/* Historial (xs={12} para que ocupe todo abajo) */}
-                        <Grid item xs={12}>
-                            {/* ACÁ IRÁ TABLA ULTIMOS REGISTROS */}
-                        </Grid>
-
-                    </Grid>
-
+                    {/* BLOQUE INFERIOR: Historial de Registros */}
+                    <Box sx={{ width: '100%' }}>
+                        <TablaUltimosRegistros 
+                            registros={registros} 
+                            integranteId={id} 
+                        />
+                    </Box>
                 </>
             )}
+
+            {/* Modal Reutilizado */}
             <FormularioIntegrante 
                 open={openModal} 
                 onClose={() => setOpenModal(false)} 
                 integrante={integrante}
                 onGuardar={handleActualizarPerfil}
             />
+
         </Box>
     );
 };
