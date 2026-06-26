@@ -1,9 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { 
     Table, TableBody, TableCell, TableContainer, 
     TableHead, TableRow, Paper, Typography, 
-    CircularProgress, Box, Tooltip, IconButton, Switch
+    CircularProgress, Box, Tooltip, IconButton, 
+    Switch
 } from '@mui/material';
+
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -97,6 +101,15 @@ const TablaIntegrantes = ({ integrantes, cargando, onToggleEstado, onEliminar, o
                                             onClick={() => onEliminar(integrante.id)}
                                         >
                                             <DeleteIcon fontSize="small" />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Ver Perfil Completo">
+                                        <IconButton 
+                                            component={Link}
+                                            to={`/integrantes/${integrante.id}`}
+                                            color="primary" 
+                                        >
+                                            <PersonSearchIcon />
                                         </IconButton>
                                     </Tooltip>
                                 </TableCell>

@@ -1,14 +1,9 @@
 import React from 'react';
 import { Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Box, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 
 const TablaUltimosRegistros = ({ registros, integranteId }) => {
-    const navigate = useNavigate();
-
-    const handleVerHistorial = () => {
-        navigate(`/registros?integranteId=${integranteId}`);
-    };
 
     return (
         <Card elevation={3} sx={{ borderRadius: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -19,10 +14,11 @@ const TablaUltimosRegistros = ({ registros, integranteId }) => {
                         Últimos Registros de Acceso
                     </Typography>
                     <Button 
+                        component={Link}
+                        to={`/registros?integranteId=${integranteId}`}
                         variant="text" 
                         color="primary" 
                         endIcon={<FormatListBulletedIcon />}
-                        onClick={handleVerHistorial}
                     >
                         Ver historial completo
                     </Button>

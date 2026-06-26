@@ -10,9 +10,7 @@ import { getIntegranteById, updateIntegrante } from '../services/integranteServi
 import { getRegistros} from '../services/registrosService'
 
 const PerfilIntegrante = () => {
-    //Temporal, dsp se usara useParams
-    const id = 'a6b70eb8-9487-4528-9ef1-bc86ebeef9f6';
-
+    const { id } = useParams();
     const [integrante, setIntegrante] = useState(null);
     const [registros, setRegistros] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -28,7 +26,6 @@ const cargarDatosPerfil = () => {
             getRegistros(id, 1, 5) 
         ])
         .then(([datosIntegrante, datosRegistros]) => {
-            console.log("Respuesta del backend para registros:", datosRegistros);
             setIntegrante(datosIntegrante);            
             setRegistros(datosRegistros.registros);
             setLoading(false);

@@ -54,7 +54,7 @@ function App() {
         <Routes>
           <Route path="/registros" element={<GestionRegistro />} />
           <Route path="/integrantes" element={<GestionIntegrantes />} />
-          <Route path="/integrantes/perfil" element={<PerfilIntegrante />} />
+          <Route path="/integrantes/:id" element={<PerfilIntegrante />} />
         </Routes>
       </main>
     </BrowserRouter>
