@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
 
-import { CARRERAS_UTN } from '../constants/carreras';
+import { CARRERAS_UTN } from '../../constants/carreras';
 
 const FiltrosIntegrantes = ({ filtroNombre, setFiltroNombre, filtroCarrera, setFiltroCarrera }) => {
     return (
