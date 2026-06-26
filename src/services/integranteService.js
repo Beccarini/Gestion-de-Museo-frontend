@@ -33,3 +33,13 @@ export const toggleEstadoIntegrante = async (id) => {
     const response = await api.patch(`integrantes/${id}/toggle`);
     return response.data;
 };
+
+// Adentro de integranteService.js
+
+export const getRegistrosByIntegrante = async (id, pagina = 1, limite = 5) => {
+    const params = { pagina, limite };
+    
+    const response = await api.get(`/integrantes/${id}/registros`, { params });
+    
+    return response.data; 
+};
