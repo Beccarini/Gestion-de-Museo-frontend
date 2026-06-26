@@ -5,10 +5,10 @@ import {
     Pagination 
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import TablaIntegrantes from '../components/TablaIntegrantes'; 
-import FormularioIntegrante from '../components/FormularioIntegrante';
-import FiltrosIntegrantes from '../components/FiltrosIntegrantes';
-import EncabezadoIntegrantes from '../components/EncabezadoIntegrantes';
+import TablaIntegrantes from '../components/gestionIntegrantes/TablaIntegrantes'; 
+import FormularioIntegrante from '../components/gestionIntegrantes/FormularioIntegrante';
+import FiltrosIntegrantes from '../components/gestionIntegrantes/FiltrosIntegrantes';
+import EncabezadoIntegrantes from '../components/gestionIntegrantes/EncabezadoIntegrantes';
 
 import { 
     getIntegrantes, 

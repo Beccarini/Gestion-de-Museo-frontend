@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom'
 import { CssBaseline } from '@mui/material'
 import { GestionRegistro } from './pages/GestionRegistros.jsx'
 import GestionIntegrantes from './pages/GestionIntegrantes'
-
+import PerfilIntegrante from './pages/PerfilIntegrante'
 function App() {
   return (
     <BrowserRouter>
@@ -54,6 +54,7 @@ function App() {
         <Routes>
           <Route path="/registros" element={<GestionRegistro />} />
           <Route path="/integrantes" element={<GestionIntegrantes />} />
+          <Route path="/integrantes/perfil" element={<PerfilIntegrante />} />
         </Routes>
       </main>
     </BrowserRouter>
