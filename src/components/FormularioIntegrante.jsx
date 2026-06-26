@@ -4,7 +4,7 @@ import {
     Button, TextField, FormControl, InputLabel, Select, MenuItem 
 } from '@mui/material';
 
-import { CARRERAS_UTN } from '../../constants/carreras';
+import { CARRERAS_UTN } from '../constants/carreras';
 
 const FormularioIntegrante = ({ open, onClose, onGuardar, integrante }) => {
     const [formData, setFormData] = useState({ nombre: '', legajo: '', token: '', carrera: '' });

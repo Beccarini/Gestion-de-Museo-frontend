@@ -3,8 +3,9 @@ import { useParams } from 'react-router-dom';
 import { Box, Grid, Alert, CircularProgress } from '@mui/material';
 
 import CardInfoBasica from '../components/perfilIntegrantes/CardInfoBasica';
+import FormularioIntegrante from '../components/FormularioIntegrante'
 
-import { getIntegranteById } from '../services/integranteService';
+import { getIntegranteById, updateIntegrante } from '../services/integranteService';
 
 const PerfilIntegrante = () => {
     const id = 'a6b70eb8-9487-4528-9ef1-bc86ebeef9f6';
@@ -34,6 +35,18 @@ const PerfilIntegrante = () => {
             cargarDatosPerfil();
         }
     }, [id]);
+
+    const handleActualizarPerfil = (datos) => {
+        updateIntegrante(id, datos)
+            .then(() => {
+                setOpenModal(false);
+                cargarDatosPerfil(); 
+            })
+            .catch((err) => {
+                console.error("Error al actualizar:", err);
+                setError("No se pudieron guardar los cambios.");
+            });
+    };
 
     if (loading) {
         return (
@@ -81,9 +94,15 @@ const PerfilIntegrante = () => {
 
                 </>
             )}
-
+            <FormularioIntegrante 
+                open={openModal} 
+                onClose={() => setOpenModal(false)} 
+                integrante={integrante}
+                onGuardar={handleActualizarPerfil}
+            />
         </Box>
     );
 };
+
 
 export default PerfilIntegrante;
