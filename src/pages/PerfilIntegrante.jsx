@@ -5,8 +5,9 @@ import { Box, Grid, Alert, CircularProgress } from '@mui/material';
 import CardInfoBasica from '../components/perfilIntegrantes/CardInfoBasica';
 import FormularioIntegrante from '../components/FormularioIntegrante'
 import TablaUltimosRegistros from '../components/perfilIntegrantes/TablaUltimosRegistros';
+import SeccionPermisos from '../components/perfilIntegrantes/SeccionPermisos'
 
-import { getIntegranteById, updateIntegrante, getRegistrosByIntegrante } from '../services/integranteService';
+import { getIntegranteById, updateIntegrante, getRegistrosByIntegrante, getPermisosByIntegrante } from '../services/integranteService';
 
 const PerfilIntegrante = () => {
     const { id } = useParams();
@@ -15,6 +16,7 @@ const PerfilIntegrante = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [openModal, setOpenModal] = useState(false);
+    const [permisos, setPermisos] = useState(null);
 
     const cargarDatosPerfil = () => {
         setLoading(true);
@@ -22,9 +24,10 @@ const PerfilIntegrante = () => {
         
         Promise.all([
             getIntegranteById(id),
-            getRegistrosByIntegrante(id, 1, 5) 
+            getRegistrosByIntegrante(id, 1, 5),
+            getPermisosByIntegrante(id)
         ])
-        .then(([datosIntegrante, datosBackend]) => {
+        .then(([datosIntegrante, datosBackend, datosPermisos]) => {
             setIntegrante(datosIntegrante);
             
             if (datosBackend.registrosPaginados && datosBackend.registrosPaginados.historial) {
@@ -32,6 +35,8 @@ const PerfilIntegrante = () => {
             } else {
                 setRegistros([]); 
             }
+
+            setPermisos(datosPermisos);
             
             setLoading(false);
         })
@@ -92,6 +97,10 @@ return (
                             integranteId={id} 
                         />
                     </Box>
+
+                    <Grid item xs={12} md={6}>
+                        <SeccionPermisos permisosIniciales={permisos} />
+                    </Grid>
                 </>
             )}
 
