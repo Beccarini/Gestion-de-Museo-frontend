@@ -6,8 +6,12 @@ import CardInfoBasica from '../components/perfilIntegrantes/CardInfoBasica';
 import FormularioIntegrante from '../components/FormularioIntegrante'
 import TablaUltimosRegistros from '../components/perfilIntegrantes/TablaUltimosRegistros';
 import SeccionPermisos from '../components/perfilIntegrantes/SeccionPermisos'
+import SeccionProyectos from '../components/perfilIntegrantes/SeccionProyectos'; // <-- Nuevo
 
-import { getIntegranteById, updateIntegrante, getRegistrosByIntegrante, getPermisosByIntegrante } from '../services/integranteService';
+import { getIntegranteById, updateIntegrante, 
+        getRegistrosByIntegrante, getPermisosByIntegrante,
+        getProyectosByIntegrante 
+} from '../services/integranteService';
 
 const PerfilIntegrante = () => {
     const { id } = useParams();
@@ -17,6 +21,7 @@ const PerfilIntegrante = () => {
     const [error, setError] = useState(null);
     const [openModal, setOpenModal] = useState(false);
     const [permisos, setPermisos] = useState(null);
+    const [proyectos, setProyectos] = useState(null);
 
     const cargarDatosPerfil = () => {
         setLoading(true);
@@ -25,9 +30,10 @@ const PerfilIntegrante = () => {
         Promise.all([
             getIntegranteById(id),
             getRegistrosByIntegrante(id, 1, 5),
-            getPermisosByIntegrante(id)
+            getPermisosByIntegrante(id).catch(() => null),
+            getProyectosByIntegrante(id).catch(() => null)
         ])
-        .then(([datosIntegrante, datosBackend, datosPermisos]) => {
+        .then(([datosIntegrante, datosBackend, datosPermisos, datosProyectos]) => {
             setIntegrante(datosIntegrante);
             
             if (datosBackend.registrosPaginados && datosBackend.registrosPaginados.historial) {
@@ -37,6 +43,7 @@ const PerfilIntegrante = () => {
             }
 
             setPermisos(datosPermisos);
+            setProyectos(datosProyectos)
             
             setLoading(false);
         })
@@ -73,8 +80,8 @@ const PerfilIntegrante = () => {
         );
     }
 
-return (
-        <Box sx={{ width: '100%', maxWidth: '1300px', mx: 'auto', px: { xs: 2, md: 3 }, mt: 5, mb: 5 }}>
+    return (
+        <Box sx={{ width: '100%', maxWidth: '1300px', mx: 'auto', px: { xs: 2, md: 3 }, mt: 2, mb: 5 }}>
             
             {error && (
                 <Alert severity="error" onClose={() => setError(null)} sx={{ mb: 3 }}>
@@ -91,20 +98,33 @@ return (
                         />
                     </Box>
 
+                    <Box sx={{ 
+                        display: 'flex', 
+                        flexDirection: { xs: 'column', md: 'row' }, 
+                        gap: 3, 
+                        mb: 3,
+                        width: '100%' 
+                    }}>
+                        {/* Mitad izquierda para Permisos */}
+                        <Box sx={{ flex: 1, display: 'flex' }}>
+                            <SeccionPermisos permisosIniciales={permisos} />
+                        </Box>
+                        
+                        {/* Mitad derecha para Proyectos */}
+                        <Box sx={{ flex: 1, display: 'flex' }}>
+                            <SeccionProyectos proyectosIniciales={proyectos} />
+                        </Box>
+                    </Box>
+
                     <Box sx={{ width: '100%' }}>
                         <TablaUltimosRegistros 
                             registros={registros} 
                             integranteId={id} 
                         />
                     </Box>
-
-                    <Grid item xs={12} md={6}>
-                        <SeccionPermisos permisosIniciales={permisos} />
-                    </Grid>
                 </>
             )}
 
-            {/* Modal Reutilizado */}
             <FormularioIntegrante 
                 open={openModal} 
                 onClose={() => setOpenModal(false)} 

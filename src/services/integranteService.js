@@ -42,10 +42,13 @@ export const getRegistrosByIntegrante = async (id, pagina = 1, limite = 5) => {
     return response.data; 
 };
 
-// Adentro de integranteService.js
-
 export const getPermisosByIntegrante = async (id) => {
 
     const response = await api.get(`/integrantes/${id}/permisos`);
+    return response.data; 
+};
+
+export const getProyectosByIntegrante = async (id) => {
+    const response = await api.get(`/integrantes/${id}/proyectos`);
     return response.data; 
 };

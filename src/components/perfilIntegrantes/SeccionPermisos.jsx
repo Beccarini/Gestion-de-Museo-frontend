@@ -5,20 +5,18 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const SeccionPermisos = ({ permisosIniciales }) => {
-    // Si desde el backend llega como 'permisos' o 'permiso', nos aseguramos de tener un array
     const listaPermisos = Array.isArray(permisosIniciales) 
         ? permisosIniciales 
         : (permisosIniciales?.permisos || []);
 
     return (
-        <Card elevation={3} sx={{ borderRadius: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <Card elevation={3} sx={{ borderRadius: 2, height: '100%', minHeight: '180px', width: '100%', display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ p: { xs: 2, md: 3 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 
-                {/* Encabezado de la Sección */}
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 1 }}>
                     <SecurityIcon color="primary" />
                     <Typography variant="h6" fontWeight="bold">
-                        Permisos de Acceso Asignados
+                        Permisos
                     </Typography>
                     <Chip 
                         label={listaPermisos.length} 
@@ -42,12 +40,9 @@ const SeccionPermisos = ({ permisosIniciales }) => {
                             <TableBody>
                                 {listaPermisos.map((permiso) => (
                                     <TableRow key={permiso.id} hover>
-                                        {/* Descripción */}
                                         <TableCell sx={{ fontWeight: 500, color: 'text.primary' }}>
                                             {permiso.descripcion}
                                         </TableCell>
-
-                                        {/* Días de la semana (recorre el array que parsea Sequelize) */}
                                         <TableCell>
                                             <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap', alignItems: 'center' }}>
                                                 <CalendarMonthIcon sx={{ fontSize: 16, color: 'action.active', mr: 0.5 }} />
@@ -66,8 +61,6 @@ const SeccionPermisos = ({ permisosIniciales }) => {
                                                 )}
                                             </Box>
                                         </TableCell>
-
-                                        {/* Horas de Inicio y Fin */}
                                         <TableCell>
                                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'text.secondary' }}>
                                                 <AccessTimeIcon sx={{ fontSize: 16, color: 'action.active' }} />
@@ -82,8 +75,18 @@ const SeccionPermisos = ({ permisosIniciales }) => {
                         </Table>
                     </TableContainer>
                 ) : (
-                    <Box sx={{ textAlign: 'center', py: 6, color: 'text.secondary', flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Typography variant="body1">Este integrante no posee permisos cargados en el sistema.</Typography>
+                    <Box sx={{ 
+                        flexGrow: 1, 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        textAlign: 'center',
+                        width: '100%',
+                        p: 2
+                    }}>
+                        <Typography variant="body1" color="text.secondary">
+                            Este integrante no posee permisos cargados en el sistema.
+                        </Typography>
                     </Box>
                 )}
             </CardContent>

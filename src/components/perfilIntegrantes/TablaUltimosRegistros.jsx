@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Box, Button } from '@mui/material';
+import { Card, CardContent, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Box, Button, Divider } from '@mui/material';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 import { Link } from 'react-router-dom';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 
@@ -8,20 +9,22 @@ const TablaUltimosRegistros = ({ registros, integranteId }) => {
         <Card elevation={3} sx={{ borderRadius: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ p: { xs: 2, md: 3 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 1 }}>
+                    {/* USAMOS EL NOMBRE EXACTO DEL IMPORT */}
+                    <ListAltIcon color="info" />
+                    
                     <Typography variant="h6" fontWeight="bold">
-                        Últimos Registros de Acceso
+                        Últimos Registros
                     </Typography>
-                    <Button 
-                        component={Link}
-                        to={`/registros?integranteId=${integranteId}`}
-                        variant="text" 
-                        color="primary" 
-                        endIcon={<FormatListBulletedIcon />}
-                    >
-                        Ver historial completo
-                    </Button>
+                    
+                    <Box sx={{ ml: 'auto' }}>
+                        <Button variant="text" size="small" endIcon={<FormatListBulletedIcon />}>
+                            VER HISTORIAL COMPLETO
+                        </Button>
+                    </Box>
                 </Box>
+                <Divider sx={{ mb: 3 }} />
+            
 
                 {registros && registros.length > 0 ? (
                     <TableContainer sx={{ flexGrow: 1 }}>
@@ -37,7 +40,6 @@ const TablaUltimosRegistros = ({ registros, integranteId }) => {
                             </TableHead>
                             <TableBody>
                                 {registros.map((reg) => {
-                                    // Separamos la fecha y la hora
                                     const fechaObj = new Date(reg.fecha);
                                     const dia = fechaObj.toLocaleDateString('es-AR');
                                     const hora = fechaObj.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
@@ -59,7 +61,6 @@ const TablaUltimosRegistros = ({ registros, integranteId }) => {
                                                 </Box>
                                             </TableCell>
                                             <TableCell>
-                                                {/* Intenta mostrar el nombre del evento, si no cae al ID, y si no hay, un guion */}
                                                 {reg.Evento?.nombre || reg.eventoId || '—'}
                                             </TableCell>
                                             <TableCell>
@@ -77,7 +78,14 @@ const TablaUltimosRegistros = ({ registros, integranteId }) => {
                         </Table>
                     </TableContainer>
                 ) : (
-                    <Box sx={{ textAlign: 'center', py: 6, color: 'text.secondary', flexGrow: 1 }}>
+                    <Box sx={{                         
+                        flexGrow: 1, 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        textAlign: 'center',
+                        width: '100%',
+                        p: 2}}>
                         <Typography variant="body1">No hay registros recientes para este integrante.</Typography>
                     </Box>
                 )}
