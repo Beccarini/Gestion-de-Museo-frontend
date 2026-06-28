@@ -52,3 +52,23 @@ export const getProyectosByIntegrante = async (id) => {
     const response = await api.get(`/integrantes/${id}/proyectos`);
     return response.data; 
 };
+
+export const asignarPermiso = async (id, permisoId) => {
+    const response = await api.post(`/integrantes/${id}/permisos`, { permisoId });
+    return response.data;
+};
+
+export const desvincularPermiso = async (id, permisoId) => {
+    const response = await api.delete(`/integrantes/${id}/permisos/${permisoId}`);
+    return response.data;
+};
+
+export const asignarProyecto = async (id, proyectoId) => {
+    const response = await api.post(`/integrantes/${id}/proyectos`, { proyectoId });
+    return response.data;
+};
+
+export const desvincularProyecto = async (id, proyectoId) => {
+    const response = await api.delete(`/integrantes/${id}/proyectos/${proyectoId}`);
+    return response.data;
+};

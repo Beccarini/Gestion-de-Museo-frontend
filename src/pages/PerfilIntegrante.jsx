@@ -30,8 +30,8 @@ const PerfilIntegrante = () => {
         Promise.all([
             getIntegranteById(id),
             getRegistrosByIntegrante(id, 1, 5),
-            getPermisosByIntegrante(id).catch(() => null),
-            getProyectosByIntegrante(id).catch(() => null)
+            getPermisosByIntegrante(id),
+            getProyectosByIntegrante(id)
         ])
         .then(([datosIntegrante, datosBackend, datosPermisos, datosProyectos]) => {
             setIntegrante(datosIntegrante);
@@ -42,8 +42,8 @@ const PerfilIntegrante = () => {
                 setRegistros([]); 
             }
 
-            setPermisos(datosPermisos);
-            setProyectos(datosProyectos)
+            setPermisos(datosPermisos.integrante.permisos);
+            setProyectos(datosProyectos.integrante.proyectos)
             
             setLoading(false);
         })
@@ -98,22 +98,12 @@ const PerfilIntegrante = () => {
                         />
                     </Box>
 
-                    <Box sx={{ 
-                        display: 'flex', 
-                        flexDirection: { xs: 'column', md: 'row' }, 
-                        gap: 3, 
-                        mb: 3,
-                        width: '100%' 
-                    }}>
-                        {/* Mitad izquierda para Permisos */}
-                        <Box sx={{ flex: 1, display: 'flex' }}>
-                            <SeccionPermisos permisosIniciales={permisos} />
-                        </Box>
-                        
-                        {/* Mitad derecha para Proyectos */}
-                        <Box sx={{ flex: 1, display: 'flex' }}>
-                            <SeccionProyectos proyectosIniciales={proyectos} />
-                        </Box>
+                    <Box sx={{ width: '100%', mb: 3 }}>
+                        <SeccionPermisos permisosIniciales={permisos} />
+                    </Box>
+                    
+                    <Box sx={{ width: '100%', mb: 3 }}>
+                        <SeccionProyectos proyectosIniciales={proyectos} />
                     </Box>
 
                     <Box sx={{ width: '100%' }}>
