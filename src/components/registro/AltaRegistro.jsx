@@ -19,8 +19,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { getIntegrantes } from '../../services/integranteService';
 
 const estadoInicialFormulario = { 
-    integranteId: '', // Cambiado de null a '' para evitar warnings en el Select controlado de MUI
-    eventoId: '',
+    integranteId: '',
     fecha: null,
     esAsistencia: false,
     esApertura: false,
@@ -31,7 +30,6 @@ export function AltaRegistro({ nuevoRegistro, open, onClose }) {
     const [formData, setFormData] = useState(estadoInicialFormulario);
     const [listaIntegrantes, setListaIntegrantes] = useState([]);
 
-    // Cargar los integrantes cuando se abre el modal
     useEffect(() => {
         if (open) {
             obtenerIntegrantes();
@@ -70,11 +68,10 @@ export function AltaRegistro({ nuevoRegistro, open, onClose }) {
         
         const datosParaBackend = {
             ...formData,
-            // Convertimos cadenas vacías a null para la base de datos si es necesario
             integranteId: formData.integranteId === '' ? null : formData.integranteId,
             fecha: formData.fecha.toISOString() 
         };
-        
+        console.log(datosParaBackend);
         nuevoRegistro(datosParaBackend);
         setFormData(estadoInicialFormulario);
         onClose();
@@ -92,10 +89,8 @@ export function AltaRegistro({ nuevoRegistro, open, onClose }) {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <form id="formulario-registro" onSubmit={handleSubmit}>
                         <Grid container spacing={3} sx={{ mt: 0.5 }}>
-                            
-                            {/* --- LISTA DESPLEGABLE DE INTEGRANTES --- */}
-                            <Grid item xs={12}>
-                                <FormControl fullWidth required>
+                            <Grid xs={12}>
+                                <FormControl fullWidth>
                                     <InputLabel id="label-integrante">Integrante</InputLabel>
                                     <Select
                                         labelId="label-integrante"
@@ -105,18 +100,15 @@ export function AltaRegistro({ nuevoRegistro, open, onClose }) {
                                         label="Integrante"
                                         onChange={handleChange}
                                     >
-                                        {/* Renderizamos las opciones de la lista */}
                                         {listaIntegrantes.map((integrante) => (
                                             <MenuItem key={integrante.id} value={integrante.id}>
-                                                {/* Ajusta 'integrante.nombre' según la estructura de tu backend */}
                                                 {integrante.nombre} {integrante.apellido}
                                             </MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
                             </Grid>
-
-                            <Grid item xs={12} sm={6}>
+                            <Grid xs={12} sm={6}>
                                 <DateTimePicker
                                     label="Fecha y Hora"
                                     value={formData.fecha}
@@ -129,8 +121,7 @@ export function AltaRegistro({ nuevoRegistro, open, onClose }) {
                                     }}
                                 />
                             </Grid>
-                            
-                            <Grid item xs={12} sm={6} display="flex" alignItems="center">
+                            <Grid xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center' }}>
                                 <FormControlLabel
                                     control={
                                         <Checkbox
