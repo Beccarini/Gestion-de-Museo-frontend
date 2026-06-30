@@ -3,6 +3,7 @@ import { CssBaseline, Box, List, ListItem, ListItemButton, ListItemText, Typogra
 import { GestionRegistro } from './pages/GestionRegistros.jsx';
 import GestionIntegrantes from './pages/GestionIntegrantes';
 import PerfilIntegrante from './pages/PerfilIntegrante';
+import GestionPermisos from './pages/GestionPermisos.jsx';
 
 const drawerWidth = 240; // Ancho fijo para tu barra lateral
 
@@ -11,7 +12,7 @@ function App() {
     { text: 'DashBoard', path: '/' },
     { text: 'Integrantes', path: '/integrantes' },
     { text: 'Registros', path: '/registros' },
-    { text: 'Permisos', path: '/config' },
+    { text: 'Permisos', path: '/permisos' },
     { text: 'Eventos', path: '/eventos' },
     { text: 'Proyectos', path: '/proyectos' },
 
@@ -51,6 +52,7 @@ function App() {
             <Route path="/registros" element={<GestionRegistro />} />
             <Route path="/integrantes" element={<GestionIntegrantes />} />
             <Route path="/integrantes/:id" element={<PerfilIntegrante />} />
+            <Route path="/permisos" element={<GestionPermisos />} />
           </Routes>
         </Box>
 
