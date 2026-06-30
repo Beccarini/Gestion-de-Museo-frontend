@@ -26,8 +26,6 @@ export function GestionRegistro() {
         postRegistro(registro)
             .then(() => {
                 obtenerRegistros();
-                // El modal ya se cierra en AltaRegistro tras el submit, 
-                // pero puedes forzar el cierre aquí si tu petición demora.
             }).catch((error) => {
                 console.log(error);
             });
