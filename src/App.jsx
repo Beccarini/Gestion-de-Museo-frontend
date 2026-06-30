@@ -3,7 +3,7 @@ import { CssBaseline, Box, List, ListItem, ListItemButton, ListItemText, Typogra
 import { GestionRegistro } from './pages/GestionRegistros.jsx';
 import GestionIntegrantes from './pages/GestionIntegrantes';
 import PerfilIntegrante from './pages/PerfilIntegrante';
-
+import { GestionEventos } from './pages/GestionEvento.jsx';
 const drawerWidth = 240; // Ancho fijo para tu barra lateral
 
 function App() {
@@ -51,6 +51,7 @@ function App() {
             <Route path="/registros" element={<GestionRegistro />} />
             <Route path="/integrantes" element={<GestionIntegrantes />} />
             <Route path="/integrantes/:id" element={<PerfilIntegrante />} />
+            <Route path="/eventos" element={<GestionEventos/>} />
           </Routes>
         </Box>
 
