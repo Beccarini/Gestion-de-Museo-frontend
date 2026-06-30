@@ -8,15 +8,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
 export function MostrarEvento({ eventos, deleteEvento, onEditar }) {
-    
-    if (eventos.length === 0) {
-        return (
-            <Typography variant="body1" color="textSecondary" align="center" sx={{ mt: 4 }}>
-                No hay eventos registrados actualmente.
-            </Typography>
-        );
-    }
-
     return (
         <TableContainer component={Paper} sx={{ boxShadow: 2, borderRadius: 2 }}>
             <Table>
@@ -24,6 +15,7 @@ export function MostrarEvento({ eventos, deleteEvento, onEditar }) {
                     <TableRow>
                         <TableCell><strong>Nombre</strong></TableCell>
                         <TableCell><strong>Tipo</strong></TableCell>
+                        <TableCell><strong>Descripción</strong></TableCell>
                         <TableCell><strong>Fechas (Inicio - Fin)</strong></TableCell>
                         <TableCell align="center"><strong>Acciones</strong></TableCell>
                     </TableRow>
@@ -36,7 +28,9 @@ export function MostrarEvento({ eventos, deleteEvento, onEditar }) {
                             <TableCell sx={{ textTransform: 'capitalize' }}>
                                 {evento.tipo || 'Otro'}
                             </TableCell>
-                            
+                            <TableCell>
+                                {evento.descripcion}
+                            </TableCell>
                             <TableCell>
                                 {evento.fechaInicio instanceof Date 
                                     ? evento.fechaInicio.toLocaleString('es-AR', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' })
@@ -52,7 +46,6 @@ export function MostrarEvento({ eventos, deleteEvento, onEditar }) {
                             </TableCell>
                             
                             <TableCell align="center">
-                                {/* Botón Editar estilizado */}
                                 <Tooltip title="Editar Evento">
                                     <IconButton 
                                         color="primary" 
