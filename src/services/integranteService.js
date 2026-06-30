@@ -63,6 +63,16 @@ export const desvincularPermiso = async (id, permisoId) => {
     return response.data;
 };
 
+
+export const asignarMultiplesPermisos = async (integranteId, permisosIds) => {
+        const peticiones = permisosIds.map(permisoId => 
+        api.post(`/integrantes/${integranteId}/permisos`, { permisoId })
+    );
+    
+    await Promise.all(peticiones);
+    return true;
+};
+
 export const asignarProyecto = async (id, proyectoId) => {
     const response = await api.post(`/integrantes/${id}/proyectos`, { proyectoId });
     return response.data;

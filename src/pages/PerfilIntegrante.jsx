@@ -6,11 +6,12 @@ import CardInfoBasica from '../components/perfilIntegrantes/CardInfoBasica';
 import FormularioIntegrante from '../components/FormularioIntegrante'
 import TablaUltimosRegistros from '../components/perfilIntegrantes/TablaUltimosRegistros';
 import SeccionPermisos from '../components/perfilIntegrantes/SeccionPermisos'
-import SeccionProyectos from '../components/perfilIntegrantes/SeccionProyectos'; // <-- Nuevo
+import SeccionProyectos from '../components/perfilIntegrantes/SeccionProyectos';
+import AsignarPermisos from '../components/perfilIntegrantes/AsignarPermisos'; 
 
 import { getIntegranteById, updateIntegrante, 
         getRegistrosByIntegrante, getPermisosByIntegrante,
-        getProyectosByIntegrante 
+        getProyectosByIntegrante, desvincularPermiso 
 } from '../services/integranteService';
 
 const PerfilIntegrante = () => {
@@ -20,6 +21,7 @@ const PerfilIntegrante = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [openModal, setOpenModal] = useState(false);
+    const [openModalPermisos, setOpenModalPermisos] = useState(false); 
     const [permisos, setPermisos] = useState(null);
     const [proyectos, setProyectos] = useState(null);
 
@@ -53,6 +55,18 @@ const PerfilIntegrante = () => {
             setLoading(false);
         });
     };
+
+    const handleDesvincularPermiso = async (permisoId, descripcion) => {
+    if (window.confirm(`¿Seguro que querés revocar el permiso "${descripcion}" a este integrante?`)) {
+        try {
+            await desvincularPermiso(id, permisoId);
+            cargarDatosPerfil(); // Recargamos para que desaparezca de la tabla
+        } catch (err) {
+            console.error("Error al revocar:", err);
+            setError("Hubo un error al revocar el permiso.");
+        }
+    }
+};
 
     useEffect(() => {
         if (id) {
@@ -99,7 +113,11 @@ const PerfilIntegrante = () => {
                     </Box>
 
                     <Box sx={{ width: '100%', mb: 3 }}>
-                        <SeccionPermisos permisosIniciales={permisos} />
+                        <SeccionPermisos 
+                            permisosIniciales={permisos} 
+                            onAbrirAsignar={() => setOpenModalPermisos(true)} 
+                            onDesvincular={handleDesvincularPermiso} 
+                        />
                     </Box>
                     
                     <Box sx={{ width: '100%', mb: 3 }}>
@@ -120,6 +138,14 @@ const PerfilIntegrante = () => {
                 onClose={() => setOpenModal(false)} 
                 integrante={integrante}
                 onGuardar={handleActualizarPerfil}
+            />
+
+            <AsignarPermisos
+                open={openModalPermisos}
+                onClose={() => setOpenModalPermisos(false)}
+                integranteId={id}
+                permisosActuales={permisos || []}
+                onAsignacionExitosa={cargarDatosPerfil}
             />
 
         </Box>

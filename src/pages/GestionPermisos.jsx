@@ -11,15 +11,11 @@ const GestionPermisos = () => {
     const [permisos, setPermisos] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    
-    // --- NUEVO ESTADO PARA EL FILTRO ---
-    const [filtroDia, setFiltroDia] = useState('');
-    
+    const [filtroDia, setFiltroDia] = useState('');    
     const [openModal, setOpenModal] = useState(false);
     const [permisoAEditar, setPermisoAEditar] = useState(null);
     const [error, setError] = useState(null);
 
-    // Actualizamos la función para que le pase el filtro al servicio
     const cargarPermisos = async () => {
         try {
             const data = await getPermisos(page, 10, filtroDia);
@@ -30,12 +26,10 @@ const GestionPermisos = () => {
         }
     };
 
-    // El useEffect ahora "escucha" los cambios en page Y en filtroDia
     useEffect(() => {
         cargarPermisos();
     }, [page, filtroDia]);
 
-    // Cuando el usuario cambia el filtro, lo volvemos a la página 1
     const handleCambioFiltro = (nuevoDia) => {
         setFiltroDia(nuevoDia);
         setPage(1);
