@@ -24,3 +24,9 @@ export const deleteEvento = async (id) => {
     const response = await api.delete(`/eventos/${id}`);
     return response; 
 };
+export const getRegistrosByEvento = async (id, pagina = 1, limite = 5) => {
+    const params = { pagina, limite };
+    const response = await api.get(`/eventos/${id}/registros`, { params });
+    
+    return response.data; 
+};

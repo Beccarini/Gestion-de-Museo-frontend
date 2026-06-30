@@ -7,8 +7,9 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import {Link} from 'react-router-dom';
 
-export function MostrarEvento({eventos, deleteEvento, onEditar, onVerDetalles}) {
+export function MostrarEvento({eventos, deleteEvento, onEditar}) {
     return (
         <TableContainer component={Paper} sx={{ boxShadow: 2, borderRadius: 2 }}>
             <Table>
@@ -56,7 +57,8 @@ export function MostrarEvento({eventos, deleteEvento, onEditar, onVerDetalles}) 
                                             backgroundColor: '#e6fffa', 
                                             '&:hover': { backgroundColor: '#b2f5ea' } 
                                         }}
-                                        onClick={() => onVerDetalles(evento)}
+                                        component={Link}
+                                        to={`/eventos/${evento.id}`}
                                     >
                                         <VisibilityIcon fontSize="small" />
                                     </IconButton>

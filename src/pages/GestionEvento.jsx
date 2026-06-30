@@ -4,7 +4,6 @@ import { Button, Box, Typography } from '@mui/material';
 import { AltaEvento } from '../components/gestionEventos/AltaEvento';
 import { MostrarEvento } from '../components/gestionEventos/MostrarEvento';
 import { getEventos, createEvento, deleteEvento, updateEvento } from '../services/eventoService';
-import { useNavigate } from 'react-router-dom';
 
 export function GestionEventos() {
     const [allEventos, setAllEventos] = useState([]);
@@ -77,10 +76,6 @@ export function GestionEventos() {
         setModalOpen(false);
         setEventoAEditar(null);
     };
-    const navigate=useNavigate();
-    function onVerDetalles(evento){
-        navigate(`/eventos/${evento.id}`);
-    }
     return (
         <Box sx={{ p: 4 }}>
             <Typography variant="h4" sx={{ mb: 3, fontWeight: 'bold' }}>
@@ -101,7 +96,6 @@ export function GestionEventos() {
                 eventos={allEventos} 
                 deleteEvento={borrarEvento} 
                 onEditar={handleAbrirEditar}
-                onVerDetalles={onVerDetalles}
             />
             <AltaEvento 
                 open={modalOpen} 
