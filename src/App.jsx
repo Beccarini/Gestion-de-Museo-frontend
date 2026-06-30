@@ -8,6 +8,7 @@ const drawerWidth = 240; // Ancho fijo para tu barra lateral
 
 function App() {
   const menuItems = [
+    { text: 'DashBoard', path: '/' },
     { text: 'Integrantes', path: '/integrantes' },
     { text: 'Registros', path: '/registros' },
     { text: 'Permisos', path: '/config' },

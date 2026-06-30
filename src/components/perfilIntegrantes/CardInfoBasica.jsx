@@ -56,8 +56,8 @@ return (
                                 <Typography variant="h6" fontWeight="500">{integrante.carrera || 'No especificada'}</Typography>
                             </Box>
                             <Box>
-                                <Typography variant="body2" color="textSecondary">Token Asignado</Typography>
-                                <Typography variant="h6" sx={{ fontFamily: 'monospace', fontWeight: 'bold', color: 'primary.main' }}>
+                                <Typography variant="body2" color="textSecondary">Token</Typography>
+                                <Typography variant="h6" sx={{ fontFamily: 'monospace' }}>
                                     {integrante.token || 'Sin token'}
                                 </Typography>
                             </Box>
