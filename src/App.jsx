@@ -89,11 +89,6 @@ return (
 
 function App() {
 
-
-
-
-
-
   return (
     <AuthProvider>
       <BrowserRouter>
