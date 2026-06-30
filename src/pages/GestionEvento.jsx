@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Button, Box, Typography } from '@mui/material';
 import { AltaEvento } from '../components/gestionEventos/AltaEvento';
 import { MostrarEvento } from '../components/gestionEventos/MostrarEvento';
-import { getEventos, createEvento, deleteEvento, updateEvento } from '../services/eventoService'; 
+import { getEventos, createEvento, deleteEvento, updateEvento } from '../services/eventoService';
+import { useNavigate } from 'react-router-dom';
 
 export function GestionEventos() {
     const [allEventos, setAllEventos] = useState([]);
@@ -40,10 +41,9 @@ export function GestionEventos() {
                     console.error("Error al actualizar evento:", error);
                 });
         } else {
-            // Lógica de Alta en API (Tu función original)
             createEvento(eventoData)
                 .then(() => {
-                    obtenerEventos(); // Refrescar tabla
+                    obtenerEventos();
                     handleCloseModal();
                 })
                 .catch((error) => {
@@ -77,7 +77,10 @@ export function GestionEventos() {
         setModalOpen(false);
         setEventoAEditar(null);
     };
-
+    const navigate=useNavigate();
+    function onVerDetalles(evento){
+        navigate(`/eventos/${evento.id}`);
+    }
     return (
         <Box sx={{ p: 4 }}>
             <Typography variant="h4" sx={{ mb: 3, fontWeight: 'bold' }}>
@@ -97,7 +100,8 @@ export function GestionEventos() {
             <MostrarEvento 
                 eventos={allEventos} 
                 deleteEvento={borrarEvento} 
-                onEditar={handleAbrirEditar} 
+                onEditar={handleAbrirEditar}
+                onVerDetalles={onVerDetalles}
             />
             <AltaEvento 
                 open={modalOpen} 
