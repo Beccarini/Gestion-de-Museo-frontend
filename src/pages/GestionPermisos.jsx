@@ -4,6 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import SecurityIcon from '@mui/icons-material/Security';
 import TablaPermisos from '../components/permisos/TablaPermisos';
 import FormularioPermiso from '../components/permisos/FormularioPermiso';
+import FiltrosPermisos from '../components/permisos/FiltrosPermisos'; // <-- IMPORTAMOS EL COMPONENTE
 import { getPermisos, crearPermiso, actualizarPermiso, eliminarPermiso } from '../services/permisoService';
 
 const GestionPermisos = () => {
@@ -11,13 +12,17 @@ const GestionPermisos = () => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     
+    // --- NUEVO ESTADO PARA EL FILTRO ---
+    const [filtroDia, setFiltroDia] = useState('');
+    
     const [openModal, setOpenModal] = useState(false);
     const [permisoAEditar, setPermisoAEditar] = useState(null);
     const [error, setError] = useState(null);
 
+    // Actualizamos la función para que le pase el filtro al servicio
     const cargarPermisos = async () => {
         try {
-            const data = await getPermisos(page, 10);
+            const data = await getPermisos(page, 10, filtroDia);
             setPermisos(data.permisos);
             setTotalPages(data.totalPaginas);
         } catch (err) {
@@ -25,9 +30,21 @@ const GestionPermisos = () => {
         }
     };
 
+    // El useEffect ahora "escucha" los cambios en page Y en filtroDia
     useEffect(() => {
         cargarPermisos();
-    }, [page]);
+    }, [page, filtroDia]);
+
+    // Cuando el usuario cambia el filtro, lo volvemos a la página 1
+    const handleCambioFiltro = (nuevoDia) => {
+        setFiltroDia(nuevoDia);
+        setPage(1);
+    };
+
+    const handleLimpiarFiltro = () => {
+        setFiltroDia('');
+        setPage(1);
+    };
 
     const handleOpenNuevo = () => {
         setPermisoAEditar(null);
@@ -48,7 +65,7 @@ const GestionPermisos = () => {
                 await crearPermiso(formData);
             }
             setOpenModal(false);
-            cargarPermisos(); // Recargar tabla
+            cargarPermisos();
         } catch (err) {
             setError(err.response?.data?.errors?.[0]?.msg || 'Error al guardar el permiso');
         }
@@ -58,6 +75,8 @@ const GestionPermisos = () => {
         if (window.confirm('¿Estás seguro de eliminar este permiso? Esto podría afectar a los integrantes que lo tengan asignado.')) {
             try {
                 await eliminarPermiso(id);
+                // Si justo borramos el último de la página, es buena práctica volver a la 1
+                setPage(1); 
                 cargarPermisos();
             } catch (err) {
                 setError('Error al eliminar el permiso.');
@@ -70,7 +89,6 @@ const GestionPermisos = () => {
             
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <SecurityIcon color="primary" fontSize="large" />
                     <Typography variant="h4" fontWeight="bold">
                         Gestión de Permisos
                     </Typography>
@@ -91,6 +109,13 @@ const GestionPermisos = () => {
                     {error}
                 </Alert>
             )}
+
+            {/* --- COMPONENTE DE FILTROS --- */}
+            <FiltrosPermisos 
+                filtroDia={filtroDia}
+                setFiltroDia={handleCambioFiltro}
+                onLimpiar={handleLimpiarFiltro}
+            />
 
             <TablaPermisos 
                 permisos={permisos} 
