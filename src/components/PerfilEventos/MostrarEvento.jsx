@@ -18,12 +18,12 @@ export function MostrarEvento({evento}){
             <Divider sx={{ my: 2 }} />
             
             <Grid container spacing={2}>
-                <Grid item xs={12} md={8}>
+                <Grid xs={12} md={8}>
                     <Typography variant="body1">
                         <strong>Descripción:</strong> {evento.descripcion || 'Sin descripción disponible.'}
                     </Typography>
                 </Grid>
-                <Grid item xs={12} md={4} sx={{ borderLeft: { md: '1px solid #e0e0e0' }, pl: { md: 3 } }}>
+                <Grid xs={12} md={4} sx={{ borderLeft: { md: '1px solid #e0e0e0' }, pl: { md: 3 } }}>
                     <Typography variant="body2" color="text.secondary">
                         <strong>Fecha Inicio:</strong> {evento.fechaInicio ? new Date(evento.fechaInicio).toLocaleString('es-AR') : 'No definida'}
                     </Typography>
