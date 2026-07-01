@@ -51,7 +51,6 @@ const LayoutPrivado = () => {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-      
       {/* BARRA LATERAL */}
       <Box sx={{ width: drawerWidth, borderRight: '1px solid #e0e0e0', backgroundColor: '#fff', display: 'flex', flexDirection: 'column' }}>
         <Typography sx={{ p: 3, fontWeight: 'bold', fontSize: '1.2rem', color: '#1a73e8' }}>
@@ -104,9 +103,6 @@ const LayoutPrivado = () => {
     </Box>
   );
 };
-
-// --- Componente Raíz ---
-
 function App() {
   return (
     <AuthProvider>

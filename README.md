@@ -1,16 +1,25 @@
-# React + Vite
+# TP4: Sistema MUIC (Gestión de Museo) - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción
+Cliente web desarrollado en React para interactuar con la API de Gestión de Museo. La aplicación permite la administración interna de los recursos del museo, incluyendo el control de accesos, el seguimiento de eventos, la gestión de plantillas y la asignación de permisos para los integrantes del equipo.
 
-Currently, two official plugins are available:
+## Tecnologías Utilizadas
+* **Framework/Librería:** React.js (React Router v6)
+* **Gestión de Estado Global:** API Context (`useContext` mediante `AuthProvider`)
+* **Estilos / UI:** Material UI (MUI)
+* **Cliente HTTP:** Axios / Fetch
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Instalación y Ejecución
 
-## React Compiler
+> **Nota:** Para realizar esta parte, es necesario primero tener el backend de la aplicación funcionando de forma paralela.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/Beccarini/Gestion-de-Museo-frontend
+   Abrir la carpeta del proyecto desde la terminal
+2. **Instalar dependencias**
+    Ya con la carpeta abierta, ejecutar el comando:
+    "npm install"
+3. **Ejecutar el frontend**
+    Hay que tener la carpeta de la aplicación abierta en la terminal, luego ejecutar el comando:
+    "npm run dev"

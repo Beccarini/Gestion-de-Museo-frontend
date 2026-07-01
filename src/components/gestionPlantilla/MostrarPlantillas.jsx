@@ -1,14 +1,13 @@
 import React from 'react';
 import { 
     Paper, Table, TableBody, TableCell, TableContainer, 
-    TableHead, TableRow, IconButton, Chip 
+    TableHead, TableRow, IconButton, Chip, Tooltip 
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
-import { DIAS_SEMANA } from '../../constants/diasSemana';
-
+import { SvgIcon } from '@mui/material';
 export function MostrarPlantillas({ plantillas, deletePlantilla, toggleEstado, editarPlantilla }) {
     return (
         <TableContainer component={Paper}>
@@ -37,7 +36,8 @@ export function MostrarPlantillas({ plantillas, deletePlantilla, toggleEstado, e
                                 <TableCell>
                                     <Chip label={row.tipo} size="small" variant="outlined" />
                                 </TableCell>
-                                <TableCell>{DIAS_SEMANA[row.diaSemana]}</TableCell>
+                                {/* Corrección: Ahora row.diaSemana es directamente el string "Lunes" */}
+                                <TableCell>{row.diaSemana}</TableCell>
                                 <TableCell>{`${row.horaInicio} a ${row.horaFin}`}</TableCell>
                                 <TableCell>
                                     <Chip 
@@ -47,6 +47,7 @@ export function MostrarPlantillas({ plantillas, deletePlantilla, toggleEstado, e
                                     />
                                 </TableCell>
                                 <TableCell align="center">
+
                                     <IconButton 
                                         color={row.activo ? "success" : "default"} 
                                         onClick={() => toggleEstado(row.id)}
