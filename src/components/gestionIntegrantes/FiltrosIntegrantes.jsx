@@ -37,7 +37,6 @@ const FiltrosIntegrantes = ({ filtroNombre, setFiltroNombre, filtroCarrera, setF
                 </Select>
             </FormControl>
 
-            {/* Botón rápido para limpiar filtros */}
             {(filtroNombre !== '' || filtroCarrera !== '') && (
                 <Button 
                     color="inherit" 

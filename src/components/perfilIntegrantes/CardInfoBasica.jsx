@@ -7,7 +7,7 @@ const CardInfoBasica = ({ integrante, onAbrirEditar }) => {
 
     const inicial = integrante.nombre ? integrante.nombre.charAt(0).toUpperCase() : 'U';
 
-return (
+    return (
         <Card elevation={3} sx={{ borderRadius: 2, flex: 1, width: '100%' }}>
             <CardContent sx={{ p: { xs: 3, md: 4 } }}>
                 

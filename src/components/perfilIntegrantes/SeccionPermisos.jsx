@@ -4,9 +4,11 @@ import SecurityIcon from '@mui/icons-material/Security';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
 
-const SeccionPermisos = ({ permisosIniciales }) => {
-    // Si desde el backend llega envuelto en 'integrante', lo desarmamos acá
+const SeccionPermisos = ({ permisosIniciales, onAbrirAsignar, onDesvincular }) => {
     const listaPermisos = Array.isArray(permisosIniciales) 
         ? permisosIniciales 
         : (permisosIniciales?.integrante?.permisos || permisosIniciales?.permisos || []);
@@ -28,13 +30,12 @@ const SeccionPermisos = ({ permisosIniciales }) => {
                         sx={{ fontWeight: 'bold' }} 
                     />
                     
-                    {/* BOTÓN ASIGNAR (Placeholder) */}
                     <Button 
                         variant="outlined" 
                         size="small" 
                         startIcon={<AddIcon />}
                         sx={{ ml: 'auto', borderRadius: 2, textTransform: 'none', fontWeight: 'bold' }}
-                        onClick={() => alert('Próximamente: Acá abriremos el modal de asignación')}
+                        onClick={onAbrirAsignar}
                     >
                         Asignar
                     </Button>
@@ -49,11 +50,11 @@ const SeccionPermisos = ({ permisosIniciales }) => {
                                     <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none' }}>Descripción</TableCell>
                                     <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none' }}>Días Permitidos</TableCell>
                                     <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none' }}>Franja Horaria</TableCell>
+                                    <TableCell sx={{ borderBottom: 'none' }} align="right"></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {listaPermisos.map((permiso, index) => {
-                                    // Truco para sacar el borde de la última fila y que quede más limpio
                                     const isLast = index === listaPermisos.length - 1;
                                     const borderStyle = isLast ? { borderBottom: 'none' } : {};
 
@@ -89,6 +90,18 @@ const SeccionPermisos = ({ permisosIniciales }) => {
                                                         {permiso.horaInicio} - {permiso.horaFin}
                                                     </Typography>
                                                 </Box>
+                                            </TableCell>
+
+                                            <TableCell align="right" sx={{ ...borderStyle }}>
+                                                <Tooltip title="Revocar permiso">
+                                                    <IconButton 
+                                                        size="small" 
+                                                        color="error" 
+                                                        onClick={() => onDesvincular(permiso.id, permiso.descripcion)}
+                                                    >
+                                                        <DeleteIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </TableCell>
                                         </TableRow>
                                     );

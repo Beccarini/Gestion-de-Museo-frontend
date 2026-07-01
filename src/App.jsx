@@ -3,6 +3,7 @@ import { CssBaseline, Box, List, ListItem, ListItemButton, ListItemText, Typogra
 import { GestionRegistro } from './pages/GestionRegistros.jsx';
 import GestionIntegrantes from './pages/GestionIntegrantes';
 import PerfilIntegrante from './pages/PerfilIntegrante';
+import GestionPermisos from './pages/GestionPermisos.jsx';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 const drawerWidth = 240;
@@ -80,6 +81,7 @@ return (
           <Route path="/registros" element={<GestionRegistro />} />
           <Route path="/integrantes" element={<GestionIntegrantes />} />
           <Route path="/integrantes/:id" element={<PerfilIntegrante />} />
+          <Route path="/permisos" element={<GestionPermisos />} />
           {/* Redirección por defecto si entran a la raíz */}
           <Route path="*" element={<Navigate to="/integrantes" replace />} />
         </Routes>
