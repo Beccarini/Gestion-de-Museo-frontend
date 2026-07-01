@@ -4,6 +4,7 @@ import { GestionRegistro } from './pages/GestionRegistros.jsx';
 import GestionIntegrantes from './pages/GestionIntegrantes';
 import PerfilIntegrante from './pages/PerfilIntegrante';
 import { GestionEventos } from './pages/GestionEvento.jsx';
+import { PerfilEvento } from './pages/PerfilEvento.jsx';
 const drawerWidth = 240; // Ancho fijo para tu barra lateral
 
 function App() {
@@ -52,9 +53,9 @@ function App() {
             <Route path="/integrantes" element={<GestionIntegrantes />} />
             <Route path="/integrantes/:id" element={<PerfilIntegrante />} />
             <Route path="/eventos" element={<GestionEventos/>} />
+            <Route path="/eventos/:id" element={<PerfilEvento/>} />
           </Routes>
         </Box>
-
       </Box>
     </BrowserRouter>
   );

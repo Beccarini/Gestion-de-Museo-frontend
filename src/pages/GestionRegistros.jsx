@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add'; // Opcional, para que el botón se vea mejor
+import AddIcon from '@mui/icons-material/Add'; 
 import { AltaRegistro } from '../components/registro/AltaRegistro';
 import { MostrarBaja } from '../components/registro/MostrarBaja';
 import { getRegistros, deleteRegistro, postRegistro } from '../services/registrosService';
-
 export function GestionRegistro() {
     const [allRegistros, setAllRegistros] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el Dialog
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
     function obtenerRegistros() {
         getRegistros()
             .then((data) => {

@@ -10,6 +10,7 @@ export function MostrarBaja({registros, setRegistros, deleteRegistro}){
                     <TableRow>
                         <TableCell>Fecha</TableCell>
                         <TableCell>Integrante ID</TableCell>
+                        <TableCell>Evento ID</TableCell>
                         <TableCell>Asistencia</TableCell>
                         <TableCell align="center">Acciones</TableCell>
                     </TableRow>
@@ -27,6 +28,7 @@ export function MostrarBaja({registros, setRegistros, deleteRegistro}){
                                 <TableRow key={row.id}>
                                     <TableCell>{row.fecha ? new Date(row.fecha).toLocaleString() : ''}</TableCell>
                                     <TableCell>{row.integranteId}</TableCell>
+                                    <TableCell>{row.eventoId}</TableCell>
                                     <TableCell>{row.esAsistencia ? 'Sí' : 'No'}</TableCell>
                                     <TableCell align="center">
                                         <IconButton color="error" onClick={() => deleteRegistro(row.id)}>

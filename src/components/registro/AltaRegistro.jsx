@@ -17,9 +17,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { getIntegrantes } from '../../services/integranteService';
-
+import { getEventos } from '../../services/eventoService';
 const estadoInicialFormulario = { 
     integranteId: '',
+    eventoId:'',
     fecha: null,
     esAsistencia: false,
     esApertura: false,
@@ -29,7 +30,7 @@ const estadoInicialFormulario = {
 export function AltaRegistro({ nuevoRegistro, open, onClose }) {
     const [formData, setFormData] = useState(estadoInicialFormulario);
     const [listaIntegrantes, setListaIntegrantes] = useState([]);
-
+    const [eventos,setEventos]=useState([])
     useEffect(() => {
         if (open) {
             obtenerIntegrantes();
@@ -42,6 +43,11 @@ export function AltaRegistro({ nuevoRegistro, open, onClose }) {
         }).catch((error) => {
             console.log(error);
         });
+        getEventos().then((data)=>{
+            setEventos(data || []);
+        }).catch((error)=>{
+            console.log(error);
+        })
     };
 
     const handleChange = (e) => {
@@ -89,6 +95,29 @@ export function AltaRegistro({ nuevoRegistro, open, onClose }) {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <form id="formulario-registro" onSubmit={handleSubmit}>
                         <Grid container spacing={3} sx={{ mt: 0.5 }}>
+                            <Grid xs={12}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="label-evento">Eventos</InputLabel> 
+                                    <Select
+                                        labelId="label-evento" // <-- Mismo ID que arriba
+                                        id="eventoSeleccionado"
+                                        name="eventoId"
+                                        value={formData.eventoId || ''} // <-- Agrega el fallback '||' para evitar warnings de React
+                                        label="Eventos" // <-- Debe ser idéntico al texto del InputLabel
+                                        onChange={handleChange}
+                                    >
+                                        {eventos.length === 0 ? (
+                                            <MenuItem disabled value=""><em>No hay eventos disponibles</em></MenuItem>
+                                        ) : (
+                                            eventos.map((evento) => (
+                                                <MenuItem key={evento.id} value={evento.id}>
+                                                    {evento.nombre}
+                                                </MenuItem>
+                                            ))
+                                        )}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
                             <Grid xs={12}>
                                 <FormControl fullWidth>
                                     <InputLabel id="label-integrante">Integrante</InputLabel>
