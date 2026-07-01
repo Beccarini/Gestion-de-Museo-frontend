@@ -10,7 +10,6 @@ const TablaUltimosRegistros = ({ registros, integranteId }) => {
             <CardContent sx={{ p: { xs: 2, md: 3 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 1 }}>
-                    {/* USAMOS EL NOMBRE EXACTO DEL IMPORT */}
                     <ListAltIcon color="info" />
                     
                     <Typography variant="h6" fontWeight="bold">
@@ -49,7 +48,6 @@ const TablaUltimosRegistros = ({ registros, integranteId }) => {
                                             <TableCell>{dia}</TableCell>
                                             <TableCell>{hora}</TableCell>
                                             <TableCell>
-                                                {/* Mostramos tags según los booleanos del modelo */}
                                                 <Box sx={{ display: 'flex', gap: 1 }}>
                                                     {reg.esApertura && (
                                                         <Chip label="Apertura" size="small" color="info" variant="outlined" />
