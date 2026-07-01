@@ -1,0 +1,1 @@
+export const FRECUENCIAS = ['semanal', 'quincenal', 'mensual'];
