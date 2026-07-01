@@ -11,6 +11,7 @@ import GestionIntegrantes from './pages/GestionIntegrantes';
 import PerfilIntegrante from './pages/PerfilIntegrante';
 import GestionPermisos from './pages/GestionPermisos.jsx';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import Dashboard from './pages/Dashboard.jsx';
 import Login from './pages/Login';
 const drawerWidth = 240;
 import { GestionEventos } from './pages/GestionEvento.jsx';
@@ -87,8 +88,18 @@ const LayoutPrivado = () => {
       </Box>
 
       {/* CONTENIDO PRINCIPAL */}
-      <Box component="main" sx={{ flexGrow: 1, backgroundColor: '#fafafa', p: 3 }}>
+      <Box 
+        component="main" 
+        sx={{ 
+          flexGrow: 1, 
+          backgroundColor: '#fafafa', 
+          p: 0, // Quitamos el padding global para que cada página decida sus márgenes
+          width: `calc(100% - ${drawerWidth}px)`, // Forzamos el ancho exacto restando el menú lateral
+          height: '100vh',
+          overflow: 'auto' // Permite el scroll si el contenido es muy largo
+        }}>
         <Routes>
+          <Route path="/" element={<Dashboard />} />
           <Route path="/registros" element={<GestionRegistro />} />
           <Route path="/integrantes" element={<GestionIntegrantes />} />
           <Route path="/integrantes/:id" element={<PerfilIntegrante />} />
