@@ -6,6 +6,8 @@ import PerfilIntegrante from './pages/PerfilIntegrante';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 const drawerWidth = 240;
+import { GestionEventos } from './pages/GestionEvento.jsx';
+import { PerfilEvento } from './pages/PerfilEvento.jsx';
 
 const menuItems = [
   { text: 'DashBoard', path: '/' },

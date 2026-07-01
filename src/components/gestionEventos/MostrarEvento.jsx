@@ -6,8 +6,10 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import {Link} from 'react-router-dom';
 
-export function MostrarEvento({ eventos, deleteEvento, onEditar }) {
+export function MostrarEvento({eventos, deleteEvento, onEditar}) {
     return (
         <TableContainer component={Paper} sx={{ boxShadow: 2, borderRadius: 2 }}>
             <Table>
@@ -46,6 +48,21 @@ export function MostrarEvento({ eventos, deleteEvento, onEditar }) {
                             </TableCell>
                             
                             <TableCell align="center">
+                                <Tooltip title="Ver Detalles del Evento">
+                                    <IconButton 
+                                        color="info" 
+                                        size="small" 
+                                        sx={{ 
+                                            mx: 0.5, 
+                                            backgroundColor: '#e6fffa', 
+                                            '&:hover': { backgroundColor: '#b2f5ea' } 
+                                        }}
+                                        component={Link}
+                                        to={`/eventos/${evento.id}`}
+                                    >
+                                        <VisibilityIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
                                 <Tooltip title="Editar Evento">
                                     <IconButton 
                                         color="primary" 
