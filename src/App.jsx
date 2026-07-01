@@ -5,6 +5,7 @@ import GestionIntegrantes from './pages/GestionIntegrantes';
 import PerfilIntegrante from './pages/PerfilIntegrante';
 import { GestionEventos } from './pages/GestionEvento.jsx';
 import { PerfilEvento } from './pages/PerfilEvento.jsx';
+import { Plantilla } from './pages/Plantilla.jsx';
 const drawerWidth = 240; // Ancho fijo para tu barra lateral
 
 function App() {
@@ -14,16 +15,13 @@ function App() {
     { text: 'Registros', path: '/registros' },
     { text: 'Permisos', path: '/config' },
     { text: 'Eventos', path: '/eventos' },
-    { text: 'Proyectos', path: '/proyectos' },
-
+    { text: 'Proyectos', path: '/proyectos' }
   ];
 
   return (
     <BrowserRouter>
       <CssBaseline />
       <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-        
-        {/* BARRA LATERAL */}
         <Box sx={{ width: drawerWidth, borderRight: '1px solid #e0e0e0', backgroundColor: '#fff' }}>
           <Typography sx={{ p: 3, fontWeight: 'bold', fontSize: '1.2rem', color: '#1a73e8' }}>
             Mi App
@@ -45,15 +43,14 @@ function App() {
             ))}
           </List>
         </Box>
-
-        {/* CONTENIDO PRINCIPAL */}
         <Box component="main" sx={{ flexGrow: 1, backgroundColor: '#fafafa', p: 3 }}>
           <Routes>
             <Route path="/registros" element={<GestionRegistro />} />
             <Route path="/integrantes" element={<GestionIntegrantes />} />
             <Route path="/integrantes/:id" element={<PerfilIntegrante />} />
             <Route path="/eventos" element={<GestionEventos/>} />
-            <Route path="/eventos/:id" element={<PerfilEvento/>} />
+            <Route path="/eventos/:id" element={<PerfilEvento/>}/>
+            <Route path="/plantilla" element={<Plantilla/>}/>
           </Routes>
         </Box>
       </Box>

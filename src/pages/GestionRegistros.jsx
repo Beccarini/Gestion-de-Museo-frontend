@@ -43,8 +43,6 @@ export function GestionRegistro() {
                 <Typography variant="h4" gutterBottom sx={{ mb: 0 }}>
                     Gestión de Registros
                 </Typography>
-                
-                {/* Botón que abre el modal */}
                 <Button 
                     variant="contained" 
                     color="primary" 
@@ -54,15 +52,11 @@ export function GestionRegistro() {
                     Nuevo Registro
                 </Button>
             </Box>
-            
-            {/* --- SECCIÓN DE ALTA (MODAL) --- */}
             <AltaRegistro 
                 open={isModalOpen} 
                 onClose={() => setIsModalOpen(false)} 
                 nuevoRegistro={nuevoRegistro} 
             />
-            
-            {/* --- SECCIÓN DE BAJA (LISTADO) --- */}
             <MostrarBaja 
                 registros={allRegistros} 
                 setRegistros={setAllRegistros}
