@@ -42,13 +42,15 @@ export function GestionPlantilla() {
     }
 
     function borrarPlantilla(id) {
-        deletePlantilla(id)
-            .then(() => {
-                obtenerPlantillas();
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        if (window.confirm('¿Estás seguro de eliminar la plantilla?')){
+            deletePlantilla(id)
+                .then(() => {
+                    obtenerPlantillas();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
     }
 
     function alternarEstado(id) {

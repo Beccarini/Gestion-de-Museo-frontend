@@ -29,13 +29,15 @@ export function GestionRegistro() {
             });
     }
     function borrarRegistro(id){
-        deleteRegistro(id)
-        .then(()=>{
-            obtenerRegistros()
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
+        if (window.confirm('¿Estás seguro de eliminar el registro?')){
+            deleteRegistro(id)
+            .then(()=>{
+                obtenerRegistros()
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+        }
     }
     return (
         <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>

@@ -7,8 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
-
-const DIAS = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+import { DIAS_SEMANA } from '../../constants/diasSemana';
 
 export function MostrarPlantillas({ plantillas, deletePlantilla, toggleEstado, editarPlantilla }) {
     return (
@@ -38,7 +37,7 @@ export function MostrarPlantillas({ plantillas, deletePlantilla, toggleEstado, e
                                 <TableCell>
                                     <Chip label={row.tipo} size="small" variant="outlined" />
                                 </TableCell>
-                                <TableCell>{DIAS[row.diaSemana]}</TableCell>
+                                <TableCell>{DIAS_SEMANA[row.diaSemana]}</TableCell>
                                 <TableCell>{`${row.horaInicio} a ${row.horaFin}`}</TableCell>
                                 <TableCell>
                                     <Chip 
