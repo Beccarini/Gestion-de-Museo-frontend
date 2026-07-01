@@ -15,7 +15,6 @@ const formatearFecha = (fechaISO) => {
     });
 };
 
-// Función para asignar colores a los estados
 const getEstadoColor = (estado) => {
     const est = estado?.toLowerCase() || '';
     if (est === 'en curso' || est === 'activo') return 'success';
@@ -25,7 +24,6 @@ const getEstadoColor = (estado) => {
 };
 
 const SeccionProyectos = ({ proyectosIniciales }) => {
-    // Buscamos el array donde sea que venga según la respuesta del backend
     const listaProyectos = Array.isArray(proyectosIniciales) 
         ? proyectosIniciales 
         : (proyectosIniciales?.proyectos || proyectosIniciales?.integrante?.proyectos || []);
@@ -34,7 +32,6 @@ const SeccionProyectos = ({ proyectosIniciales }) => {
         <Card elevation={3} sx={{ borderRadius: 2, height: '100%', minHeight: '180px', width: '100%', display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ p: { xs: 2, md: 3 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 
-                {/* Encabezado */}
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 1 }}>
                     <AccountTreeIcon color="secondary" />
                     <Typography variant="h6" fontWeight="bold">
@@ -47,7 +44,6 @@ const SeccionProyectos = ({ proyectosIniciales }) => {
                         sx={{ fontWeight: 'bold' }} 
                     />
 
-                    {/* BOTÓN ASIGNAR */}
                     <Button 
                         variant="outlined" 
                         color="secondary"
@@ -79,7 +75,6 @@ const SeccionProyectos = ({ proyectosIniciales }) => {
                                     return (
                                         <TableRow key={proyecto.id} hover>
                                             
-                                            {/* Columna Nombre y Descripción */}
                                             <TableCell sx={{ ...borderStyle }}>
                                                 <Typography variant="body2" fontWeight={600} color="text.primary">
                                                     {proyecto.nombre || 'Sin nombre'}
@@ -89,7 +84,6 @@ const SeccionProyectos = ({ proyectosIniciales }) => {
                                                 </Typography>
                                             </TableCell>
                                             
-                                            {/* Columna Fechas */}
                                             <TableCell sx={{ ...borderStyle }}>
                                                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
                                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
@@ -107,7 +101,6 @@ const SeccionProyectos = ({ proyectosIniciales }) => {
                                                 </Box>
                                             </TableCell>
 
-                                            {/* Columna Estado */}
                                             <TableCell sx={{ ...borderStyle }}>
                                                 <Chip 
                                                     label={proyecto.estado ? proyecto.estado.toUpperCase() : 'DESCONOCIDO'} 
