@@ -29,13 +29,15 @@ export function GestionRegistro() {
             });
     }
     function borrarRegistro(id){
-        deleteRegistro(id)
-        .then(()=>{
-            obtenerRegistros()
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
+        if (window.confirm('¿Estás seguro de eliminar el registro?')){
+            deleteRegistro(id)
+            .then(()=>{
+                obtenerRegistros()
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+        }
     }
     return (
         <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
@@ -43,8 +45,6 @@ export function GestionRegistro() {
                 <Typography variant="h4" gutterBottom sx={{ mb: 0 }}>
                     Gestión de Registros
                 </Typography>
-                
-                {/* Botón que abre el modal */}
                 <Button 
                     variant="contained" 
                     color="primary" 
@@ -54,15 +54,11 @@ export function GestionRegistro() {
                     Nuevo Registro
                 </Button>
             </Box>
-            
-            {/* --- SECCIÓN DE ALTA (MODAL) --- */}
             <AltaRegistro 
                 open={isModalOpen} 
                 onClose={() => setIsModalOpen(false)} 
                 nuevoRegistro={nuevoRegistro} 
             />
-            
-            {/* --- SECCIÓN DE BAJA (LISTADO) --- */}
             <MostrarBaja 
                 registros={allRegistros} 
                 setRegistros={setAllRegistros}

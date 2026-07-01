@@ -24,7 +24,6 @@ export function GestionEventos() {
                 console.error("Error al buscar eventos:", error);
             });
     }
-
     useEffect(() => {
         obtenerEventos();
     }, []);
@@ -81,7 +80,6 @@ export function GestionEventos() {
             <Typography variant="h4" sx={{ mb: 3, fontWeight: 'bold' }}>
                 Gestión de Eventos
             </Typography>
-            
             <Button 
                 variant="contained" 
                 color="primary" 
@@ -90,8 +88,6 @@ export function GestionEventos() {
             >
                 Registrar Nuevo Evento
             </Button>
-
-            {/* Pasamos allEventos y las funciones correspondientes */}
             <MostrarEvento 
                 eventos={allEventos} 
                 deleteEvento={borrarEvento} 
