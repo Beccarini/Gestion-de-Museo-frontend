@@ -101,7 +101,6 @@ const GestionIntegrantes = () => {
         deleteIntegrante(id)
             .then((response) => {
                 if (response.status === 204 || response.status === 200) {
-                    // Refrescamos desde el backend para mantener la paginación/orden correcto
                     obtenerIntegrantes(); 
                 }
             })

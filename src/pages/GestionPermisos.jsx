@@ -4,7 +4,9 @@ import AddIcon from '@mui/icons-material/Add';
 import SecurityIcon from '@mui/icons-material/Security';
 import TablaPermisos from '../components/permisos/TablaPermisos';
 import FormularioPermiso from '../components/permisos/FormularioPermiso';
-import FiltrosPermisos from '../components/permisos/FiltrosPermisos'; // <-- IMPORTAMOS EL COMPONENTE
+import FiltrosPermisos from '../components/permisos/FiltrosPermisos';
+import AsignarMasivo from '../components/permisos/AsignarMasivo';
+import VerIntegrantes from '../components/perfilIntegrantes/VerIntegrantes';
 import { getPermisos, crearPermiso, actualizarPermiso, eliminarPermiso } from '../services/permisoService';
 
 const GestionPermisos = () => {
@@ -15,6 +17,10 @@ const GestionPermisos = () => {
     const [openModal, setOpenModal] = useState(false);
     const [permisoAEditar, setPermisoAEditar] = useState(null);
     const [error, setError] = useState(null);
+    const [openModalMasivo, setOpenModalMasivo] = useState(false);
+    const [permisoParaAsignar, setPermisoParaAsignar] = useState(null);
+    const [openModalIntegrantes, setOpenModalIntegrantes] = useState(false);
+    const [permisoParaVer, setPermisoParaVer] = useState(null);
 
     const cargarPermisos = async () => {
         try {
@@ -69,13 +75,21 @@ const GestionPermisos = () => {
         if (window.confirm('¿Estás seguro de eliminar este permiso? Esto podría afectar a los integrantes que lo tengan asignado.')) {
             try {
                 await eliminarPermiso(id);
-                // Si justo borramos el último de la página, es buena práctica volver a la 1
                 setPage(1); 
                 cargarPermisos();
             } catch (err) {
                 setError('Error al eliminar el permiso.');
             }
         }
+    };
+
+    const handleOpenAsignarMasivo = (permiso) => {
+        setPermisoParaAsignar(permiso);
+        setOpenModalMasivo(true);
+    };
+    const handleOpenVerIntegrantes = (permiso) => {
+        setPermisoParaVer(permiso);
+        setOpenModalIntegrantes(true);
     };
 
     return (
@@ -104,7 +118,6 @@ const GestionPermisos = () => {
                 </Alert>
             )}
 
-            {/* --- COMPONENTE DE FILTROS --- */}
             <FiltrosPermisos 
                 filtroDia={filtroDia}
                 setFiltroDia={handleCambioFiltro}
@@ -115,6 +128,8 @@ const GestionPermisos = () => {
                 permisos={permisos} 
                 onEdit={handleOpenEditar} 
                 onDelete={handleEliminar} 
+                onAsignarMasivo={handleOpenAsignarMasivo}
+                onVerIntegrantes={handleOpenVerIntegrantes}
             />
 
             {totalPages > 1 && (
@@ -133,6 +148,21 @@ const GestionPermisos = () => {
                 onClose={() => setOpenModal(false)} 
                 permisoAEditar={permisoAEditar}
                 onGuardar={handleGuardar}
+            />
+
+            <AsignarMasivo 
+                open={openModalMasivo}
+                onClose={() => setOpenModalMasivo(false)}
+                permisoSeleccionado={permisoParaAsignar}
+                onAsignacionExitosa={() => {
+                    alert('¡Permisos asignados con éxito!');
+                }}
+            />
+
+            <VerIntegrantes 
+                open={openModalIntegrantes}
+                onClose={() => setOpenModalIntegrantes(false)}
+                permisoSeleccionado={permisoParaVer}
             />
 
         </Box>

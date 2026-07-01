@@ -50,8 +50,8 @@ const AsignarPermisos = ({ open, onClose, integranteId, permisosActuales, onAsig
         setGuardando(true);
         try {
             await asignarMultiplesPermisos(integranteId, seleccionados);
-            onAsignacionExitosa(); // Recargamos el perfil
-            onClose(); // Cerramos el modal
+            onAsignacionExitosa(); 
+            onClose(); 
         } catch (error) {
             console.error("Error al asignar permisos:", error);
             alert("Hubo un error al asignar los permisos.");

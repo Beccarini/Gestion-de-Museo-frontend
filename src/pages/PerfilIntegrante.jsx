@@ -60,7 +60,7 @@ const PerfilIntegrante = () => {
     if (window.confirm(`¿Seguro que querés revocar el permiso "${descripcion}" a este integrante?`)) {
         try {
             await desvincularPermiso(id, permisoId);
-            cargarDatosPerfil(); // Recargamos para que desaparezca de la tabla
+            cargarDatosPerfil(); 
         } catch (err) {
             console.error("Error al revocar:", err);
             setError("Hubo un error al revocar el permiso.");

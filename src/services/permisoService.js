@@ -13,6 +13,11 @@ export const getPermisoById = async (id) => {
     return response.data;
 };
 
+export const getIntegrantesPorPermiso = async (permisoId) => {
+    const response = await api.get(`/permisos/${permisoId}/integrantes`);
+    return response.data;
+};
+
 export const crearPermiso = async (permisoData) => {
     const response = await api.post('/permisos', permisoData);
     return response.data;

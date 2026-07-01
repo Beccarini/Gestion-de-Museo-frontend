@@ -82,21 +82,31 @@ const FormularioPermiso = ({ open, onClose, permisoAEditar, onGuardar }) => {
                                 label="Hora de Inicio"
                                 name="horaInicio"
                                 type="time"
-                                value={formData.horaInicio}
+                                value={formData.horaInicio || ''}
                                 onChange={handleChange}
                                 fullWidth
                                 required
-                                InputLabelProps={{ shrink: true }}
+                                InputLabelProps={{ 
+                                    shrink: true 
+                                }}
+                                slotProps={{ 
+                                    inputLabel: { shrink: true } 
+                                }}
                             />
                             <TextField
                                 label="Hora de Fin"
                                 name="horaFin"
                                 type="time"
-                                value={formData.horaFin}
+                                value={formData.horaFin || ''}
                                 onChange={handleChange}
                                 fullWidth
                                 required
-                                InputLabelProps={{ shrink: true }}
+                                InputLabelProps={{ 
+                                    shrink: true 
+                                }}
+                                slotProps={{ 
+                                    inputLabel: { shrink: true } 
+                                }}
                             />
                         </Box>
 

@@ -1,6 +1,6 @@
 import api from './api';
 
-export const getIntegrantes = async (nombre = '', carrera = '', pagina= 1, limite=2) => {
+export const getIntegrantes = async (nombre = '', carrera = '', pagina= 1, limite=20) => {
     const params = { pagina, limite };
     if (nombre) params.nombre = nombre;
     if (carrera) params.carrera = carrera;
@@ -72,6 +72,16 @@ export const asignarMultiplesPermisos = async (integranteId, permisosIds) => {
     await Promise.all(peticiones);
     return true;
 };
+
+export const asignarPermisoMasivo = async (permisoId, integrantesIds) => {
+    const peticiones = integrantesIds.map(integranteId => 
+        api.post(`/integrantes/${integranteId}/permisos`, { permisoId })
+    );
+    
+    const resultados = await Promise.allSettled(peticiones);
+    return resultados;
+};
+
 
 export const asignarProyecto = async (id, proyectoId) => {
     const response = await api.post(`/integrantes/${id}/proyectos`, { proyectoId });
