@@ -21,21 +21,15 @@ api.interceptors.response.use(
         return response;
     },
     (error) => {
-        // Si el backend tira un error, revisa si es un 401 (No autorizado / Expirado)
         if (error.response && error.response.status === 401) {
-            // Verifica que no sea la ruta del login propiamente dicha
             if (!error.config.url.includes('/auth/login')) {
                 console.warn('🔴 Sesión expirada o token inválido. Forzando cierre de sesión...');
-                
-                
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
-                
-                //Redirige al login limpiando el estado de la app
                 window.location.href = '/login';
             }
         }
+        return Promise.reject(error);
     }
 )
-
 export default api;

@@ -14,6 +14,7 @@ import Dashboard from './pages/Dashboard.jsx';
 const drawerWidth = 240;
 import { GestionEventos } from './pages/GestionEvento.jsx';
 import { PerfilEvento } from './pages/PerfilEvento.jsx';
+import GestionProyectos from './pages/GestionProyectos.jsx';
 import { GestionPlantilla } from './pages/GestionPlantilla.jsx';
 const menuItems = [
   { text: 'DashBoard', path: '/' },
@@ -102,6 +103,7 @@ const LayoutPrivado = () => {
           <Route path="/integrantes" element={<GestionIntegrantes />} />
           <Route path="/integrantes/:id" element={<PerfilIntegrante />} />
           <Route path="/permisos" element={<GestionPermisos />} />
+          <Route path="/proyectos" element={<GestionProyectos />} />
           <Route path="/eventos" element={<GestionEventos />} />
           <Route path="/eventos/:id" element={<PerfilEvento />} />
           <Route path="/plantilla" element={<GestionPlantilla />} />
