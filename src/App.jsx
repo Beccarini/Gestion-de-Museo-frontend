@@ -10,12 +10,12 @@ import { GestionRegistro } from './pages/GestionRegistros.jsx';
 import GestionIntegrantes from './pages/GestionIntegrantes';
 import PerfilIntegrante from './pages/PerfilIntegrante';
 import GestionPermisos from './pages/GestionPermisos.jsx';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Login from './pages/Login';
+const drawerWidth = 240;
 import { GestionEventos } from './pages/GestionEvento.jsx';
 import { PerfilEvento } from './pages/PerfilEvento.jsx';
 import { GestionPlantilla } from './pages/GestionPlantilla.jsx';
-
-const drawerWidth = 240;
-
 const menuItems = [
   { text: 'DashBoard', path: '/' },
   { text: 'Integrantes', path: '/integrantes' },
@@ -36,12 +36,10 @@ const RutaPublica = ({ children }) => {
   
   return children;
 };
-
 const RutaProtegida = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   
   if (loading) return null;
-  // Si NO está logueado, lo redirigimos al login
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   
   return children;
@@ -105,9 +103,8 @@ const LayoutPrivado = () => {
   );
 };
 
-// --- Componente Raíz ---
-
 function App() {
+
   return (
     <AuthProvider>
       <BrowserRouter>
