@@ -10,9 +10,7 @@ import { GestionRegistro } from './pages/GestionRegistros.jsx';
 import GestionIntegrantes from './pages/GestionIntegrantes';
 import PerfilIntegrante from './pages/PerfilIntegrante';
 import GestionPermisos from './pages/GestionPermisos.jsx';
-import { AuthProvider, useAuth } from './context/AuthContext';
 import Dashboard from './pages/Dashboard.jsx';
-import Login from './pages/Login';
 const drawerWidth = 240;
 import { GestionEventos } from './pages/GestionEvento.jsx';
 import { PerfilEvento } from './pages/PerfilEvento.jsx';
@@ -107,7 +105,7 @@ const LayoutPrivado = () => {
           <Route path="/eventos" element={<GestionEventos />} />
           <Route path="/eventos/:id" element={<PerfilEvento />} />
           <Route path="/plantilla" element={<GestionPlantilla />} />
-          <Route path="*" element={<Navigate to="/integrantes" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Box>
     </Box>
