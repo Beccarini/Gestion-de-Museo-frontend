@@ -30,7 +30,7 @@ const menuItems = [
   { text: 'Permisos', path: '/permisos', icon: <VpnKeyIcon /> },
   { text: 'Proyectos', path: '/proyectos', icon: <WorkIcon /> },
   { text: 'Eventos', path: '/eventos', icon: <EventIcon /> },
-  { text: 'Plantilla de evento', path: '/plantilla', icon: <GridViewIcon /> }
+  { text: 'Plantilla de evento', path: '/plantillas', icon: <GridViewIcon /> }
 ];
 
 
