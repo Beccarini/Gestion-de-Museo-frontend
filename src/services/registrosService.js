@@ -4,7 +4,7 @@ export const getRegistros = async (filtros = {}) => {
     // Extraemos las variables del objeto (con valores por defecto para paginación)
     const { 
         pagina = 1, 
-        limite = 10, 
+        limite = 20, 
         integranteId, 
         fechaInicio, 
         fechaFin, 
