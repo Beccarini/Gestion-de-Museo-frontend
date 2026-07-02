@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { Box, Card, CardContent, TextField, Button, Typography, Alert, CircularProgress } from '@mui/material';
+import { Box, Card, CardContent, TextField, Button, Typography, Alert, CircularProgress, InputAdornment, IconButton } from '@mui/material';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { loginService } from '../services/authService';
+import { useState } from 'react';
 
 const Login = () => {
     const { login } = useAuth();
@@ -13,6 +15,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [loadingLogin, setLoadingLogin] = useState(false);
     const [error, setError] = useState(null);
+    const [mostrarPassword, setMostrarPassword] = useState(false);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -81,12 +84,27 @@ const Login = () => {
                         />
                         <TextField
                             label="Contraseña"
-                            type="password"
+                            type={mostrarPassword ? 'text' : 'password'}
                             fullWidth
                             margin="normal"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             disabled={loadingLogin}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={() => setMostrarPassword((prev) => !prev)}
+                                            onMouseDown={(e) => e.preventDefault()}
+                                            edge="end"
+                                            disabled={loadingLogin}
+                                            aria-label={mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                                        >
+                                            {mostrarPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
                         <Button
                             type="submit"
