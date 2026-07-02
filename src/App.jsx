@@ -23,7 +23,7 @@ const menuItems = [
   { text: 'Permisos', path: '/permisos' },
   { text: 'Eventos', path: '/eventos' },
   { text: 'Proyectos', path: '/proyectos' },
-  { text: 'Plantilla de evento', path:'/plantilla'}
+  { text: 'Plantilla de evento', path:'/plantillas'}
 ];
 
 
@@ -105,7 +105,7 @@ const LayoutPrivado = () => {
           <Route path="/proyectos" element={<GestionProyectos />} />
           <Route path="/eventos" element={<GestionEventos />} />
           <Route path="/eventos/:id" element={<PerfilEvento />} />
-          <Route path="/plantilla" element={<GestionPlantilla />} />
+          <Route path="/plantillas" element={<GestionPlantilla />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Box>

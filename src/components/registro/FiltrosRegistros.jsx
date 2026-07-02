@@ -4,14 +4,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
-import 'dayjs/locale/es'; // Opcional: para que el calendario esté en español
+import 'dayjs/locale/es'; 
 
-export const FiltrosRegistros = ({ 
-    fechaInicio, setFechaInicio, 
-    fechaFin, setFechaFin, 
-    esAsistencia, setEsAsistencia, 
-    esApertura, setEsApertura 
-}) => {
+export function FiltrosRegistros({ fechaInicio, setFechaInicio, fechaFin, setFechaFin, esAsistencia, setEsAsistencia, esApertura, setEsApertura}){
     
     const hasFilters = fechaInicio || fechaFin || esAsistencia !== '' || esApertura !== '';
 
