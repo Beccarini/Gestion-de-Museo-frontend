@@ -4,7 +4,7 @@ import SecurityIcon from '@mui/icons-material/Security';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
+import LinkOffIcon from '@mui/icons-material/LinkOff';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 
@@ -99,7 +99,7 @@ const SeccionPermisos = ({ permisosIniciales, onAbrirAsignar, onDesvincular }) =
                                                         color="error" 
                                                         onClick={() => onDesvincular(permiso.id, permiso.descripcion)}
                                                     >
-                                                        <DeleteIcon fontSize="small" />
+                                                        <LinkOffIcon fontSize="small" />
                                                     </IconButton>
                                                 </Tooltip>
                                             </TableCell>

@@ -6,7 +6,7 @@ import TablaPermisos from '../components/permisos/TablaPermisos';
 import FormularioPermiso from '../components/permisos/FormularioPermiso';
 import FiltrosPermisos from '../components/permisos/FiltrosPermisos';
 import AsignarMasivo from '../components/permisos/AsignarMasivo';
-import VerIntegrantes from '../components/perfilIntegrantes/VerIntegrantes';
+import VerIntegrantes from '../components/permisos/VerIntegrantes';
 import { getPermisos, crearPermiso, actualizarPermiso, eliminarPermiso } from '../services/permisoService';
 
 const GestionPermisos = () => {

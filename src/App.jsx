@@ -17,7 +17,7 @@ import { PerfilEvento } from './pages/PerfilEvento.jsx';
 import GestionProyectos from './pages/GestionProyectos.jsx';
 import { GestionPlantilla } from './pages/GestionPlantilla.jsx';
 const menuItems = [
-  { text: 'DashBoard', path: '/' },
+  { text: 'Dashboard', path: '/' },
   { text: 'Integrantes', path: '/integrantes' },
   { text: 'Registros', path: '/registros' },
   { text: 'Permisos', path: '/permisos' },
