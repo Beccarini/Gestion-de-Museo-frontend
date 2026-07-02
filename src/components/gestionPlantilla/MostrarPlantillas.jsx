@@ -1,22 +1,13 @@
 import React from 'react';
 import { 
     Paper, Table, TableBody, TableCell, TableContainer, 
-<<<<<<< HEAD
     TableHead, TableRow, IconButton, Chip, Tooltip 
-=======
-    TableHead, TableRow, IconButton, Chip 
->>>>>>> 367ca93630868418cd6834f0c2d5d9a8afe09e65
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import ToggleOffIcon from '@mui/icons-material/ToggleOff';
-<<<<<<< HEAD
-import { SvgIcon } from '@mui/material';
-=======
-import { DIAS_SEMANA } from '../../constants/diasSemana';
 
->>>>>>> 367ca93630868418cd6834f0c2d5d9a8afe09e65
 export function MostrarPlantillas({ plantillas, deletePlantilla, toggleEstado, editarPlantilla }) {
     return (
         <TableContainer component={Paper}>
@@ -45,12 +36,8 @@ export function MostrarPlantillas({ plantillas, deletePlantilla, toggleEstado, e
                                 <TableCell>
                                     <Chip label={row.tipo} size="small" variant="outlined" />
                                 </TableCell>
-<<<<<<< HEAD
-                                {/* Corrección: Ahora row.diaSemana es directamente el string "Lunes" */}
+                                {/* Mantiene la corrección: row.diaSemana ya es un string como "Lunes" */}
                                 <TableCell>{row.diaSemana}</TableCell>
-=======
-                                <TableCell>{DIAS_SEMANA[row.diaSemana]}</TableCell>
->>>>>>> 367ca93630868418cd6834f0c2d5d9a8afe09e65
                                 <TableCell>{`${row.horaInicio} a ${row.horaFin}`}</TableCell>
                                 <TableCell>
                                     <Chip 
@@ -60,24 +47,26 @@ export function MostrarPlantillas({ plantillas, deletePlantilla, toggleEstado, e
                                     />
                                 </TableCell>
                                 <TableCell align="center">
-<<<<<<< HEAD
-
-=======
->>>>>>> 367ca93630868418cd6834f0c2d5d9a8afe09e65
-                                    <IconButton 
-                                        color={row.activo ? "success" : "default"} 
-                                        onClick={() => toggleEstado(row.id)}
-                                    >
-                                        {row.activo ? <ToggleOnIcon /> : <ToggleOffIcon />}
-                                    </IconButton>
+                                    <Tooltip title={row.activo ? "Desactivar" : "Activar"}>
+                                        <IconButton 
+                                            color={row.activo ? "success" : "default"} 
+                                            onClick={() => toggleEstado(row.id)}
+                                        >
+                                            {row.activo ? <ToggleOnIcon /> : <ToggleOffIcon />}
+                                        </IconButton>
+                                    </Tooltip>
                                     
-                                    <IconButton color="primary" onClick={() => editarPlantilla(row)}>
-                                        <EditIcon />
-                                    </IconButton>
+                                    <Tooltip title="Editar">
+                                        <IconButton color="primary" onClick={() => editarPlantilla(row)}>
+                                            <EditIcon />
+                                        </IconButton>
+                                    </Tooltip>
                                     
-                                    <IconButton color="error" onClick={() => deletePlantilla(row.id)}>
-                                        <DeleteIcon />
-                                    </IconButton>
+                                    <Tooltip title="Eliminar">
+                                        <IconButton color="error" onClick={() => deletePlantilla(row.id)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Tooltip>
                                 </TableCell>
                             </TableRow>
                         ))
