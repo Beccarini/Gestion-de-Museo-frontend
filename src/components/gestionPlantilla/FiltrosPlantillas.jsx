@@ -1,21 +1,16 @@
 import React from 'react';
 import { Box, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export const FiltrosPlantillas = ({ 
     tipo, setTipo, 
     diaSemana, setDiaSemana, 
     frecuencia, setFrecuencia,
-    activo, setActivo 
+    activo, setActivo,
+    onLimpiar 
 }) => {
     
     const hasFilters = tipo !== '' || diaSemana !== '' || frecuencia !== '' || activo !== '';
-
-    const limpiarFiltros = () => {
-        setTipo('');
-        setDiaSemana('');
-        setFrecuencia('');
-        setActivo('');
-    };
 
     const dias = [
         { value: '0', label: 'Domingo' },
@@ -32,12 +27,13 @@ export const FiltrosPlantillas = ({
 
     return (
         <Box sx={{ 
-            display: 'flex', gap: 2, mb: 4, backgroundColor: 'white', 
-            p: 2, borderRadius: 1, boxShadow: '0 1px 3px rgba(0,0,0,0.1)', flexWrap: 'wrap' 
+            display: 'flex', 
+            gap: 2, 
+            mb: 3, 
+            flexWrap: 'wrap', 
+            alignItems: 'center' 
         }}>
-            
-            {/* Filtro: Tipo de Evento */}
-            <FormControl sx={{ flexGrow: 1, minWidth: '150px' }}>
+            <FormControl sx={{ minWidth: 160 }} size="small">
                 <InputLabel id="select-tipo-label">Tipo</InputLabel>
                 <Select
                     labelId="select-tipo-label"
@@ -48,14 +44,13 @@ export const FiltrosPlantillas = ({
                     <MenuItem value=""><em>Todos</em></MenuItem>
                     {tipos.map(t => (
                         <MenuItem key={t} value={t}>
-                            {t.charAt(0).toUpperCase() + t.slice(1)} {/* Capitaliza la primera letra */}
+                            {t.charAt(0).toUpperCase() + t.slice(1)}
                         </MenuItem>
                     ))}
                 </Select>
             </FormControl>
 
-            {/* Filtro: Día de la Semana */}
-            <FormControl sx={{ flexGrow: 1, minWidth: '150px' }}>
+            <FormControl sx={{ minWidth: 160 }} size="small">
                 <InputLabel id="select-dia-label">Día</InputLabel>
                 <Select
                     labelId="select-dia-label"
@@ -70,8 +65,7 @@ export const FiltrosPlantillas = ({
                 </Select>
             </FormControl>
 
-            {/* Filtro: Frecuencia */}
-            <FormControl sx={{ flexGrow: 1, minWidth: '150px' }}>
+            <FormControl sx={{ minWidth: 160 }} size="small">
                 <InputLabel id="select-frecuencia-label">Frecuencia</InputLabel>
                 <Select
                     labelId="select-frecuencia-label"
@@ -88,8 +82,7 @@ export const FiltrosPlantillas = ({
                 </Select>
             </FormControl>
 
-            {/* Filtro: Activo */}
-            <FormControl sx={{ flexGrow: 1, minWidth: '150px' }}>
+            <FormControl sx={{ minWidth: 160 }} size="small">
                 <InputLabel id="select-estado-label">Estado</InputLabel>
                 <Select
                     labelId="select-estado-label"
@@ -103,11 +96,17 @@ export const FiltrosPlantillas = ({
                 </Select>
             </FormControl>
 
-            {hasFilters && (
-                <Button color="inherit" onClick={limpiarFiltros} sx={{ minWidth: '120px' }}>
-                    Limpiar
-                </Button>
-            )}
+            <Button 
+                variant="outlined" 
+                color="primary" 
+                startIcon={<ClearIcon />} 
+                onClick={onLimpiar}
+                disabled={!hasFilters}
+            >
+                Limpiar Filtros
+            </Button>
         </Box>
     );
 };
+
+export default FiltrosPlantillas;
