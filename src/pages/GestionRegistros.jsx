@@ -68,12 +68,10 @@ export function GestionRegistro() {
         }
     };
 
-    // Efecto para cambios en filtros/pág
     useEffect(() => {
         obtenerRegistros();
     }, [pagina, fechaInicio, fechaFin, esAsistencia, esApertura]);
 
-    // Resetear a página 1 al cambiar filtros
     useEffect(() => {
         setPagina(1);
     }, [fechaInicio, fechaFin, esAsistencia, esApertura]);
@@ -88,6 +86,14 @@ export function GestionRegistro() {
         }
     }
 
+    const handleLimpiarFiltros = () => {
+        setFechaInicio('');
+        setFechaFin('');
+        setEsAsistencia('');
+        setEsApertura('');
+        setPagina(1); 
+    };
+
     return (
         <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: '1200px', mx: 'auto' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
@@ -95,8 +101,22 @@ export function GestionRegistro() {
                     Gestión de Registros
                 </Typography>
                 <Button 
-                    variant="contained" color="primary" startIcon={<AddIcon />} 
+                    variant="contained" 
+                    color="primary"
+                    startIcon={<AddIcon />}
                     onClick={() => setIsModalOpen(true)}
+                    sx={{ 
+                        borderRadius: '8px', 
+                        fontWeight: 600, 
+                        px: 3,
+                        py: 1,
+                        boxShadow: '0 4px 10px rgba(26, 115, 232, 0.3)',
+                        transition: 'all 0.2s',
+                        '&:hover': { 
+                            boxShadow: '0 6px 15px rgba(26, 115, 232, 0.4)', 
+                            transform: 'translateY(-2px)' 
+                        }
+                    }}
                 >
                     NUEVO REGISTRO
                 </Button>
@@ -107,6 +127,7 @@ export function GestionRegistro() {
                 fechaFin={fechaFin} setFechaFin={setFechaFin}
                 esAsistencia={esAsistencia} setEsAsistencia={setEsAsistencia}
                 esApertura={esApertura} setEsApertura={setEsApertura}
+                onLimpiar={handleLimpiarFiltros}
             />
 
             <AltaRegistro 

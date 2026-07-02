@@ -86,6 +86,14 @@ export function GestionPlantilla() {
     const handlePageChange = (newPage) => {
         setPagina(newPage);
     };
+
+    const handleLimpiarFiltros = () => {
+        setTipo('');
+        setDiaSemana('');
+        setFrecuencia('');
+        setActivo('');
+        setPagina(1);
+    };
     return (
         <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
@@ -108,8 +116,9 @@ export function GestionPlantilla() {
             <FiltrosPlantillas 
                 tipo={tipo} setTipo={setTipo}
                 diaSemana={diaSemana} setDiaSemana={setDiaSemana}
-                frecuencia={frecuencia} setFrecuencia={setFrecuencia} // <--- ¡Aquí!
+                frecuencia={frecuencia} setFrecuencia={setFrecuencia} 
                 activo={activo} setActivo={setActivo}
+                onLimpiar={handleLimpiarFiltros}
             />
             <AltaPlantilla 
                 open={isModalOpen} 
