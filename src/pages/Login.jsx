@@ -90,20 +90,22 @@ const Login = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             disabled={loadingLogin}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            onClick={() => setMostrarPassword((prev) => !prev)}
-                                            onMouseDown={(e) => e.preventDefault()}
-                                            edge="end"
-                                            disabled={loadingLogin}
-                                            aria-label={mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                                        >
-                                            {mostrarPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                ),
+                            slotProps={{
+                                input: {
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={() => setMostrarPassword((prev) => !prev)}
+                                                onMouseDown={(e) => e.preventDefault()}
+                                                edge="end"
+                                                disabled={loadingLogin}
+                                                aria-label={mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                                            >
+                                                {mostrarPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                },
                             }}
                         />
                         <Button
