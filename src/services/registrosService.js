@@ -1,7 +1,7 @@
 import api from './api';
 
 export const getRegistros = async (filtros = {}) => {
-    // Extraemos los filtros con valores por defecto para paginación
+    // Extraemos las variables del objeto (con valores por defecto para paginación)
     const { 
         pagina = 1, 
         limite = 10, 
@@ -14,7 +14,7 @@ export const getRegistros = async (filtros = {}) => {
     
     const params = { pagina, limite };
 
-    // Agregamos condicionalmente los parámetros que tengan valor
+    // Agregamos dinámicamente lo que se esté buscando
     if (integranteId) params.integranteId = integranteId;
     if (fechaInicio) params.fechaInicio = fechaInicio;
     if (fechaFin) params.fechaFin = fechaFin;
