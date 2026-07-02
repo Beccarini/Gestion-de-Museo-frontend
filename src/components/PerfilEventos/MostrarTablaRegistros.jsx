@@ -1,7 +1,7 @@
 import React from "react";
 import { 
     Box, Paper, Table, TableBody, TableCell, 
-    TableContainer, TableHead, TableRow, IconButton, TablePagination 
+    TableContainer, TableHead, TableRow, IconButton, TablePagination, Typography, Chip, Tooltip 
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -13,57 +13,69 @@ export function MostrarTablaRegistros({
     limite, 
     onChangePagina, 
     onChangeLimite
-}){
+}) {
     return(
-        <Paper sx={{ borderRadius: 2, boxShadow: 2, overflow: 'hidden' }}>
+        <Paper elevation={0} sx={{ borderRadius: 3, border: '1px solid #f0f0f0', overflow: 'hidden' }}>
             <TableContainer>
                 <Table>
-                    <TableHead sx={{ backgroundColor: '#f8f9fa' }}>
-                        <TableRow>
-                            <TableCell><strong>Fecha y Hora</strong></TableCell>
-                            <TableCell><strong>ID Integrante</strong></TableCell>
-                            <TableCell><strong>Nombre Integrante</strong></TableCell>
-                            <TableCell><strong>Tipo de Registro</strong></TableCell>
-                            <TableCell align="center"><strong>Acciones</strong></TableCell>
+                    <TableHead>
+                        <TableRow sx={{ backgroundColor: '#f8fafc' }}>
+                            <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>Fecha y Hora</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>ID / Token</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>Nombre Integrante</TableCell>
+                            <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>Tipo de Registro</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: 'bold', color: '#475569' }}>Acciones</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {registros.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={5} align="center" sx={{ py: 3, color: 'text.secondary' }}>
-                                    No hay asistencias ni marcas de acceso registradas para este evento.
+                                <TableCell colSpan={5} align="center" sx={{ py: 5 }}>
+                                    <Typography variant="body1" color="text.secondary">
+                                        No hay asistencias ni marcas de acceso registradas para este evento.
+                                    </Typography>
                                 </TableCell>
                             </TableRow>
                         ) : (
                             registros.map((row) => (
-                                <TableRow key={row.id} hover>
-                                    <TableCell>
-                                        {row.fecha ? new Date(row.fecha).toLocaleString('es-AR') : '—'}
+                                <TableRow 
+                                    key={row.id} 
+                                    hover
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: '#fafafa' } }}
+                                >
+                                    <TableCell sx={{ fontWeight: 500, color: '#1e293b' }}>
+                                        {row.fecha ? new Date(row.fecha).toLocaleString('es-AR', { hour: '2-digit', minute:'2-digit', day:'2-digit', month:'2-digit', year:'numeric' }) : '—'}
                                     </TableCell>
-                                    <TableCell>{row.integranteId || 'Anónimo / Token'}</TableCell>
-                                    <TableCell>
+                                    
+                                    <TableCell sx={{ fontFamily: 'monospace', color: 'text.secondary' }}>
+                                        {row.integranteId || 'Anónimo'}
+                                    </TableCell>
+                                    
+                                    <TableCell sx={{ fontWeight: 'bold', color: '#1e293b' }}>
                                         {row.integrante ? `${row.integrante.nombre} ${row.integrante.apellido}` : '—'}
                                     </TableCell>
+                                    
                                     <TableCell>
-                                        <Box 
-                                            component="span" 
-                                            sx={{
-                                                px: 1.5, py: 0.5, borderRadius: 1, fontSize: '0.85rem', fontWeight: 500,
-                                                backgroundColor: row.esAsistencia ? '#e6fffa' : '#fff5f5',
-                                                color: row.esAsistencia ? '#00875a' : '#de350b'
-                                            }}
-                                        >
-                                            {row.esAsistencia ? 'Asistencia' : 'Acceso/Apertura'}
-                                        </Box>
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <IconButton 
-                                            color="error" 
+                                        <Chip 
+                                            label={row.esAsistencia ? 'Asistencia' : 'Apertura'} 
+                                            color={row.esAsistencia ? 'success' : 'info'}
                                             size="small"
-                                            onClick={() => handleEliminarRegistro(row.id)}
-                                        >
-                                            <DeleteIcon fontSize="small" />
-                                        </IconButton>
+                                            variant="outlined"
+                                            sx={{ fontWeight: 700, borderWidth: '1.5px' }}
+                                        />
+                                    </TableCell>
+                                    
+                                    <TableCell align="center">
+                                        <Tooltip title="Eliminar registro">
+                                            <IconButton 
+                                                color="error" 
+                                                size="small"
+                                                onClick={() => handleEliminarRegistro(row.id)}
+                                                sx={{ mx: 0.5, backgroundColor: '#fff5f5', '&:hover': { backgroundColor: '#fed7d7' } }}
+                                            >
+                                                <DeleteIcon fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -71,6 +83,7 @@ export function MostrarTablaRegistros({
                     </TableBody>
                 </Table>
             </TableContainer>
+            
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
@@ -83,6 +96,7 @@ export function MostrarTablaRegistros({
                     onChangePagina(1);
                 }}
                 labelRowsPerPage="Filas por página:"
+                sx={{ borderTop: '1px solid #f0f0f0' }}
             />
         </Paper>
     );

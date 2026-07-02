@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'; 
-import { Box, Grid, Alert, CircularProgress, Typography } from '@mui/material';
-
+import { Box, Grid, Alert, CircularProgress, Typography, Button } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link } from 'react-router-dom';
 import CardInfoBasica from '../components/perfilIntegrantes/CardInfoBasica';
 import FormularioIntegrante from '../components/FormularioIntegrante'
 import TablaUltimosRegistros from '../components/perfilIntegrantes/TablaUltimosRegistros';
@@ -14,6 +15,7 @@ import { getIntegranteById, updateIntegrante,
         getProyectosByIntegrante, desvincularPermiso, 
         desvincularProyecto
 } from '../services/integranteService';
+import { getEventoById } from '../services/eventoService';
 
 const PerfilIntegrante = () => {
     const { id } = useParams();
@@ -37,18 +39,39 @@ const PerfilIntegrante = () => {
             getPermisosByIntegrante(id),
             getProyectosByIntegrante(id)
         ])
-        .then(([datosIntegrante, datosBackend, datosPermisos, datosProyectos]) => {
+        .then(async ([datosIntegrante, datosBackend, datosPermisos, datosProyectos]) => {
             setIntegrante(datosIntegrante);
+            setPermisos(datosPermisos.integrante.permisos);
+            setProyectos(datosProyectos.integrante.proyectos);
             
             if (datosBackend.registrosPaginados && datosBackend.registrosPaginados.historial) {
-                setRegistros(datosBackend.registrosPaginados.historial);
+                const historialCrudo = datosBackend.registrosPaginados.historial;
+                
+                const historialConEventos = await Promise.all(
+                    historialCrudo.map(async (reg) => {
+                        let eventoData = null;
+                        
+                        if (reg.eventoId) {
+                            try {
+                                const res = await getEventoById(reg.eventoId);
+                                eventoData = res.evento || res.data || res; 
+                            } catch (err) {
+                                console.warn(`No se encontró el evento ${reg.eventoId}`);
+                            }
+                        }
+                        
+                        return {
+                            ...reg,
+                            Evento: eventoData || null
+                        };
+                    })
+                );
+                
+                setRegistros(historialConEventos);
             } else {
                 setRegistros([]); 
             }
 
-            setPermisos(datosPermisos.integrante.permisos);
-            setProyectos(datosProyectos.integrante.proyectos)
-            
             setLoading(false);
         })
         .catch((err) => {
@@ -120,7 +143,11 @@ const PerfilIntegrante = () => {
 
     return (
         <Box sx={{ width: '100%', maxWidth: '1300px', mx: 'auto', px: { xs: 2, md: 3 }, mt: 2, mb: 5 }}>
-            
+
+            <Button startIcon={<ArrowBackIcon />} component={Link} to={`/integrantes`} sx={{ mb: 2 }}>
+                Volver al listado
+            </Button>
+
             {error && (
                 <Alert severity="error" onClose={() => setError(null)} sx={{ mb: 3 }}>
                     {error}
