@@ -10,11 +10,11 @@ import { GestionRegistro } from './pages/GestionRegistros.jsx';
 import GestionIntegrantes from './pages/GestionIntegrantes';
 import PerfilIntegrante from './pages/PerfilIntegrante';
 import GestionPermisos from './pages/GestionPermisos.jsx';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import Login from './pages/Login';
+import Dashboard from './pages/Dashboard.jsx';
 const drawerWidth = 240;
 import { GestionEventos } from './pages/GestionEvento.jsx';
 import { PerfilEvento } from './pages/PerfilEvento.jsx';
+import GestionProyectos from './pages/GestionProyectos.jsx';
 import { GestionPlantilla } from './pages/GestionPlantilla.jsx';
 const menuItems = [
   { text: 'DashBoard', path: '/' },
@@ -86,16 +86,27 @@ const LayoutPrivado = () => {
       </Box>
 
       {/* CONTENIDO PRINCIPAL */}
-      <Box component="main" sx={{ flexGrow: 1, backgroundColor: '#fafafa', p: 3 }}>
+      <Box 
+        component="main" 
+        sx={{ 
+          flexGrow: 1, 
+          backgroundColor: '#fafafa', 
+          p: 0, // Quitamos el padding global para que cada página decida sus márgenes
+          width: `calc(100% - ${drawerWidth}px)`, // Forzamos el ancho exacto restando el menú lateral
+          height: '100vh',
+          overflow: 'auto' // Permite el scroll si el contenido es muy largo
+        }}>
         <Routes>
+          <Route path="/" element={<Dashboard />} />
           <Route path="/registros" element={<GestionRegistro />} />
           <Route path="/integrantes" element={<GestionIntegrantes />} />
           <Route path="/integrantes/:id" element={<PerfilIntegrante />} />
           <Route path="/permisos" element={<GestionPermisos />} />
+          <Route path="/proyectos" element={<GestionProyectos />} />
           <Route path="/eventos" element={<GestionEventos />} />
           <Route path="/eventos/:id" element={<PerfilEvento />} />
           <Route path="/plantilla" element={<GestionPlantilla />} />
-          <Route path="*" element={<Navigate to="/integrantes" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Box>
     </Box>
