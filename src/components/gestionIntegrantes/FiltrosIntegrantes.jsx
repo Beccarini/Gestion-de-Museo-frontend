@@ -1,51 +1,48 @@
 import React from 'react';
-import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Button } from '@mui/material';
-
+import { Box, TextField, MenuItem, Button, FormControl, InputLabel, Select } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 import { CARRERAS_UTN } from '../../constants/carreras';
 
-const FiltrosIntegrantes = ({ filtroNombre, setFiltroNombre, filtroCarrera, setFiltroCarrera }) => {
+const FiltrosIntegrantes = ({ filtroNombre, setFiltroNombre, filtroCarrera, setFiltroCarrera, onLimpiar }) => {
     return (
-        <Box sx={{ 
-            display: 'flex', 
-            gap: 2, 
-            mb: 4, 
-            backgroundColor: 'white', 
-            p: 2, 
-            borderRadius: 1, 
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)' 
-        }}>
+        <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap', alignItems: 'center' }}>
             <TextField
-                fullWidth
                 label="Buscar por Nombre..."
                 variant="outlined"
+                size="small"
                 value={filtroNombre}
                 onChange={(e) => setFiltroNombre(e.target.value)}
+                sx={{ minWidth: 250 }}
+                InputProps={{
+                    startAdornment: <SearchIcon sx={{ color: 'action.active', mr: 1 }} />
+                }}
             />
-            
-            <FormControl fullWidth>
-                <InputLabel id="select-carrera-label">Filtrar por Carrera</InputLabel>
+
+            <FormControl size="small" sx={{ minWidth: 200 }}>
+                <InputLabel id="filtro-carrera-label">Filtrar por Carrera</InputLabel>
                 <Select
-                    labelId="select-carrera-label"
+                    labelId="filtro-carrera-label"
                     value={filtroCarrera}
                     label="Filtrar por Carrera"
                     onChange={(e) => setFiltroCarrera(e.target.value)}
                 >
                     <MenuItem value=""><em>Todas las carreras</em></MenuItem>
-                    {CARRERAS_UTN.map((carrera) => (
+                    {CARRERAS_UTN.map(carrera => (
                         <MenuItem key={carrera} value={carrera}>{carrera}</MenuItem>
                     ))}
                 </Select>
             </FormControl>
 
-            {(filtroNombre !== '' || filtroCarrera !== '') && (
-                <Button 
-                    color="inherit" 
-                    onClick={() => { setFiltroNombre(''); setFiltroCarrera(''); }}
-                    sx={{ minWidth: '120px' }}
-                >
-                    Limpiar
-                </Button>
-            )}
+            <Button 
+                variant="outlined" 
+                color="primary"
+                startIcon={<ClearIcon />} 
+                onClick={onLimpiar}
+                disabled={!filtroNombre && !filtroCarrera}
+            >
+                Limpiar Filtros
+            </Button>
         </Box>
     );
 };

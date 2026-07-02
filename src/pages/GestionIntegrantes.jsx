@@ -94,6 +94,12 @@ const GestionIntegrantes = () => {
         setIntegranteAEditar(null);
     };
 
+    const handleLimpiarFiltros = () => {
+        setFiltroNombre('');
+        setFiltroCarrera('');
+        setPagina(1); 
+    };
+
     const handleEliminar = (id) => {
         const confirmar = window.confirm('¿Estás seguro de eliminar este integrante?');
         if (!confirmar) return;
@@ -150,6 +156,7 @@ const GestionIntegrantes = () => {
                 setFiltroNombre={setFiltroNombre}
                 filtroCarrera={filtroCarrera}
                 setFiltroCarrera={setFiltroCarrera}
+                onLimpiar={handleLimpiarFiltros}
             />
 
             <TablaIntegrantes 
