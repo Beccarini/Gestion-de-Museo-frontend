@@ -64,7 +64,7 @@ const Dashboard = () => {
                     eventos: listaEventos.length,
                     proyectos: proyRes?.totalElementos || 0
                 },
-                registros: registrosConNombre.slice(0, 5),
+                registros: registrosConNombre.slice(0, 10),
                 eventos: listaEventos.slice(0, 5), 
                 proyectos: proyRes?.proyectos || []
             });
