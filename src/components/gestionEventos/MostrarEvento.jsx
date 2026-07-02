@@ -1,99 +1,136 @@
-// src/components/gestionEventos/MostrarEvento.jsx
 import React from 'react';
 import { 
     Table, TableBody, TableCell, TableContainer, 
-    TableHead, TableRow, Paper, IconButton, Typography, Tooltip 
+    TableHead, TableRow, Paper, IconButton, Typography, Tooltip, Box 
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import {Link} from 'react-router-dom';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { Link } from 'react-router-dom';
 
-export function MostrarEvento({eventos, deleteEvento, onEditar}) {
+const formatearFechaHora = (fecha) => {
+    if (!fecha) return '—';
+    const d = new Date(fecha);
+    return d.toLocaleString('es-AR', { 
+        hour: '2-digit', minute: '2-digit', 
+        day: '2-digit', month: '2-digit', year: 'numeric' 
+    });
+};
+
+export function MostrarEvento({ eventos, deleteEvento, onEditar }) {
     return (
-        <TableContainer component={Paper} sx={{ boxShadow: 2, borderRadius: 2 }}>
+        <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 3, border: '1px solid #f0f0f0' }}>
             <Table>
-                <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
-                    <TableRow>
-                        <TableCell><strong>Nombre</strong></TableCell>
-                        <TableCell><strong>Tipo</strong></TableCell>
-                        <TableCell><strong>Descripción</strong></TableCell>
-                        <TableCell><strong>Fechas (Inicio - Fin)</strong></TableCell>
-                        <TableCell align="center"><strong>Acciones</strong></TableCell>
+                <TableHead>
+                    <TableRow sx={{ backgroundColor: '#f8fafc' }}>
+                        <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>Nombre</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>Tipo</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>Descripción</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>Plantilla</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>Día</TableCell>
+                        <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>Horario</TableCell>
+                        <TableCell align="center" sx={{ fontWeight: 'bold', color: '#475569' }}>Acciones</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {eventos.map((evento) => (
-                        <TableRow key={evento.id} hover>
-                            <TableCell style={{ fontWeight: 500 }}>{evento.nombre}</TableCell>
-                            
-                            <TableCell sx={{ textTransform: 'capitalize' }}>
-                                {evento.tipo || 'Otro'}
-                            </TableCell>
-                            <TableCell>
-                                {evento.descripcion}
-                            </TableCell>
-                            <TableCell>
-                                {evento.fechaInicio instanceof Date 
-                                    ? evento.fechaInicio.toLocaleString('es-AR', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' })
-                                    : evento.fechaInicio
-                                } 
-                                {evento.fechaFin ? 
-                                    (
-                                        ` - ${evento.fechaFin instanceof Date 
-                                            ? evento.fechaFin.toLocaleString('es-AR', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' })
-                                            : evento.fechaFin}`
-                                    ) : ''
-                                }
-                            </TableCell>
-                            
-                            <TableCell align="center">
-                                <Tooltip title="Ver Detalles del Evento">
-                                    <IconButton 
-                                        color="info" 
-                                        size="small" 
-                                        sx={{ 
-                                            mx: 0.5, 
-                                            backgroundColor: '#e6fffa', 
-                                            '&:hover': { backgroundColor: '#b2f5ea' } 
-                                        }}
-                                        component={Link}
-                                        to={`/eventos/${evento.id}`}
-                                    >
-                                        <VisibilityIcon fontSize="small" />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Editar Evento">
-                                    <IconButton 
-                                        color="primary" 
-                                        size="small" 
-                                        sx={{ 
-                                            mx: 0.5, 
-                                            backgroundColor: '#ebf8ff', 
-                                            '&:hover': { backgroundColor: '#bee3f8' } 
-                                        }}
-                                        onClick={() => onEditar(evento)}
-                                    >
-                                        <EditIcon fontSize="small" />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Eliminar Evento">
-                                    <IconButton 
-                                        color="error" 
-                                        size="small"
-                                        sx={{ 
-                                            mx: 0.5, 
-                                            backgroundColor: '#fff5f5', 
-                                            '&:hover': { backgroundColor: '#fed7d7' } 
-                                        }}
-                                        onClick={() => deleteEvento(evento.id)}
-                                    >
-                                        <DeleteIcon fontSize="small" />
-                                    </IconButton>
-                                </Tooltip>
+                    {eventos.length === 0 ? (
+                        <TableRow>
+                            <TableCell colSpan={6} align="center" sx={{ py: 5 }}>
+                                <Typography variant="body1" color="text.secondary">
+                                    No hay eventos registrados aún.
+                                </Typography>
                             </TableCell>
                         </TableRow>
-                    ))}
+                    ) : (
+                        eventos.map((evento) => (
+                            <TableRow 
+                                key={evento.id} 
+                                hover 
+                                sx={{ 
+                                    '&:last-child td, &:last-child th': { border: 0 },
+                                    '&:hover': { backgroundColor: '#fafafa' } 
+                                }}
+                            >
+                                <TableCell sx={{ fontWeight: 'bold', color: '#1e293b' }}>
+                                    {evento.nombre}
+                                </TableCell>
+                                
+                                <TableCell sx={{ textTransform: 'capitalize', color: 'text.secondary' }}>
+                                    {evento.tipo || 'Otro'}
+                                </TableCell>
+                                
+                                <TableCell>
+                                    {evento.descripcion ? (
+                                        <Tooltip title={evento.descripcion} arrow placement="top">
+                                            <Typography variant="body2" color="text.secondary" noWrap sx={{ maxWidth: 150, cursor: 'default' }}>
+                                                {evento.descripcion}
+                                            </Typography>
+                                        </Tooltip>
+                                    ) : (
+                                        <Typography variant="body2" color="text.secondary">—</Typography>
+                                    )}
+                                </TableCell>
+
+                                <TableCell sx={{ color: 'text.secondary' }}>
+                                    {evento.Plantilla?.nombre || evento.plantillaId || '—'}
+                                </TableCell>
+                                
+                                <TableCell sx={{ fontWeight: 'bold', color: '#1e293b' }}>
+                                    {evento.fechaInicio instanceof Date 
+                                        ? evento.fechaInicio.toLocaleDateString('es-AR') 
+                                        : '—'
+                                    }
+                                </TableCell>
+
+                                <TableCell>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
+                                        <CalendarMonthIcon sx={{ fontSize: 18 }} />
+                                        <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 500 }}>
+                                            {evento.fechaInicio instanceof Date 
+                                                ? evento.fechaInicio.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) 
+                                                : '—'
+                                            }
+                                            {evento.fechaFin instanceof Date && 
+                                                ` - ${evento.fechaFin.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}`
+                                            }
+                                        </Typography>
+                                    </Box>
+                                </TableCell>
+                                
+                                <TableCell align="center">
+                                    <Tooltip title="Ver Detalles del Evento">
+                                        <IconButton 
+                                            color="info" 
+                                            size="small" 
+                                            component={Link}
+                                            to={`/eventos/${evento.id}`}
+                                        >
+                                            <VisibilityIcon fontSize="small" />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Editar Evento">
+                                        <IconButton 
+                                            color="primary" 
+                                            size="small" 
+                                            onClick={() => onEditar(evento)}
+                                        >
+                                            <EditIcon fontSize="small" />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Eliminar Evento">
+                                        <IconButton 
+                                            color="error" 
+                                            size="small"
+                                            onClick={() => deleteEvento(evento.id)}
+                                        >
+                                            <DeleteIcon fontSize="small" />
+                                        </IconButton>
+                                    </Tooltip>
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    )}
                 </TableBody>
             </Table>
         </TableContainer>

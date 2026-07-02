@@ -4,17 +4,52 @@ import AddIcon from '@mui/icons-material/Add';
 import { AltaRegistro } from '../components/registro/AltaRegistro';
 import { MostrarBaja } from '../components/registro/MostrarBaja';
 import { getRegistros, deleteRegistro, postRegistro } from '../services/registrosService';
+import { getIntegranteById } from '../services/integranteService';
+import { getEventoById } from '../services/eventoService';
+
 export function GestionRegistro() {
     const [allRegistros, setAllRegistros] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    function obtenerRegistros() {
-        getRegistros()
-            .then((data) => {
-                setAllRegistros(data.registros || []);
-            }).catch((error) => {
-                console.log(error);
-            });
+
+const obtenerRegistros = async () => {
+    try {
+        const data = await getRegistros();
+        const registrosRaw = data.registros || [];
+
+        const registrosConNombres = await Promise.all(
+            registrosRaw.map(async (reg) => {
+                let integranteData = null;
+                let eventoData = null;
+
+                if (reg.integranteId) {
+                    try {
+                        integranteData = await getIntegranteById(reg.integranteId);
+                    } catch (err) {
+                        console.warn(`No se encontró el integrante ${reg.integranteId}`);
+                    }
+                }
+
+                if (reg.eventoId) {
+                    try {
+                        eventoData = await getEventoById(reg.eventoId);
+                    } catch (err) {
+                        console.warn(`No se encontró el evento ${reg.eventoId}`);
+                    }
+                }
+
+                return {
+                    ...reg,
+                    Integrante: integranteData || null,
+                    Evento: eventoData || null
+                };
+            })
+        );
+        setAllRegistros(registrosConNombres);
+        
+    } catch (error) {
+        console.error("Error al buscar registros:", error);
     }
+};
 
     useEffect(() => {
         obtenerRegistros();

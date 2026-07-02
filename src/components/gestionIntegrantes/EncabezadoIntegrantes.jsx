@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 const EncabezadoIntegrantes = ({ onAbrirModal }) => {
     return (
-        <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: '1200px', mx: 'auto' }}>
+        <Box sx={{  maxWidth: '1200px', mx: 'auto' }}>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>

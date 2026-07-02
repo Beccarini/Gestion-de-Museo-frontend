@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'; 
-import { Box, Grid, Alert, CircularProgress } from '@mui/material';
+import { Box, Grid, Alert, CircularProgress, Typography } from '@mui/material';
 
 import CardInfoBasica from '../components/perfilIntegrantes/CardInfoBasica';
 import FormularioIntegrante from '../components/FormularioIntegrante'
@@ -102,8 +102,18 @@ const PerfilIntegrante = () => {
 
     if (loading) {
         return (
-            <Box display="flex" sx={{ flexDirection: 'column', alignItems: 'center', py: 20 }}>
-                <CircularProgress size={60} />
+            <Box sx={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                width: '100%',            
+                py: 10                    
+            }}>
+                <CircularProgress size={50} />
+                <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
+                    Cargando base de datos...
+                </Typography>
             </Box>
         );
     }
@@ -137,7 +147,6 @@ const PerfilIntegrante = () => {
                     <Box sx={{ width: '100%', mb: 3 }}>
                         <SeccionProyectos 
                             proyectosIniciales={proyectos} 
-                            // CORRECCIÓN 3: Pasamos las props con los nombres exactos que espera SeccionProyectos
                             onAsignar={() => setOpenProyectosModal(true)} 
                             onDesasignar={handleDesvincularProyecto} 
                         />
