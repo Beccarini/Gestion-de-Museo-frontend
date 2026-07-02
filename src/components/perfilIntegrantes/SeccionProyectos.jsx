@@ -1,10 +1,10 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box, Divider, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material';
+import { Card, CardContent, Typography, Box, Divider, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, IconButton } from '@mui/material';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import AddIcon from '@mui/icons-material/Add';
 import EventIcon from '@mui/icons-material/Event';
+import LinkOffIcon from '@mui/icons-material/LinkOff'; 
 
-// Función para formatear fechas al formato local
 const formatearFecha = (fechaISO) => {
     if (!fechaISO) return '—';
     const fecha = new Date(fechaISO);
@@ -23,7 +23,7 @@ const getEstadoColor = (estado) => {
     return 'primary';
 };
 
-const SeccionProyectos = ({ proyectosIniciales }) => {
+const SeccionProyectos = ({ proyectosIniciales, onAsignar, onDesasignar }) => {
     const listaProyectos = Array.isArray(proyectosIniciales) 
         ? proyectosIniciales 
         : (proyectosIniciales?.proyectos || proyectosIniciales?.integrante?.proyectos || []);
@@ -50,7 +50,7 @@ const SeccionProyectos = ({ proyectosIniciales }) => {
                         size="small" 
                         startIcon={<AddIcon />}
                         sx={{ ml: 'auto', borderRadius: 2, textTransform: 'none', fontWeight: 'bold' }}
-                        onClick={() => alert('Próximamente: Modal para asignar proyecto')}
+                        onClick={onAsignar} // Llamamos a la función que abre el modal en el padre
                     >
                         Asignar
                     </Button>
@@ -62,9 +62,10 @@ const SeccionProyectos = ({ proyectosIniciales }) => {
                         <Table size="small" sx={{ minWidth: 400 }}>
                             <TableHead>
                                 <TableRow sx={{ backgroundColor: 'action.hover' }}>
-                                    <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none', width: '45%' }}>Proyecto</TableCell>
+                                    <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none', width: '40%' }}>Proyecto</TableCell>
                                     <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none' }}>Período</TableCell>
                                     <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none' }}>Estado</TableCell>
+                                    <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none', align: 'center' }}></TableCell> {/* Columna vacía para el botón */}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -109,6 +110,18 @@ const SeccionProyectos = ({ proyectosIniciales }) => {
                                                     variant="outlined"
                                                     sx={{ fontSize: '0.70rem', fontWeight: 'bold', height: '24px' }}
                                                 />
+                                            </TableCell>
+
+                                            {/* Nueva celda con el botón de desasignar */}
+                                            <TableCell sx={{ ...borderStyle }} align="right">
+                                                <IconButton 
+                                                    size="small"
+                                                    color="error"
+                                                    onClick={() => onDesasignar(proyecto.id)} // Le pasamos el ID al padre
+                                                    title="Desvincular proyecto"
+                                                >
+                                                    <LinkOffIcon fontSize="small" />
+                                                </IconButton>
                                             </TableCell>
 
                                         </TableRow>

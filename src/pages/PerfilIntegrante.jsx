@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'; 
-import { Box, Grid, Alert, CircularProgress } from '@mui/material';
-
+import { Box, Grid, Alert, CircularProgress, Typography, Button } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link } from 'react-router-dom';
 import CardInfoBasica from '../components/perfilIntegrantes/CardInfoBasica';
 import FormularioIntegrante from '../components/FormularioIntegrante'
 import TablaUltimosRegistros from '../components/perfilIntegrantes/TablaUltimosRegistros';
 import SeccionPermisos from '../components/perfilIntegrantes/SeccionPermisos'
 import SeccionProyectos from '../components/perfilIntegrantes/SeccionProyectos';
 import AsignarPermisos from '../components/perfilIntegrantes/AsignarPermisos'; 
-
+import AsignarProyectos from '../components/perfilIntegrantes/AsignarProyectos';
 import { getIntegranteById, updateIntegrante, 
         getRegistrosByIntegrante, getPermisosByIntegrante,
-        getProyectosByIntegrante, desvincularPermiso 
+        getProyectosByIntegrante, desvincularPermiso, 
+        desvincularProyecto
 } from '../services/integranteService';
+import { getEventoById } from '../services/eventoService';
 
 const PerfilIntegrante = () => {
     const { id } = useParams();
@@ -24,6 +27,7 @@ const PerfilIntegrante = () => {
     const [openModalPermisos, setOpenModalPermisos] = useState(false); 
     const [permisos, setPermisos] = useState(null);
     const [proyectos, setProyectos] = useState(null);
+    const [openProyectosModal, setOpenProyectosModal] = useState(false);
 
     const cargarDatosPerfil = () => {
         setLoading(true);
@@ -35,18 +39,39 @@ const PerfilIntegrante = () => {
             getPermisosByIntegrante(id),
             getProyectosByIntegrante(id)
         ])
-        .then(([datosIntegrante, datosBackend, datosPermisos, datosProyectos]) => {
+        .then(async ([datosIntegrante, datosBackend, datosPermisos, datosProyectos]) => {
             setIntegrante(datosIntegrante);
+            setPermisos(datosPermisos.integrante.permisos);
+            setProyectos(datosProyectos.integrante.proyectos);
             
             if (datosBackend.registrosPaginados && datosBackend.registrosPaginados.historial) {
-                setRegistros(datosBackend.registrosPaginados.historial);
+                const historialCrudo = datosBackend.registrosPaginados.historial;
+                
+                const historialConEventos = await Promise.all(
+                    historialCrudo.map(async (reg) => {
+                        let eventoData = null;
+                        
+                        if (reg.eventoId) {
+                            try {
+                                const res = await getEventoById(reg.eventoId);
+                                eventoData = res.evento || res.data || res; 
+                            } catch (err) {
+                                console.warn(`No se encontró el evento ${reg.eventoId}`);
+                            }
+                        }
+                        
+                        return {
+                            ...reg,
+                            Evento: eventoData || null
+                        };
+                    })
+                );
+                
+                setRegistros(historialConEventos);
             } else {
                 setRegistros([]); 
             }
 
-            setPermisos(datosPermisos.integrante.permisos);
-            setProyectos(datosProyectos.integrante.proyectos)
-            
             setLoading(false);
         })
         .catch((err) => {
@@ -57,16 +82,28 @@ const PerfilIntegrante = () => {
     };
 
     const handleDesvincularPermiso = async (permisoId, descripcion) => {
-    if (window.confirm(`¿Seguro que querés revocar el permiso "${descripcion}" a este integrante?`)) {
-        try {
-            await desvincularPermiso(id, permisoId);
-            cargarDatosPerfil(); 
-        } catch (err) {
-            console.error("Error al revocar:", err);
-            setError("Hubo un error al revocar el permiso.");
+        if (window.confirm(`¿Seguro que querés revocar el permiso "${descripcion}" a este integrante?`)) {
+            try {
+                await desvincularPermiso(id, permisoId);
+                cargarDatosPerfil(); 
+            } catch (err) {
+                console.error("Error al revocar:", err);
+                setError("Hubo un error al revocar el permiso.");
+            }
         }
-    }
-};
+    };
+
+    const handleDesvincularProyecto = async (proyectoId) => {
+        if (!window.confirm("¿Estás seguro de que deseas desvincular este proyecto de este integrante?")) return;
+        
+        try {
+            await desvincularProyecto(id, proyectoId); 
+            cargarDatosPerfil(); 
+        } catch (error) {
+            console.error("Error al desvincular el proyecto:", error);
+            alert("No se pudo desvincular el proyecto.");
+        }
+    };
 
     useEffect(() => {
         if (id) {
@@ -88,15 +125,29 @@ const PerfilIntegrante = () => {
 
     if (loading) {
         return (
-            <Box display="flex" sx={{ flexDirection: 'column', alignItems: 'center', py: 20 }}>
-                <CircularProgress size={60} />
+            <Box sx={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                width: '100%',            
+                py: 10                    
+            }}>
+                <CircularProgress size={50} />
+                <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
+                    Cargando base de datos...
+                </Typography>
             </Box>
         );
     }
 
     return (
         <Box sx={{ width: '100%', maxWidth: '1300px', mx: 'auto', px: { xs: 2, md: 3 }, mt: 2, mb: 5 }}>
-            
+
+            <Button startIcon={<ArrowBackIcon />} component={Link} to={`/integrantes`} sx={{ mb: 2 }}>
+                Volver al listado
+            </Button>
+
             {error && (
                 <Alert severity="error" onClose={() => setError(null)} sx={{ mb: 3 }}>
                     {error}
@@ -121,7 +172,11 @@ const PerfilIntegrante = () => {
                     </Box>
                     
                     <Box sx={{ width: '100%', mb: 3 }}>
-                        <SeccionProyectos proyectosIniciales={proyectos} />
+                        <SeccionProyectos 
+                            proyectosIniciales={proyectos} 
+                            onAsignar={() => setOpenProyectosModal(true)} 
+                            onDesasignar={handleDesvincularProyecto} 
+                        />
                     </Box>
 
                     <Box sx={{ width: '100%' }}>
@@ -148,9 +203,16 @@ const PerfilIntegrante = () => {
                 onAsignacionExitosa={cargarDatosPerfil}
             />
 
+            <AsignarProyectos
+                open={openProyectosModal}
+                onClose={() => setOpenProyectosModal(false)}
+                integranteId={id}
+                proyectosActuales={proyectos || []}
+                onAsignacionExitosa={cargarDatosPerfil}
+            />
+
         </Box>
     );
 };
-
 
 export default PerfilIntegrante;

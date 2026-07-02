@@ -92,3 +92,12 @@ export const desvincularProyecto = async (id, proyectoId) => {
     const response = await api.delete(`/integrantes/${id}/proyectos/${proyectoId}`);
     return response.data;
 };
+
+export const asignarMultiplesProyectos = async (integranteId, proyectosIds) => {
+    const peticiones = proyectosIds.map(proyectoId => 
+        api.post(`/integrantes/${integranteId}/proyectos`, { proyectoId })
+    );
+    
+    await Promise.all(peticiones);
+    return true;
+};  

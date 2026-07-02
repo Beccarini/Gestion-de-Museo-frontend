@@ -1,5 +1,7 @@
 import React from 'react';
 import { Card, CardContent, Typography, Box, Avatar, Button, Chip } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Link } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 
 const CardInfoBasica = ({ integrante, onAbrirEditar }) => {
