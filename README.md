@@ -18,6 +18,7 @@ Cliente web desarrollado en React para interactuar con la API de Gestión de Mus
    git clone https://github.com/Beccarini/Gestion-de-Museo-frontend
    Abrir la carpeta del proyecto desde la terminal
 2. **Instalar dependencias**
+    Antes de instalar las dependencias, es necesario instalar Node.js
     Ya con la carpeta abierta, ejecutar el comando:
     "npm install"
 3. **Ejecutar el frontend**

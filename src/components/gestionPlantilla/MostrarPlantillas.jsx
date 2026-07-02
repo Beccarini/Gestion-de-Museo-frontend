@@ -1,6 +1,11 @@
 import React from 'react';
 import { 
     Paper, Table, TableBody, TableCell, TableContainer, 
+    TableHead, TableRow, IconButton, Chip, Tooltip, Box, Pagination 
+} from '@mui/material';
+
+import ToggleOnIcon from '@mui/icons-material/ToggleOn';
+import ToggleOffIcon from '@mui/icons-material/ToggleOff';
     TableHead, TableRow, IconButton, Chip, Box, Typography, Tooltip, Switch 
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -8,7 +13,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { DIAS_SEMANA } from '../../constants/diasSemana';
 
-export function MostrarPlantillas({ plantillas, deletePlantilla, toggleEstado, editarPlantilla }) {
+export function MostrarPlantillas({ plantillas, deletePlantilla, toggleEstado, editarPlantilla, paginaActual, totalPaginas, onChangePagina}){
     return (
         <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 3, border: '1px solid #f0f0f0' }}>
             <Table>
@@ -103,10 +108,61 @@ export function MostrarPlantillas({ plantillas, deletePlantilla, toggleEstado, e
                                     </Box>
                                 </TableCell>
                             </TableRow>
-                        ))
-                    )}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                        ) : (
+                            plantillas.map((row) => (
+                                <TableRow key={row.id}>
+                                    <TableCell>{row.nombre}</TableCell>
+                                    <TableCell>
+                                        <Chip label={row.tipo} size="small" variant="outlined" />
+                                    </TableCell>
+                                    {/* Mantiene la corrección: row.diaSemana ya es un string como "Lunes" */}
+                                    <TableCell>{row.diaSemana}</TableCell>
+                                    <TableCell>{`${row.horaInicio} a ${row.horaFin}`}</TableCell>
+                                    <TableCell>
+                                        <Chip 
+                                            label={row.activo ? "Activo" : "Inactivo"} 
+                                            color={row.activo ? "success" : "default"} 
+                                            size="small" 
+                                        />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <Tooltip title={row.activo ? "Desactivar" : "Activar"}>
+                                            <IconButton 
+                                                color={row.activo ? "success" : "default"} 
+                                                onClick={() => toggleEstado(row.id)}
+                                            >
+                                                {row.activo ? <ToggleOnIcon /> : <ToggleOffIcon />}
+                                            </IconButton>
+                                        </Tooltip>
+                                        
+                                        <Tooltip title="Editar">
+                                            <IconButton color="primary" onClick={() => editarPlantilla(row)}>
+                                                <EditIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                        
+                                        <Tooltip title="Eliminar">
+                                            <IconButton color="error" onClick={() => deletePlantilla(row.id)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </TableCell>
+                                </TableRow>
+                            ))
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            {totalPaginas > 0 && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, pb: 3 }}>
+                    <Pagination 
+                        count={totalPaginas} 
+                        page={paginaActual} 
+                        onChange={(event, value) => onChangePagina(value)} 
+                        color="primary" 
+                    />
+                </Box>
+            )}
+        </Box>
     );
 }

@@ -1,7 +1,23 @@
 import api from './api';
 
-export const getPlantillas = async () => {
-    const response = await api.get('/plantillas');
+export const getPlantillas = async (filtros = {}) => {
+    const { 
+        pagina = 1, 
+        limite = 3, 
+        tipo, 
+        diaSemana, 
+        frecuencia, 
+        activo 
+    } = filtros;
+
+    const params = { pagina, limite };
+
+    if (tipo) params.tipo = tipo;
+    if (frecuencia) params.frecuencia = frecuencia; // <--- Agrégalo aquí
+    if (diaSemana !== undefined && diaSemana !== '') params.diaSemana = diaSemana;
+    if (activo !== undefined && activo !== '') params.activo = activo;
+
+    const response = await api.get('/plantillas', { params });
     return response.data;
 };
 

@@ -56,7 +56,6 @@ const LayoutPrivado = () => {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-      
       {/* BARRA LATERAL */}
       <Box sx={{ 
       width: drawerWidth, 
@@ -145,14 +144,13 @@ const LayoutPrivado = () => {
           <Route path="/proyectos" element={<GestionProyectos />} />
           <Route path="/eventos" element={<GestionEventos />} />
           <Route path="/eventos/:id" element={<PerfilEvento />} />
-          <Route path="/plantilla" element={<GestionPlantilla />} />
+          <Route path="/plantillas" element={<GestionPlantilla />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Box>
     </Box>
   );
 };
-
 function App() {
 
   return (

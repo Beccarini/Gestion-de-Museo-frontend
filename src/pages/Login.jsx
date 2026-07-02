@@ -28,7 +28,7 @@ const Login = () => {
         setLoadingLogin(false);
 
         if (resultado.success) {
-            navigate('/'); //se redirige al dashboard si el login es exitoso
+            navigate('/'); 
         } else {
             setError(resultado.error);
         }

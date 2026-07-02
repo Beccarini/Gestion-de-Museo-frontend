@@ -1,20 +1,41 @@
 import api from './api';
-export const getRegistros=async(integranteId = '', pagina = 1, limite = 10)=>{
-    const params = { pagina, limite}
+
+export const getRegistros = async (filtros = {}) => {
+    // Extraemos las variables del objeto (con valores por defecto para paginación)
+    const { 
+        pagina = 1, 
+        limite = 20, 
+        integranteId, 
+        fechaInicio, 
+        fechaFin, 
+        esAsistencia, 
+        esApertura 
+    } = filtros;
+    
+    const params = { pagina, limite };
+
+    // Agregamos dinámicamente lo que se esté buscando
     if (integranteId) params.integranteId = integranteId;
-    //agregar lo de las fechas
-    const response= await api.get('/registros', { params })
+    if (fechaInicio) params.fechaInicio = fechaInicio;
+    if (fechaFin) params.fechaFin = fechaFin;
+    if (esAsistencia !== '' && esAsistencia !== undefined) params.esAsistencia = esAsistencia;
+    if (esApertura !== '' && esApertura !== undefined) params.esApertura = esApertura;
+
+    const response = await api.get('/registros', { params });
     return response.data;
-}
-export const getRegistroById=async(id)=>{
-    const response= await api.get(`/registros/${id}`)
+};
+
+export const getRegistroById = async (id) => {
+    const response = await api.get(`/registros/${id}`);
     return response.data;
-}
-export const deleteRegistro=async(id)=>{
-    const response= await api.delete(`/registros/${id}`)
+};
+
+export const deleteRegistro = async (id) => {
+    const response = await api.delete(`/registros/${id}`);
     return response.data;
-}
-export const postRegistro=async(dataRegistro)=>{
-    const response= await api.post(`/registros`,dataRegistro)
+};
+
+export const postRegistro = async (dataRegistro) => {
+    const response = await api.post(`/registros`, dataRegistro);
     return response.data;
-}
+};
