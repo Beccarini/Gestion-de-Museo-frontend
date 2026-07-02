@@ -1,6 +1,13 @@
 import { BrowserRouter, Routes, Route, Navigate, NavLink } from 'react-router-dom';
-import { CssBaseline, Box, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
-
+import { CssBaseline, Box, List, ListItem, ListItemButton, ListItemText, Typography, ListItemIcon, Divider } from '@mui/material';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PeopleIcon from '@mui/icons-material/People';
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import EventIcon from '@mui/icons-material/Event';
+import WorkIcon from '@mui/icons-material/Work';
+import GridViewIcon from '@mui/icons-material/GridView';
+import LogoutIcon from '@mui/icons-material/Logout';
 // Contexto
 import { AuthProvider, useAuth } from './context/AuthContext';
 
@@ -17,13 +24,13 @@ import { PerfilEvento } from './pages/PerfilEvento.jsx';
 import GestionProyectos from './pages/GestionProyectos.jsx';
 import { GestionPlantilla } from './pages/GestionPlantilla.jsx';
 const menuItems = [
-  { text: 'DashBoard', path: '/' },
-  { text: 'Integrantes', path: '/integrantes' },
-  { text: 'Registros', path: '/registros' },
-  { text: 'Permisos', path: '/permisos' },
-  { text: 'Eventos', path: '/eventos' },
-  { text: 'Proyectos', path: '/proyectos' },
-  { text: 'Plantilla de evento', path:'/plantillas'}
+  { text: 'Dashboard', path: '/', icon: <DashboardIcon /> },
+  { text: 'Integrantes', path: '/integrantes', icon: <PeopleIcon /> },
+  { text: 'Registros', path: '/registros', icon: <AccessTimeFilledIcon /> },
+  { text: 'Permisos', path: '/permisos', icon: <VpnKeyIcon /> },
+  { text: 'Proyectos', path: '/proyectos', icon: <WorkIcon /> },
+  { text: 'Eventos', path: '/eventos', icon: <EventIcon /> },
+  { text: 'Plantilla de evento', path: '/plantilla', icon: <GridViewIcon /> }
 ];
 
 
@@ -50,40 +57,72 @@ const LayoutPrivado = () => {
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       {/* BARRA LATERAL */}
-      <Box sx={{ width: drawerWidth, borderRight: '1px solid #e0e0e0', backgroundColor: '#fff', display: 'flex', flexDirection: 'column' }}>
-        <Typography sx={{ p: 3, fontWeight: 'bold', fontSize: '1.2rem', color: '#1a73e8' }}>
-          Sistema MUIC
+      <Box sx={{ 
+      width: drawerWidth, 
+      borderRight: '1px solid #e2e8f0', 
+      backgroundColor: '#ffffff', 
+      display: 'flex', 
+      flexDirection: 'column',
+      height: '100vh' 
+    }}>
+      {/* TÍTULO DEL SISTEMA */}
+      <Box sx={{ p: 3, display: 'flex', alignItems: 'center' }}>
+        <Typography sx={{ fontWeight: 800, fontSize: '1.3rem', color: '#1e293b' }}>
+          Sistema <span style={{ color: '#2563eb' }}>MUIC</span>
         </Typography>
-        
-        {/* Menú de Navegación */}
-        <List sx={{ flexGrow: 1 }}>
-          {menuItems.map((item) => (
-            <ListItem key={item.text} disablePadding>
-              <ListItemButton 
-                component={NavLink} 
-                to={item.path}
-                sx={{
-                  '&.active': { backgroundColor: '#e8f0fe', color: '#1a73e8', fontWeight: 500 },
-                  '&:hover': { backgroundColor: '#f5f5f5' }
-                }}
-              >
-                <ListItemText primary={item.text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-
-        <List>
-          <ListItem disablePadding>
+      </Box>
+      
+      {/* MENÚ PRINCIPAL */}
+      <List sx={{ flexGrow: 1, px: 1.5 }}>
+        {menuItems.map((item) => (
+          <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
             <ListItemButton 
-                onClick={logout} 
-                sx={{ '&:hover': { backgroundColor: '#ffebee' } }}
+              component={NavLink} 
+              to={item.path}
+              sx={{
+                borderRadius: '10px',
+                '&.active': { 
+                  backgroundColor: '#eff6ff', 
+                  color: '#2563eb',
+                  '& .MuiListItemIcon-root': { color: '#2563eb' }
+                },
+                '&:hover': { backgroundColor: '#f8fafc' }
+              }}
             >
-              <ListItemText primary="Cerrar Sesión" sx={{ color: '#d32f2f', fontWeight: '500' }} />
+              <ListItemIcon sx={{ minWidth: 40, color: '#64748b' }}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText 
+                primary={item.text} 
+                primaryTypographyProps={{ fontSize: '0.95rem', fontWeight: 500 }}
+              />
             </ListItemButton>
           </ListItem>
-        </List>
-      </Box>
+        ))}
+      </List>
+
+      {/* CERRAR SESIÓN */}
+      <Divider sx={{ my: 1 }} />
+      <List sx={{ px: 1.5, mb: 2 }}>
+        <ListItem disablePadding>
+          <ListItemButton 
+            onClick={logout} 
+            sx={{ 
+              borderRadius: '10px',
+              '&:hover': { backgroundColor: '#fef2f2' } 
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: 40, color: '#ef4444' }}>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText 
+              primary="Cerrar Sesión" 
+              primaryTypographyProps={{ color: '#ef4444', fontWeight: 600, fontSize: '0.95rem' }} 
+            />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </Box>
 
       {/* CONTENIDO PRINCIPAL */}
       <Box 

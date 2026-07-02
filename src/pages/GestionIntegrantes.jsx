@@ -94,6 +94,12 @@ const GestionIntegrantes = () => {
         setIntegranteAEditar(null);
     };
 
+    const handleLimpiarFiltros = () => {
+        setFiltroNombre('');
+        setFiltroCarrera('');
+        setPagina(1); 
+    };
+
     const handleEliminar = (id) => {
         const confirmar = window.confirm('¿Estás seguro de eliminar este integrante?');
         if (!confirmar) return;
@@ -128,15 +134,8 @@ const GestionIntegrantes = () => {
     };
 
     return (
-        <Box sx={{ 
-            width: '100%', 
-            maxWidth: '1300px', 
-            mx: 'auto',         
-            px: { xs: 2, md: 3 }, 
-            mt: 5, 
-            mb: 5 
-        }}>
-            
+        <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: '1200px', mx: 'auto' }}>
+       
             <EncabezadoIntegrantes onAbrirModal={() => setOpenModal(true)} />
 
             <FormularioIntegrante 
@@ -157,6 +156,7 @@ const GestionIntegrantes = () => {
                 setFiltroNombre={setFiltroNombre}
                 filtroCarrera={filtroCarrera}
                 setFiltroCarrera={setFiltroCarrera}
+                onLimpiar={handleLimpiarFiltros}
             />
 
             <TablaIntegrantes 

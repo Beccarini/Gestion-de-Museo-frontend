@@ -5,33 +5,45 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Link as RouterLink } from 'react-router-dom';
 
-export const NextEvents = ({ events }) => (
-    <Paper sx={{ p: 4, borderRadius: 3, boxShadow: '0 4px 12px rgba(0,0,0,0.05)', height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <Typography variant="h6" sx={{ mb: 3, fontWeight: '700' }}>Próximos Eventos</Typography>
+export const NextEvents = ({ events = [] }) => (
+    <Paper sx={{ 
+        p: 3, 
+        borderRadius: 3, 
+        boxShadow: '0 4px 12px rgba(0,0,0,0.05)', 
+        height: '400px', 
+        display: 'flex', 
+        flexDirection: 'column',
+        border: '1px solid #f1f5f9'
+    }}>
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: '700' }}>Eventos</Typography>
 
-        {/* flexGrow: 1 empuja el botón de "Ir a" siempre hacia abajo */}
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ 
+            flexGrow: 1, 
+            overflowY: 'auto', 
+            pr: 1, 
+            mt: 1 
+        }}>
             {events.length > 0 ? events.map(ev => (
                 <Box key={ev.id} sx={{ 
                     mb: 2, 
                     p: 2, 
-                    bgcolor: '#f8f9fa', 
+                    bgcolor: '#f8fafc', 
                     borderRadius: 2, 
+                    border: '1px solid #e2e8f0',
                     display: 'flex', 
                     flexDirection: 'column', 
-                    gap: 1 
+                    gap: 0.5,
+                    transition: '0.2s',
+                    '&:hover': { bgcolor: '#f1f5f9' }
                 }}>
-                    <Typography variant="subtitle2" fontWeight="bold" sx={{ color: '#2d3748', fontSize: '0.95rem' }}>
+                    <Typography variant="subtitle2" fontWeight="bold" sx={{ color: '#1e293b' }}>
                         {ev.nombre}
                     </Typography>
 
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary', mt: 0.5 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.secondary' }}>
                         <EventAvailableIcon sx={{ fontSize: 16 }} />
-                        <Typography variant="caption" fontWeight="500">
-                            {ev.fechaInicio ? ev.fechaInicio.toLocaleDateString() : 'Sin fecha'} 
-                            {ev.fechaFin && ev.fechaInicio?.toDateString() !== ev.fechaFin?.toDateString() 
-                                ? ` - ${ev.fechaFin.toLocaleDateString()}` 
-                                : ''}
+                        <Typography variant="caption" fontWeight="600">
+                            {ev.fechaInicio ? ev.fechaInicio.toLocaleDateString() : 'Sin fecha'}
                         </Typography>
                     </Box>
 
@@ -44,20 +56,21 @@ export const NextEvents = ({ events }) => (
                     </Box>
                 </Box>
             )) : (
-                <Typography variant="body2" sx={{ color: 'text.secondary', fontStyle: 'italic' }}>
+                <Typography variant="body2" sx={{ color: 'text.secondary', fontStyle: 'italic', mt: 5, textAlign: 'center' }}>
                     No hay eventos programados.
                 </Typography>
             )}
         </Box>
 
-        {/* El botón con el símbolo para ir a la ruta */}
         <Button 
             component={RouterLink} 
             to="/eventos" 
             endIcon={<ArrowForwardIcon />} 
-            sx={{ mt: 2, alignSelf: 'flex-start', textTransform: 'none', fontWeight: 600 }}
+            sx={{ mt: 2, textTransform: 'none', fontWeight: 600 }}
         >
             Ir a Eventos
         </Button>
     </Paper>
 );
+
+export default NextEvents;

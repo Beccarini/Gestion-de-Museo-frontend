@@ -17,8 +17,7 @@ import { NextEvents } from '../components/dashboard/NextEvent';
 import { getIntegrantes, getIntegranteById } from '../services/integranteService';
 import { getRegistros } from '../services/registrosService';
 import { getEventos } from '../services/eventoService'; 
-//agregar getProyectos
-
+import { getProyectos } from '../services/proyectoService'; 
 const Dashboard = () => {
     const [data, setData] = useState({ 
         stats: { integrantes: 0, registros: 0, proyectos: 0, eventos: 0 }, 
@@ -34,10 +33,10 @@ const Dashboard = () => {
         Promise.all([
             getIntegrantes(), 
             getRegistros(), 
-            getEventos()
-            //getProyectos() 
+            getEventos(),
+            getProyectos({estado: 'en curso'})
         ])
-        .then(async ([intRes, regRes, evenRes]) => {
+        .then(async ([intRes, regRes, evenRes, proyRes]) => {
             const listaEventos = (evenRes.eventos || evenRes || []).map(ev => ({
                 ...ev,
                 fechaInicio: ev.fechaInicio ? new Date(ev.fechaInicio) : null,
@@ -62,12 +61,12 @@ const Dashboard = () => {
                 stats: { 
                     integrantes: intRes?.totalElementos || 0,
                     registros: regRes?.totalElementos || 0,
-                    eventos: listaEventos.length
-                    //proyectos: proyRes?.totalElementos || 0
+                    eventos: listaEventos.length,
+                    proyectos: proyRes?.totalElementos || 0
                 },
-                registros: registrosConNombre.slice(0, 5),
-                eventos: listaEventos.slice(0, 5) 
-                //proyectos: proyRes?.proyectos || []
+                registros: registrosConNombre.slice(0, 10),
+                eventos: listaEventos.slice(0, 5), 
+                proyectos: proyRes?.proyectos || []
             });
             setLoading(false);
         })
@@ -104,14 +103,14 @@ return (
                 mb: 4 
             }}>
                 <StatsCard title="Integrantes" value={data.stats.integrantes} icon={<PeopleIcon />} color="primary.main" />
-                <StatsCard title="Proyectos" value={0} icon={<AccountTreeIcon />} color="secondary.main" /> {/* agregar data.stats.proyectos si se implementa getProyectos() */}
+                <StatsCard title="Proyectos" value={data.stats.proyectos} icon={<AccountTreeIcon />} color="secondary.main" /> 
                 <StatsCard title="Registros" value={data.stats.registros} icon={<AssignmentIcon />} color="success.main" />
                 <StatsCard title="Eventos" value={data.stats.eventos} icon={<EventIcon />} color="warning.main" />
             </Box>
 
             <Box sx={{ 
                 display: 'grid', 
-                gridTemplateColumns: { xs: '1fr', md: '1.3fr 1fr' }, // <--- EL CAMBIO ESTÁ ACÁ
+                gridTemplateColumns: { xs: '1fr', md: '1.3fr 1fr' },
                 gap: 3 
             }}>
                 <Box>
@@ -119,7 +118,7 @@ return (
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                     <NextEvents events={data.eventos} />
-                    <AlertaProyectos projects={[]} />
+                    <AlertaProyectos projects={data.proyectos} />
                 </Box>
             </Box>
         </Box>

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { 
     Button, Checkbox, FormControlLabel, Grid, Dialog, DialogTitle, 
     DialogContent, DialogActions, FormControl, InputLabel, Select, 
-    MenuItem, TextField 
+    MenuItem, TextField, Box
 } from '@mui/material';
 import { TIPOS_EVENTO } from '../../constants/tiposEvento';
 import { DIAS_SEMANA } from '../../constants/diasSemana';
-import {FRECUENCIAS} from '../../constants/frecuencia';
+import { FRECUENCIAS } from '../../constants/frecuencia';
+
 const estadoInicialFormulario = { 
     nombre: '',
     descripcion: '',
@@ -17,6 +18,7 @@ const estadoInicialFormulario = {
     horaFin: '10:00',
     activo: true
 };
+
 export function AltaPlantilla({ guardarPlantilla, open, onClose, plantillaEdit }) {
     const [formData, setFormData] = useState(estadoInicialFormulario);
 
@@ -57,14 +59,15 @@ export function AltaPlantilla({ guardarPlantilla, open, onClose, plantillaEdit }
 
     return (
         <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-            <DialogTitle>
+            <DialogTitle sx={{ fontWeight: 'bold' }}>
                 {plantillaEdit ? 'Editar Plantilla' : 'Nueva Plantilla'}
             </DialogTitle>
+            
             <DialogContent dividers>
                 <form id="formulario-plantilla" onSubmit={handleSubmit}>
-                    <Grid container spacing={3} sx={{ mt: 0.5 }}>
+                    <Grid container spacing={3} sx={{ mt: 0.5, mb: 1 }}>
                         
-                        <Grid xs={12} sm={8}>
+                        <Grid item xs={12}>
                             <TextField
                                 label="Nombre de la Plantilla"
                                 name="nombre"
@@ -75,7 +78,7 @@ export function AltaPlantilla({ guardarPlantilla, open, onClose, plantillaEdit }
                             />
                         </Grid>
                         
-                        <Grid xs={12} sm={4}>
+                        <Grid item xs={12} sm={6}>
                             <FormControl fullWidth required>
                                 <InputLabel>Tipo</InputLabel>
                                 <Select
@@ -91,35 +94,7 @@ export function AltaPlantilla({ guardarPlantilla, open, onClose, plantillaEdit }
                             </FormControl>
                         </Grid>
 
-                        <Grid xs={12}>
-                            <TextField
-                                label="Descripción"
-                                name="descripcion"
-                                value={formData.descripcion}
-                                onChange={handleChange}
-                                fullWidth
-                                multiline
-                                rows={2}
-                            />
-                        </Grid>
-
-                        <Grid xs={12} sm={6}>
-                            <FormControl fullWidth required>
-                                <InputLabel>Día de la Semana</InputLabel>
-                                <Select
-                                    name="diaSemana"
-                                    value={formData.diaSemana}
-                                    label="Día de la Semana"
-                                    onChange={handleChange}
-                                >
-                                    {DIAS_SEMANA.map((dia, index) => (
-                                        <MenuItem key={index} value={index}>{dia}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
-                        <Grid xs={12} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <FormControl fullWidth required>
                                 <InputLabel>Frecuencia</InputLabel>
                                 <Select
@@ -135,7 +110,23 @@ export function AltaPlantilla({ guardarPlantilla, open, onClose, plantillaEdit }
                             </FormControl>
                         </Grid>
 
-                        <Grid xs={12} sm={6}>
+                        <Grid item xs={12}>
+                            <FormControl fullWidth required>
+                                <InputLabel>Día de la Semana</InputLabel>
+                                <Select
+                                    name="diaSemana"
+                                    value={formData.diaSemana}
+                                    label="Día de la Semana"
+                                    onChange={handleChange}
+                                >
+                                    {DIAS_SEMANA.map((dia, index) => (
+                                        <MenuItem key={index} value={index}>{dia}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 label="Hora Inicio"
                                 type="time"
@@ -148,7 +139,7 @@ export function AltaPlantilla({ guardarPlantilla, open, onClose, plantillaEdit }
                             />
                         </Grid>
 
-                        <Grid xs={12} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 label="Hora Fin"
                                 type="time"
@@ -161,28 +152,45 @@ export function AltaPlantilla({ guardarPlantilla, open, onClose, plantillaEdit }
                             />
                         </Grid>
 
-                        <Grid xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        name="activo"
-                                        checked={formData.activo}
-                                        onChange={handleChange}
-                                    />
-                                }
-                                label="Plantilla Activa"
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Descripción"
+                                name="descripcion"
+                                value={formData.descripcion}
+                                onChange={handleChange}
+                                fullWidth
+                                multiline
+                                rows={3}
                             />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', backgroundColor: '#f8fafc', p: 1.5, borderRadius: 2 }}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            name="activo"
+                                            checked={formData.activo}
+                                            onChange={handleChange}
+                                            color="primary"
+                                        />
+                                    }
+                                    label="Plantilla Activa"
+                                    sx={{ m: 0 }}
+                                />
+                            </Box>
                         </Grid>
 
                     </Grid>
                 </form>
             </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} color="error">
-                    Cancelar
+            
+            <DialogActions sx={{ p: 2 }}>
+                <Button onClick={handleClose} color="error" variant="text">
+                    CANCELAR
                 </Button>
                 <Button type="submit" form="formulario-plantilla" variant="contained" color="primary">
-                    {plantillaEdit ? 'Actualizar Plantilla' : 'Guardar Plantilla'}
+                    {plantillaEdit ? 'ACTUALIZAR PLANTILLA' : 'GUARDAR PLANTILLA'}
                 </Button>
             </DialogActions>
         </Dialog>
