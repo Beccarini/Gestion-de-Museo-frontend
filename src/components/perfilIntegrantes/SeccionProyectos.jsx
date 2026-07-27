@@ -1,5 +1,8 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box, Divider, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, IconButton } from '@mui/material';
+import { Card, CardContent, Typography, Box, Divider, Chip, 
+        Table, TableBody, TableCell, TableContainer, TableHead, 
+        TableRow, Button, IconButton, Tooltip 
+} from '@mui/material';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import AddIcon from '@mui/icons-material/Add';
 import EventIcon from '@mui/icons-material/Event';
@@ -33,24 +36,24 @@ const SeccionProyectos = ({ proyectosIniciales, onAsignar, onDesasignar }) => {
             <CardContent sx={{ p: { xs: 2, md: 3 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 1 }}>
-                    <AccountTreeIcon color="secondary" />
+                    <AccountTreeIcon color="primary" />
                     <Typography variant="h6" fontWeight="bold">
                         Proyectos
                     </Typography>
                     <Chip 
                         label={listaProyectos.length} 
-                        color="secondary" 
+                        color="primary" 
                         size="small" 
                         sx={{ fontWeight: 'bold' }} 
                     />
 
                     <Button 
                         variant="outlined" 
-                        color="secondary"
+                        color="primary"
                         size="small" 
                         startIcon={<AddIcon />}
                         sx={{ ml: 'auto', borderRadius: 2, textTransform: 'none', fontWeight: 'bold' }}
-                        onClick={onAsignar} // Llamamos a la función que abre el modal en el padre
+                        onClick={onAsignar} 
                     >
                         Asignar
                     </Button>
@@ -112,16 +115,16 @@ const SeccionProyectos = ({ proyectosIniciales, onAsignar, onDesasignar }) => {
                                                 />
                                             </TableCell>
 
-                                            {/* Nueva celda con el botón de desasignar */}
                                             <TableCell sx={{ ...borderStyle }} align="right">
-                                                <IconButton 
-                                                    size="small"
-                                                    color="error"
-                                                    onClick={() => onDesasignar(proyecto.id)} // Le pasamos el ID al padre
-                                                    title="Desvincular proyecto"
-                                                >
-                                                    <LinkOffIcon fontSize="small" />
-                                                </IconButton>
+                                                <Tooltip title="Desvincular Proyecto">
+                                                    <IconButton 
+                                                        size="small"
+                                                        color="error"
+                                                        onClick={() => onDesasignar(proyecto.id)}
+                                                    >
+                                                        <LinkOffIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </TableCell>
 
                                         </TableRow>

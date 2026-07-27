@@ -17,7 +17,11 @@ const TablaUltimosRegistros = ({ registros, integranteId }) => {
                     </Typography>
                     
                     <Box sx={{ ml: 'auto' }}>
-                        <Button variant="text" size="small" endIcon={<FormatListBulletedIcon />}>
+                        <Button 
+                            component={Link} 
+                            to={`/registros?integrante=${integranteId}`}
+                            sx={{ fontWeight: 'bold' }}
+                        >
                             VER HISTORIAL COMPLETO
                         </Button>
                     </Box>

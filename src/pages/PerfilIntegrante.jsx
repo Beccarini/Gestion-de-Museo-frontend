@@ -13,7 +13,7 @@ import AsignarProyectos from '../components/perfilIntegrantes/AsignarProyectos';
 import { getIntegranteById, updateIntegrante, 
         getRegistrosByIntegrante, getPermisosByIntegrante,
         getProyectosByIntegrante, desvincularPermiso, 
-        desvincularProyecto
+        desvincularProyecto, toggleEstadoIntegrante
 } from '../services/integranteService';
 import { getEventoById } from '../services/eventoService';
 
@@ -123,6 +123,17 @@ const PerfilIntegrante = () => {
             });
     };
 
+    const handleCambiarEstado = () => {
+        toggleEstadoIntegrante(id)
+            .then(()=>{
+                cargarDatosPerfil();
+            })
+            .catch((err) =>{
+                console.error("Error al cambiar estado:", err);
+                setError("No se pudo cambiar el estado del integrante.");
+            });
+    };
+
     if (loading) {
         return (
             <Box sx={{ 
@@ -144,7 +155,7 @@ const PerfilIntegrante = () => {
     return (
         <Box sx={{ width: '100%', maxWidth: '1300px', mx: 'auto', px: { xs: 2, md: 3 }, mt: 2, mb: 5 }}>
 
-            <Button startIcon={<ArrowBackIcon />} component={Link} to={`/integrantes`} sx={{ mb: 2 }}>
+            <Button startIcon={<ArrowBackIcon />} component={Link} to={`/integrantes`} sx={{ mb: 2 }} size='small'>
                 Volver al listado
             </Button>
 
@@ -160,6 +171,7 @@ const PerfilIntegrante = () => {
                         <CardInfoBasica 
                             integrante={integrante} 
                             onAbrirEditar={() => setOpenModal(true)} 
+                            onCambiarEstado={handleCambiarEstado}
                         />
                     </Box>
 
