@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
     Box, Typography, Chip, IconButton, Menu, MenuItem, 
-    ListItemIcon, ListItemText, Avatar 
+    ListItemIcon, ListItemText, Avatar, Paper, Card 
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
@@ -29,39 +29,35 @@ const CardInfoBasica = ({ integrante, onAbrirEditar, onCambiarEstado }) => {
         }
     };
 
-    // Tomamos la primera letra para el Avatar (si existe el nombre)
     const inicial = integrante?.nombre ? integrante.nombre.charAt(0).toUpperCase() : '';
 
     return (
-        <Box sx={{ 
+        <Card variant="outlined" sx={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
-            alignItems: 'center',
-            p: 3, 
-            boxShadow: 1, 
-            borderRadius: 2, 
+            alignItems: 'flex-start',
+            p: { xs: 2, md: 3 },
+            mb: 4,
+            borderRadius: 2,
+            borderColor: '#e2e8f0', 
             bgcolor: 'background.paper' 
         }}>
             
-            {/* Contenedor Izquierdo: Avatar, Datos y Detalles */}
             <Box sx={{ display: 'flex', gap: 4, alignItems: 'center' }}>
                 
-                {/* Columna 1: Avatar y Estado */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
                     <Avatar sx={{ width: 80, height: 80, fontSize: '2.5rem', bgcolor: '#1976d2' }}>
                         {inicial}
                     </Avatar>
                     <Chip 
-                        // ¡Ojo acá! Usamos esActivo según tu modelo de Sequelize
                         label={integrante.esActivo ? "Activo" : "Inactivo"} 
                         color={integrante.esActivo ? "success" : "default"} 
                         size="small" 
                     />
                 </Box>
 
-                {/* Columna 2: Nombre y detalles (Legajo, Carrera, Token) */}
                 <Box>
-                    <Typography variant="h4" sx={{ mb: 2, fontWeight: 500 }}>
+                    <Typography variant="h4" component="h1" sx={{ mb: 2, fontWeight: 500 }}>
                         {integrante.nombre}
                     </Typography>
                     
@@ -82,11 +78,12 @@ const CardInfoBasica = ({ integrante, onAbrirEditar, onCambiarEstado }) => {
                 </Box>
             </Box>
 
-            {/* Contenedor Derecho: Menú de acciones */}
-            <Box alignSelf="flex-start">
+
+            <Box sx={{ alignSelf: 'flex-start' }}> 
                 <IconButton 
                     aria-label="opciones" 
                     onClick={handleClickMenu}
+                    sx={{ mt: -1, mr: -1 }} 
                 >
                     <MoreVertIcon />
                 </IconButton>
@@ -120,7 +117,7 @@ const CardInfoBasica = ({ integrante, onAbrirEditar, onCambiarEstado }) => {
                 </Menu>
             </Box>
 
-        </Box>
+        </Card>
     );
 };
 

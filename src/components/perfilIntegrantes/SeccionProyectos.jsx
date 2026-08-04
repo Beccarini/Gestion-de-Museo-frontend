@@ -32,7 +32,8 @@ const SeccionProyectos = ({ proyectosIniciales, onAsignar, onDesasignar }) => {
         : (proyectosIniciales?.proyectos || proyectosIniciales?.integrante?.proyectos || []);
 
     return (
-        <Card elevation={3} sx={{ borderRadius: 2, height: '100%', minHeight: '180px', width: '100%', display: 'flex', flexDirection: 'column' }}>
+        
+        <Card variant="outlined" sx={{ borderRadius: 2, width: '100%', mb: 4, display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ p: { xs: 2, md: 3 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 1 }}>
@@ -58,7 +59,6 @@ const SeccionProyectos = ({ proyectosIniciales, onAsignar, onDesasignar }) => {
                         Asignar
                     </Button>
                 </Box>
-                <Divider sx={{ mb: 2 }} />
 
                 {listaProyectos && listaProyectos.length > 0 ? (
                     <TableContainer sx={{ flexGrow: 1 }}>

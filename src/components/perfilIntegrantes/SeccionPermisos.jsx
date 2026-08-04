@@ -14,10 +14,9 @@ const SeccionPermisos = ({ permisosIniciales, onAbrirAsignar, onDesvincular }) =
         : (permisosIniciales?.integrante?.permisos || permisosIniciales?.permisos || []);
 
     return (
-        <Card elevation={3} sx={{ borderRadius: 2, height: '100%', minHeight: '180px', width: '100%', display: 'flex', flexDirection: 'column' }}>
+        <Card variant="outlined" sx={{ borderRadius: 2, width: '100%', mb: 4, display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ p: { xs: 2, md: 3 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 
-                {/* Encabezado */}
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 1 }}>
                     <SecurityIcon color="primary" />
                     <Typography variant="h6" fontWeight="bold">
@@ -40,7 +39,6 @@ const SeccionPermisos = ({ permisosIniciales, onAbrirAsignar, onDesvincular }) =
                         Asignar
                     </Button>
                 </Box>
-                <Divider sx={{ mb: 2 }} />
 
                 {listaPermisos && listaPermisos.length > 0 ? (
                     <TableContainer sx={{ flexGrow: 1 }}>
