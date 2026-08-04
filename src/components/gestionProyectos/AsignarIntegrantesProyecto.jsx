@@ -1,9 +1,14 @@
 // src/components/proyectos/AsignarIntegrantesProyecto.jsx
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox, Typography, CircularProgress, Box, TextField, InputAdornment } from '@mui/material';
+import { 
+    Dialog, DialogTitle, DialogContent, DialogActions, Button, 
+    List, ListItem, ListItemButton, ListItemIcon, ListItemText, 
+    Checkbox, Typography, CircularProgress, Box, TextField, InputAdornment 
+} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+
 import { getIntegrantes } from '../../services/integranteService'; 
-import { asignarIntegranteAProyecto } from '../../services/proyectoService'; 
+import { asignarIntegranteAProyecto, getIntegrantesPorProyecto } from '../../services/proyectoService'; 
 
 const AsignarIntegrantesProyecto = ({ open, onClose, proyecto, onAsignacionExitosa }) => {
     const [integrantes, setIntegrantes] = useState([]);
@@ -13,19 +18,31 @@ const AsignarIntegrantesProyecto = ({ open, onClose, proyecto, onAsignacionExito
     const [guardando, setGuardando] = useState(false);
 
     useEffect(() => {
-        if (open) {
+        if (open && proyecto) {
             cargarIntegrantes();
             setSeleccionados([]);
             setBusqueda('');
         }
-    }, [open]);
+    }, [open, proyecto]);
 
     const cargarIntegrantes = async () => {
         setLoading(true);
         try {
+            const [dataTodos, dataAsignados] = await Promise.all([
+                getIntegrantes('', '', 1, 200),
+                getIntegrantesPorProyecto(proyecto.id)
+            ]);
 
-            const data = await getIntegrantes('', '', 1, 200);                        
-            setIntegrantes(data.integrantes || []);
+            const todosLosIntegrantes = dataTodos.integrantes || [];
+            const integrantesYaAsignados = dataAsignados || [];
+
+            const idsAsignados = integrantesYaAsignados.map(int => int.id);
+
+            const integrantesDisponibles = todosLosIntegrantes.filter(
+                int => !idsAsignados.includes(int.id)
+            );
+
+            setIntegrantes(integrantesDisponibles);
         } catch (error) {
             console.error("Fallo al cargar integrantes. Motivo:", error);
         } finally {
@@ -45,23 +62,23 @@ const AsignarIntegrantesProyecto = ({ open, onClose, proyecto, onAsignacionExito
         setSeleccionados(nuevosSeleccionados);
     };
 
-const handleGuardar = async () => {
-    setGuardando(true);
-    try {
-        const promesas = seleccionados.map(integranteId =>
-            asignarIntegranteAProyecto(integranteId, proyecto.id)
-        );
-        await Promise.all(promesas);
+    const handleGuardar = async () => {
+        setGuardando(true);
+        try {
+            const promesas = seleccionados.map(integranteId =>
+                asignarIntegranteAProyecto(integranteId, proyecto.id)
+            );
+            await Promise.all(promesas);
 
-        if (onAsignacionExitosa) onAsignacionExitosa();
-        onClose();
-    } catch (error) {
-        console.error("Error al asignar integrantes:", error);
-        alert("Error al intentar asignar los integrantes.");
-    } finally {
-        setGuardando(false);
-    }
-};
+            if (onAsignacionExitosa) onAsignacionExitosa();
+            onClose();
+        } catch (error) {
+            console.error("Error al asignar integrantes:", error);
+            alert("Error al intentar asignar los integrantes.");
+        } finally {
+            setGuardando(false);
+        }
+    };
 
     const integrantesFiltrados = integrantes.filter(int => 
         int.nombre.toLowerCase().includes(busqueda.toLowerCase()) || 
@@ -98,7 +115,7 @@ const handleGuardar = async () => {
                     </Box>
                 ) : integrantesFiltrados.length === 0 ? (
                     <Typography color="text.secondary" align="center" sx={{ mt: 4 }}>
-                        No se encontraron integrantes.
+                        No se encontraron integrantes disponibles para asignar.
                     </Typography>
                 ) : (
                     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>

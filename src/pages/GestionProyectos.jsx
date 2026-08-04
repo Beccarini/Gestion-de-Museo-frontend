@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { Box, Typography, Button, Pagination, Alert } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import TablaProyectos from '../components/proyectos/TablaProyectos';
-import FormularioProyecto from '../components/proyectos/FormularioProyecto';
-import FiltrosProyectos from '../components/proyectos/FiltrosProyectos';
-import VerIntegrantesProyecto from '../components/proyectos/VerIntegrantesProyecto';
-import AsignarIntegranteAProyecto from '../components/proyectos/AsignarIntegrantesProyecto';
+import TablaProyectos from '../components/gestionProyectos/TablaProyectos';
+import FormularioProyecto from '../components/gestionProyectos/FormularioProyecto';
+import FiltrosProyectos from '../components/gestionProyectos/FiltrosProyectos';
+import VerIntegrantesProyecto from '../components/gestionProyectos/VerIntegrantesProyecto';
+import AsignarIntegranteAProyecto from '../components/gestionProyectos/AsignarIntegrantesProyecto';
 
 import { getProyectos, crearProyecto, actualizarProyecto, eliminarProyecto, asignarIntegranteAProyecto } from '../services/proyectoService';
 
 const GestionProyectos = () => {
+    const navigate = useNavigate();
+
     const [proyectos, setProyectos] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     
-
     const [filtroNombre, setFiltroNombre] = useState('');
     const [filtroEstado, setFiltroEstado] = useState('');
     
-
     const [openModal, setOpenModal] = useState(false);
     const [proyectoAEditar, setProyectoAEditar] = useState(null);
     const [openModalIntegrantes, setOpenModalIntegrantes] = useState(false);
@@ -68,20 +69,19 @@ const GestionProyectos = () => {
         setOpenModalAsignar(true);
     };
 
-
-const handleGuardar = async (proyectoData) => {
-    try {
-        if (proyectoAEditar) {
-            await actualizarProyecto(proyectoAEditar.id, proyectoData);
-        } else {
-            await crearProyecto(proyectoData);
+    const handleGuardar = async (proyectoData) => {
+        try {
+            if (proyectoAEditar) {
+                await actualizarProyecto(proyectoAEditar.id, proyectoData);
+            } else {
+                await crearProyecto(proyectoData);
+            }
+            setOpenModal(false);
+            cargarProyectos();
+        } catch (err) {
+            setError('Error al guardar el proyecto.');
         }
-        setOpenModal(false);
-        cargarProyectos();
-    } catch (err) {
-        setError('Error al guardar el proyecto.');
-    }
-};
+    };
 
     const handleEliminar = async (id) => {
         if (window.confirm('¿Estás seguro de eliminar este proyecto? Esta acción no se puede deshacer.')) {
@@ -95,9 +95,12 @@ const handleGuardar = async (proyectoData) => {
         }
     };
 
+    const handleVerPerfil = (id) => {
+        navigate(`/proyectos/${id}`);
+    };
+
     return (
         <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: '1200px', mx: 'auto' }}>
-            {/* CABECERA EQUILIBRADA */}
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                     <Typography variant="h4" sx={{ fontWeight: 800, color: '#1a2027' }}>
@@ -132,7 +135,6 @@ const handleGuardar = async (proyectoData) => {
                 </Alert>
             )}
 
-       
             <FiltrosProyectos 
                 filtroNombre={filtroNombre}
                 setFiltroNombre={setFiltroNombre}
@@ -147,6 +149,7 @@ const handleGuardar = async (proyectoData) => {
                 onDelete={handleEliminar}
                 onVerIntegrantes={handleOpenVerIntegrantes}
                 onAsignarIntegrantes={handleOpenAsignarIntegrantes}
+                onVerPerfil={handleVerPerfil}
             />
 
             {totalPages > 1 && (
@@ -160,7 +163,6 @@ const handleGuardar = async (proyectoData) => {
                 </Box>
             )}
 
-           
             <FormularioProyecto 
                 open={openModal} 
                 onClose={() => setOpenModal(false)} 

@@ -23,6 +23,7 @@ import { GestionEventos } from './pages/GestionEvento.jsx';
 import { PerfilEvento } from './pages/PerfilEvento.jsx';
 import GestionProyectos from './pages/GestionProyectos.jsx';
 import { GestionPlantilla } from './pages/GestionPlantilla.jsx';
+import { PerfilProyecto } from './pages/PerfilProyecto.jsx';
 const menuItems = [
   { text: 'Dashboard', path: '/', icon: <DashboardIcon /> },
   { text: 'Integrantes', path: '/integrantes', icon: <PeopleIcon /> },
@@ -142,6 +143,7 @@ const LayoutPrivado = () => {
           <Route path="/integrantes/:id" element={<PerfilIntegrante />} />
           <Route path="/permisos" element={<GestionPermisos />} />
           <Route path="/proyectos" element={<GestionProyectos />} />
+          <Route path="/proyectos/:id" element={<PerfilProyecto/>} />
           <Route path="/eventos" element={<GestionEventos />} />
           <Route path="/eventos/:id" element={<PerfilEvento />} />
           <Route path="/plantillas" element={<GestionPlantilla />} />

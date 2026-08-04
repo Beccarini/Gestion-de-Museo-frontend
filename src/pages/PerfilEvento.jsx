@@ -84,7 +84,7 @@ export function PerfilEvento(){
             try {
                 await deleteEvento(id);
                 alert("Evento eliminado con éxito.");
-                navigate('/eventos'); // <-- Redirigimos a la tabla principal
+                navigate('/eventos'); 
             } catch (error) {
                 console.error("Error al eliminar el evento:", error);
                 alert("Hubo un error al intentar eliminar el evento. Verificá si tiene registros asociados.");
