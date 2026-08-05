@@ -109,7 +109,7 @@ export function PerfilProyecto() {
 
     return (
         <Box sx={{ width: '100%', maxWidth: '1300px', mx: 'auto', px: { xs: 2, md: 3 }, mt: 2, mb: 5 }}>
-            <Button startIcon={<ArrowBackIcon />} component={Link} to={`/proyectos`} sx={{ mb: 2 }}>
+            <Button startIcon={<ArrowBackIcon />} component={Link} to={`/proyectos`} sx={{ mb: 2 }} size="small">
                 Volver al listado
             </Button>
 

@@ -24,6 +24,9 @@ import { PerfilEvento } from './pages/PerfilEvento.jsx';
 import GestionProyectos from './pages/GestionProyectos.jsx';
 import { GestionPlantilla } from './pages/GestionPlantilla.jsx';
 import { PerfilProyecto } from './pages/PerfilProyecto.jsx';
+import { PerfilPlantilla } from './pages/PerfilPlantilla.jsx';
+
+
 const menuItems = [
   { text: 'Dashboard', path: '/', icon: <DashboardIcon /> },
   { text: 'Integrantes', path: '/integrantes', icon: <PeopleIcon /> },
@@ -147,6 +150,7 @@ const LayoutPrivado = () => {
           <Route path="/eventos" element={<GestionEventos />} />
           <Route path="/eventos/:id" element={<PerfilEvento />} />
           <Route path="/plantillas" element={<GestionPlantilla />} />
+          <Route path="/plantillas/:id" element={<PerfilPlantilla />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Box>

@@ -9,7 +9,7 @@ import LinkOffIcon from '@mui/icons-material/LinkOff';
 
 export function SeccionIntegrantes({ integrantes = [], onAbrirAsignar, onDesvincular }) {
     return (
-        <Card variant="h4" component="h1" sx={{ fontWeight: 500, color: '#0f172a' }}>
+        <Card variant="outlined" sx={{ borderRadius: 2, width: '100%', mb: 4, display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ p: { xs: 2, md: 3 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 1 }}>

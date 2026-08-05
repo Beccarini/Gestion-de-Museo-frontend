@@ -53,6 +53,7 @@ const CardInfoBasica = ({ integrante, onAbrirEditar, onCambiarEstado }) => {
                         label={integrante.esActivo ? "Activo" : "Inactivo"} 
                         color={integrante.esActivo ? "success" : "default"} 
                         size="small" 
+                        sx={{textTransform: 'bold'}}
                     />
                 </Box>
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { 
     Paper, Table, TableBody, TableCell, TableContainer, 
     TableHead, TableRow, IconButton, Chip, Box, Typography, Tooltip, Switch, Pagination 
@@ -6,6 +7,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import EventRepeatIcon from '@mui/icons-material/EventRepeat'; 
 import { DIAS_SEMANA } from '../../constants/diasSemana';
 
 export function MostrarPlantillas({ 
@@ -15,7 +17,7 @@ export function MostrarPlantillas({
     editarPlantilla, 
     paginaActual, 
     totalPaginas, 
-    onChangePagina 
+    onChangePagina
 }) {
     return (
         <Box>
@@ -76,6 +78,18 @@ export function MostrarPlantillas({
                                     </TableCell>
                                     <TableCell align="center">
                                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0.5 }}>
+                                            
+                                            <Tooltip title="Ver Perfil de Plantilla">
+                                                <IconButton 
+                                                    component={Link} 
+                                                    to={`/plantillas/${row.id}`} 
+                                                    color="info" 
+                                                    size="small"
+                                                >
+                                                    <EventRepeatIcon fontSize="small" />
+                                                </IconButton>
+                                            </Tooltip>
+                                            
                                             <Tooltip title="Editar">
                                                 <IconButton color="primary" size="small" onClick={() => editarPlantilla(row)}>
                                                     <EditIcon fontSize="small" />
@@ -103,7 +117,6 @@ export function MostrarPlantillas({
                 </Table>
             </TableContainer>
 
-            {/* Paginación */}
             {totalPaginas > 1 && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3, pb: 3 }}>
                     <Pagination 

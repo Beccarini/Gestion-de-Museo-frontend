@@ -29,7 +29,6 @@ export function SeccionItems() {
                         Asignar Ítem
                     </Button>
                 </Box>
-                <Divider sx={{ mb: 2 }} />
 
                 <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', p: 5, textAlign: 'center' }}>
                     <InventoryIcon sx={{ fontSize: 48, color: 'text.disabled', mb: 2 }} />
