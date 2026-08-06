@@ -7,7 +7,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import AddIcon from '@mui/icons-material/Add';
 import LinkOffIcon from '@mui/icons-material/LinkOff';
 
-export function SeccionIntegrantes({ integrantes = [], onAbrirAsignar, onDesvincular }) {
+export function SeccionIntegrantes({ integrantes = [], onAbrirAsignar, onDesvincular, onVerIntegrante }) {
     return (
         <Card variant="outlined" sx={{ borderRadius: 2, width: '100%', mb: 4, display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ p: { xs: 2, md: 3 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
@@ -58,7 +58,17 @@ export function SeccionIntegrantes({ integrantes = [], onAbrirAsignar, onDesvinc
                                     const borderStyle = isLast ? { borderBottom: 'none' } : {};
 
                                     return (
-                                        <TableRow key={integrante.id} hover>
+                                        <TableRow 
+                                            key={integrante.id} 
+                                            hover
+                                            onClick={() => onVerIntegrante && onVerIntegrante(integrante.id)}
+                                            sx={{ 
+                                                cursor: 'pointer',
+                                                '&:hover': {
+                                                    backgroundColor: 'rgba(25, 118, 210, 0.04)'
+                                                }
+                                            }}
+                                        >
                                             <TableCell sx={{ fontWeight: 500, color: 'text.primary', ...borderStyle }}>
                                                 {integrante.nombre}
                                             </TableCell>
@@ -73,7 +83,10 @@ export function SeccionIntegrantes({ integrantes = [], onAbrirAsignar, onDesvinc
                                                     <IconButton 
                                                         size="small" 
                                                         color="error" 
-                                                        onClick={() => onDesvincular(integrante.id)}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            onDesvincular(integrante.id);
+                                                        }}
                                                     >
                                                         <LinkOffIcon fontSize="small" />
                                                     </IconButton>

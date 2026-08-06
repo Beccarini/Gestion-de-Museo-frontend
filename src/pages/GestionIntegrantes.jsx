@@ -111,7 +111,7 @@ const GestionIntegrantes = () => {
                 }
             })
             .catch((err) => {
-                setError('Hubo un problema al intentar eliminar el registro.');
+                setError('Hubo un problema al intentar eliminar el integrante.', err);
                 console.error(err);
             });
     };

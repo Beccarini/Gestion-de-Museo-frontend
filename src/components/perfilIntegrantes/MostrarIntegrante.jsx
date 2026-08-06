@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { 
     Box, Typography, Chip, IconButton, Menu, MenuItem, 
-    ListItemIcon, ListItemText, Avatar, Paper, Card 
+    ListItemIcon, ListItemText, Avatar, Card 
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import BlockIcon from '@mui/icons-material/Block';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckIcon from '@mui/icons-material/Check';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const CardInfoBasica = ({ integrante, onAbrirEditar, onCambiarEstado }) => {
+const MostrarIntegrante = ({ integrante, onAbrirEditar, onCambiarEstado, onEliminar }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
@@ -26,6 +27,8 @@ const CardInfoBasica = ({ integrante, onAbrirEditar, onCambiarEstado }) => {
             onAbrirEditar();
         } else if (accion === 'estado') {
             onCambiarEstado();
+        } else if (accion === 'eliminar') {
+            if(onEliminar) onEliminar();
         }
     };
 
@@ -53,7 +56,7 @@ const CardInfoBasica = ({ integrante, onAbrirEditar, onCambiarEstado }) => {
                         label={integrante.esActivo ? "Activo" : "Inactivo"} 
                         color={integrante.esActivo ? "success" : "default"} 
                         size="small" 
-                        sx={{textTransform: 'bold'}}
+                        sx={{fontWeight: 'bold'}}
                     />
                 </Box>
 
@@ -100,18 +103,27 @@ const CardInfoBasica = ({ integrante, onAbrirEditar, onCambiarEstado }) => {
                         <ListItemIcon>
                             <EditIcon fontSize="small" color="primary" />
                         </ListItemIcon>
-                        <ListItemText>Editar Perfil</ListItemText>
+                        <ListItemText>Editar Integrante</ListItemText>
+                    </MenuItem>
+                    
+                    <MenuItem onClick={() => handleAccion('eliminar')}>
+                        <ListItemIcon>
+                            <DeleteIcon fontSize="small" color="error" />
+                        </ListItemIcon>
+                        <ListItemText sx={{ color: 'error.main' }}>
+                            Eliminar Integrante
+                        </ListItemText>
                     </MenuItem>
                     
                     <MenuItem onClick={() => handleAccion('estado')}>
                         <ListItemIcon>
                             {integrante.esActivo ? (
-                                <BlockIcon fontSize="small" color="error" />
+                                <BlockIcon fontSize="small" color="warning" />
                             ) : (
-                                <CheckCircleIcon fontSize="small" color="success" />
+                                <CheckIcon fontSize="small" color="success" />
                             )}
                         </ListItemIcon>
-                        <ListItemText sx={{ color: integrante.esActivo ? 'error.main' : 'success.main' }}>
+                        <ListItemText sx={{ color: integrante.esActivo ? 'warning.main' : 'success.main' }}>
                             {integrante.esActivo ? 'Dar de Baja' : 'Dar de Alta'}
                         </ListItemText>
                     </MenuItem>
@@ -122,4 +134,4 @@ const CardInfoBasica = ({ integrante, onAbrirEditar, onCambiarEstado }) => {
     );
 };
 
-export default CardInfoBasica;
+export default MostrarIntegrante;

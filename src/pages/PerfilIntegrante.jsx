@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; 
 import { Box, Grid, Alert, CircularProgress, Typography, Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Link } from 'react-router-dom';
-import CardInfoBasica from '../components/perfilIntegrantes/CardInfoBasica';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import MostrarIntegrante from '../components/perfilIntegrantes/MostrarIntegrante';
 import FormularioIntegrante from '../components/FormularioIntegrante'
 import TablaUltimosRegistros from '../components/perfilIntegrantes/TablaUltimosRegistros';
 import SeccionPermisos from '../components/perfilIntegrantes/SeccionPermisos'
@@ -13,7 +12,8 @@ import AsignarProyectos from '../components/perfilIntegrantes/AsignarProyectos';
 import { getIntegranteById, updateIntegrante, 
         getRegistrosByIntegrante, getPermisosByIntegrante,
         getProyectosByIntegrante, desvincularPermiso, 
-        desvincularProyecto, toggleEstadoIntegrante
+        desvincularProyecto, toggleEstadoIntegrante,
+        deleteIntegrante
 } from '../services/integranteService';
 import { getEventoById } from '../services/eventoService';
 
@@ -28,6 +28,7 @@ const PerfilIntegrante = () => {
     const [permisos, setPermisos] = useState(null);
     const [proyectos, setProyectos] = useState(null);
     const [openProyectosModal, setOpenProyectosModal] = useState(false);
+    const navigate = useNavigate();
 
     const cargarDatosPerfil = () => {
         setLoading(true);
@@ -134,6 +135,30 @@ const PerfilIntegrante = () => {
             });
     };
 
+    const handleEliminarIntegrante = (id) => {
+        const confirmar = window.confirm('¿Estás seguro de eliminar este integrante?');
+        if (!confirmar) return;
+
+        deleteIntegrante(id)
+            .then((response) => {
+                if (response.status === 204 || response.status === 200) {
+                    obtenerIntegrantes(); 
+                }
+            })
+            .catch((err) => {
+                setError('Hubo un problema al intentar eliminar el registro.');
+                console.error(err);
+            });
+    };
+
+    const handleVerPermiso = (permisoId) => {
+        navigate(`/permisos/${permisoId}`); 
+    };
+
+    const handleVerProyecto = (proyectoId) => {
+        navigate(`/proyectos/${proyectoId}`); 
+    };
+
     if (loading) {
         return (
             <Box sx={{ 
@@ -168,10 +193,11 @@ const PerfilIntegrante = () => {
             {integrante && (
                 <>
                     <Box sx={{ width: '100%', mb: 3 }}>
-                        <CardInfoBasica 
+                        <MostrarIntegrante 
                             integrante={integrante} 
                             onAbrirEditar={() => setOpenModal(true)} 
                             onCambiarEstado={handleCambiarEstado}
+                            onEliminar={handleEliminarIntegrante}
                         />
                     </Box>
 
@@ -180,6 +206,7 @@ const PerfilIntegrante = () => {
                             permisosIniciales={permisos} 
                             onAbrirAsignar={() => setOpenModalPermisos(true)} 
                             onDesvincular={handleDesvincularPermiso} 
+                            onVerPermiso={handleVerPermiso} // <-- ACÁ LO AGREGAMOS
                         />
                     </Box>
                     
@@ -188,6 +215,7 @@ const PerfilIntegrante = () => {
                             proyectosIniciales={proyectos} 
                             onAsignar={() => setOpenProyectosModal(true)} 
                             onDesasignar={handleDesvincularProyecto} 
+                            onVerProyecto={handleVerProyecto} // <-- ACÁ LO AGREGAMOS
                         />
                     </Box>
 
@@ -213,6 +241,7 @@ const PerfilIntegrante = () => {
                 integranteId={id}
                 permisosActuales={permisos || []}
                 onAsignacionExitosa={cargarDatosPerfil}
+                onVerPermiso={handleVerPermiso} 
             />
 
             <AsignarProyectos
@@ -221,6 +250,7 @@ const PerfilIntegrante = () => {
                 integranteId={id}
                 proyectosActuales={proyectos || []}
                 onAsignacionExitosa={cargarDatosPerfil}
+                onVerProyecto={handleVerProyecto}
             />
 
         </Box>

@@ -83,7 +83,6 @@ export function PerfilEvento(){
         if (window.confirm("¿Estás seguro de que deseás eliminar este evento de forma permanente?")) {
             try {
                 await deleteEvento(id);
-                alert("Evento eliminado con éxito.");
                 navigate('/eventos'); 
             } catch (error) {
                 console.error("Error al eliminar el evento:", error);
@@ -91,6 +90,7 @@ export function PerfilEvento(){
             }
         }
     };
+
 
     if (cargando) {
         return (

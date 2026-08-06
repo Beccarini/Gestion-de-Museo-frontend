@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
 import { MostrarProyecto } from "../components/perfilProyectos/MostrarProyecto";
 import { SeccionIntegrantes } from "../components/perfilProyectos/SeccionIntegrantes";
 import { SeccionItems } from "../components/perfilProyectos/SeccionItems";
@@ -20,11 +19,9 @@ import {
 export function PerfilProyecto() {
     const { id } = useParams();
     const navigate = useNavigate();
-
     const [proyecto, setProyecto] = useState(null);
     const [integrantes, setIntegrantes] = useState([]);
     const [cargando, setCargando] = useState(true);
-    
     const [modalEdicionAbierto, setModalEdicionAbierto] = useState(false);
     const [modalAsignarAbierto, setModalAsignarAbierto] = useState(false); 
 
@@ -94,6 +91,10 @@ export function PerfilProyecto() {
         }
     };
 
+    const handleVerIntegrante = (integranteId) => {
+        navigate(`/integrantes/${integranteId}`); 
+    };
+
     if (cargando) {
         return (
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 10 }}>
@@ -123,6 +124,7 @@ export function PerfilProyecto() {
                 integrantes={integrantes}
                 onAbrirAsignar={() => setModalAsignarAbierto(true)} 
                 onDesvincular={handleDesvincularIntegrante}
+                onVerIntegrante={handleVerIntegrante}
             />
 
             <SeccionItems />

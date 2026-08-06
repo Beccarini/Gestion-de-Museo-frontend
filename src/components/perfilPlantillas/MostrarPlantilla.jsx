@@ -76,6 +76,10 @@ export function MostrarPlantilla({ plantilla, onEditar, onEliminar, onToggleEsta
                             <ListItemIcon><EditIcon fontSize="small" color="primary" /></ListItemIcon>
                             <ListItemText>Editar Plantilla</ListItemText>
                         </MenuItem>
+                        <MenuItem onClick={() => handleAction('eliminar')}>
+                            <ListItemIcon><DeleteIcon fontSize="small" color="error" /></ListItemIcon>
+                            <ListItemText sx={{ color: 'error.main' }}>Eliminar Plantilla</ListItemText>
+                        </MenuItem>
                         <MenuItem onClick={() => handleAction('toggle')}>
                             <ListItemIcon>
                                 {plantilla.activo 
@@ -84,12 +88,8 @@ export function MostrarPlantilla({ plantilla, onEditar, onEliminar, onToggleEsta
                                 }
                             </ListItemIcon>
                             <ListItemText sx={{ color: plantilla.activo ? 'warning.main' : 'success.main' }}>
-                                {plantilla.activo ? 'Desactivar Plantilla' : 'Activar Plantilla'}
+                                {plantilla.activo ? 'Dar de Baja' : 'Dar de Alta'}
                             </ListItemText>
-                        </MenuItem>
-                        <MenuItem onClick={() => handleAction('eliminar')}>
-                            <ListItemIcon><DeleteIcon fontSize="small" color="error" /></ListItemIcon>
-                            <ListItemText sx={{ color: 'error.main' }}>Eliminar Plantilla</ListItemText>
                         </MenuItem>
                     </Menu>
                 </Box>
