@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add'; 
-import { AltaRegistro } from '../components/registro/AltaRegistro';
-import { MostrarBaja } from '../components/registro/MostrarBaja';
+import { AltaRegistro } from '../components/gestionRegistros/AltaRegistro';
+import { MostrarBaja } from '../components/gestionRegistros/MostrarBaja';
 import { getRegistros, deleteRegistro, postRegistro } from '../services/registrosService';
-import { FiltrosRegistros } from '../components/registro/FiltrosRegistros';
+import { FiltrosRegistros } from '../components/gestionRegistros/FiltrosRegistros';
 import { getIntegranteById } from '../services/integranteService';
 import { getEventoById } from '../services/eventoService';
 

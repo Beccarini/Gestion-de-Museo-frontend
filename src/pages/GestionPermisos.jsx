@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { Box, Typography, Button, Pagination, Alert } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SecurityIcon from '@mui/icons-material/Security';
-import TablaPermisos from '../components/permisos/TablaPermisos';
-import FormularioPermiso from '../components/permisos/FormularioPermiso';
-import FiltrosPermisos from '../components/permisos/FiltrosPermisos';
-import AsignarMasivo from '../components/permisos/AsignarMasivo';
-import VerIntegrantes from '../components/permisos/VerIntegrantes';
+import TablaPermisos from '../components/gestionPermisos/TablaPermisos';
+import FormularioPermiso from '../components/gestionPermisos/FormularioPermiso';
+import FiltrosPermisos from '../components/gestionPermisos/FiltrosPermisos';
+import AsignarMasivo from '../components/gestionPermisos/AsignarMasivo';
+import VerIntegrantes from '../components/gestionPermisos/VerIntegrantes';
 import { getPermisos, crearPermiso, actualizarPermiso, eliminarPermiso } from '../services/permisoService';
 
 const GestionPermisos = () => {
+    const navigate = useNavigate(); 
     const [permisos, setPermisos] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -87,6 +89,7 @@ const GestionPermisos = () => {
         setPermisoParaAsignar(permiso);
         setOpenModalMasivo(true);
     };
+    
     const handleOpenVerIntegrantes = (permiso) => {
         setPermisoParaVer(permiso);
         setOpenModalIntegrantes(true);
@@ -131,6 +134,8 @@ const GestionPermisos = () => {
                 onDelete={handleEliminar} 
                 onAsignarMasivo={handleOpenAsignarMasivo}
                 onVerIntegrantes={handleOpenVerIntegrantes}
+                // 3. Pasamos la función a la tabla para que viaje al perfil al hacer clic en la fila
+                onVerPermiso={(id) => navigate(`/permisos/${id}`)}
             />
 
             {totalPages > 1 && (

@@ -25,7 +25,7 @@ import GestionProyectos from './pages/GestionProyectos.jsx';
 import { GestionPlantilla } from './pages/GestionPlantilla.jsx';
 import { PerfilProyecto } from './pages/PerfilProyecto.jsx';
 import { PerfilPlantilla } from './pages/PerfilPlantilla.jsx';
-
+import PerfilPermiso from './pages/PerfilPermiso.jsx';
 
 const menuItems = [
   { text: 'Dashboard', path: '/', icon: <DashboardIcon /> },
@@ -134,10 +134,10 @@ const LayoutPrivado = () => {
         sx={{ 
           flexGrow: 1, 
           backgroundColor: '#fafafa', 
-          p: 0, // Quitamos el padding global para que cada página decida sus márgenes
-          width: `calc(100% - ${drawerWidth}px)`, // Forzamos el ancho exacto restando el menú lateral
+          p: 0, 
+          width: `calc(100% - ${drawerWidth}px)`, 
           height: '100vh',
-          overflow: 'auto' // Permite el scroll si el contenido es muy largo
+          overflow: 'auto' 
         }}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
@@ -145,6 +145,7 @@ const LayoutPrivado = () => {
           <Route path="/integrantes" element={<GestionIntegrantes />} />
           <Route path="/integrantes/:id" element={<PerfilIntegrante />} />
           <Route path="/permisos" element={<GestionPermisos />} />
+          <Route path="/permisos/:id" element={<PerfilPermiso />} />
           <Route path="/proyectos" element={<GestionProyectos />} />
           <Route path="/proyectos/:id" element={<PerfilProyecto/>} />
           <Route path="/eventos" element={<GestionEventos />} />
