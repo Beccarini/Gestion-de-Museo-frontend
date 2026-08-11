@@ -6,7 +6,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 
 const TablaUltimosRegistros = ({ registros, integranteId }) => {
     return (
-        <Card elevation={3} sx={{ borderRadius: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <Card variant="outlined" sx={{ borderRadius: 2, width: '100%', mb: 4, display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ p: { xs: 2, md: 3 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 1 }}>
@@ -17,12 +17,15 @@ const TablaUltimosRegistros = ({ registros, integranteId }) => {
                     </Typography>
                     
                     <Box sx={{ ml: 'auto' }}>
-                        <Button variant="text" size="small" endIcon={<FormatListBulletedIcon />}>
+                        <Button 
+                            component={Link} 
+                            to={`/registros?integrante=${integranteId}`}
+                            sx={{ fontWeight: 'bold' }}
+                        >
                             VER HISTORIAL COMPLETO
                         </Button>
                     </Box>
                 </Box>
-                <Divider sx={{ mb: 3 }} />
             
 
                 {registros && registros.length > 0 ? (

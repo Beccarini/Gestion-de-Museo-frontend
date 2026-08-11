@@ -1,5 +1,8 @@
 import React from 'react';
-import { Card, CardContent, Typography, Box, Divider, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, IconButton } from '@mui/material';
+import { Card, CardContent, Typography, Box, Chip, 
+        Table, TableBody, TableCell, TableContainer, TableHead, 
+        TableRow, Button, IconButton, Tooltip 
+} from '@mui/material';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import AddIcon from '@mui/icons-material/Add';
 import EventIcon from '@mui/icons-material/Event';
@@ -23,39 +26,39 @@ const getEstadoColor = (estado) => {
     return 'primary';
 };
 
-const SeccionProyectos = ({ proyectosIniciales, onAsignar, onDesasignar }) => {
+// 1. Agregamos onVerProyecto a las props
+const SeccionProyectos = ({ proyectosIniciales, onAsignar, onDesasignar, onVerProyecto }) => {
     const listaProyectos = Array.isArray(proyectosIniciales) 
         ? proyectosIniciales 
         : (proyectosIniciales?.proyectos || proyectosIniciales?.integrante?.proyectos || []);
 
     return (
-        <Card elevation={3} sx={{ borderRadius: 2, height: '100%', minHeight: '180px', width: '100%', display: 'flex', flexDirection: 'column' }}>
+        <Card variant="outlined" sx={{ borderRadius: 2, width: '100%', mb: 4, display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ p: { xs: 2, md: 3 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 1 }}>
-                    <AccountTreeIcon color="secondary" />
+                    <AccountTreeIcon color="primary" />
                     <Typography variant="h6" fontWeight="bold">
                         Proyectos
                     </Typography>
                     <Chip 
                         label={listaProyectos.length} 
-                        color="secondary" 
+                        color="primary" 
                         size="small" 
                         sx={{ fontWeight: 'bold' }} 
                     />
 
                     <Button 
                         variant="outlined" 
-                        color="secondary"
+                        color="primary"
                         size="small" 
                         startIcon={<AddIcon />}
                         sx={{ ml: 'auto', borderRadius: 2, textTransform: 'none', fontWeight: 'bold' }}
-                        onClick={onAsignar} // Llamamos a la función que abre el modal en el padre
+                        onClick={onAsignar} 
                     >
                         Asignar
                     </Button>
                 </Box>
-                <Divider sx={{ mb: 2 }} />
 
                 {listaProyectos && listaProyectos.length > 0 ? (
                     <TableContainer sx={{ flexGrow: 1 }}>
@@ -65,7 +68,7 @@ const SeccionProyectos = ({ proyectosIniciales, onAsignar, onDesasignar }) => {
                                     <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none', width: '40%' }}>Proyecto</TableCell>
                                     <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none' }}>Período</TableCell>
                                     <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none' }}>Estado</TableCell>
-                                    <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none', align: 'center' }}></TableCell> {/* Columna vacía para el botón */}
+                                    <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none', align: 'center' }}></TableCell> 
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -74,7 +77,17 @@ const SeccionProyectos = ({ proyectosIniciales, onAsignar, onDesasignar }) => {
                                     const borderStyle = isLast ? { borderBottom: 'none' } : {};
 
                                     return (
-                                        <TableRow key={proyecto.id} hover>
+                                        <TableRow 
+                                            key={proyecto.id} 
+                                            hover
+                                            onClick={() => onVerProyecto && onVerProyecto(proyecto.id)}
+                                            sx={{ 
+                                                cursor: 'pointer',
+                                                '&:hover': {
+                                                    backgroundColor: 'rgba(25, 118, 210, 0.04)' 
+                                                }
+                                            }}
+                                        >
                                             
                                             <TableCell sx={{ ...borderStyle }}>
                                                 <Typography variant="body2" fontWeight={600} color="text.primary">
@@ -112,16 +125,19 @@ const SeccionProyectos = ({ proyectosIniciales, onAsignar, onDesasignar }) => {
                                                 />
                                             </TableCell>
 
-                                            {/* Nueva celda con el botón de desasignar */}
                                             <TableCell sx={{ ...borderStyle }} align="right">
-                                                <IconButton 
-                                                    size="small"
-                                                    color="error"
-                                                    onClick={() => onDesasignar(proyecto.id)} // Le pasamos el ID al padre
-                                                    title="Desvincular proyecto"
-                                                >
-                                                    <LinkOffIcon fontSize="small" />
-                                                </IconButton>
+                                                <Tooltip title="Desvincular Proyecto">
+                                                    <IconButton 
+                                                        size="small"
+                                                        color="error"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            onDesasignar(proyecto.id);
+                                                        }}
+                                                    >
+                                                        <LinkOffIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </TableCell>
 
                                         </TableRow>

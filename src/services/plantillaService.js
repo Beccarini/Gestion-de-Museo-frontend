@@ -3,7 +3,7 @@ import api from './api';
 export const getPlantillas = async (filtros = {}) => {
     const { 
         pagina = 1, 
-        limite = 3, 
+        limite = 20, 
         tipo, 
         diaSemana, 
         frecuencia, 
@@ -13,7 +13,7 @@ export const getPlantillas = async (filtros = {}) => {
     const params = { pagina, limite };
 
     if (tipo) params.tipo = tipo;
-    if (frecuencia) params.frecuencia = frecuencia; // <--- Agrégalo aquí
+    if (frecuencia) params.frecuencia = frecuencia; 
     if (diaSemana !== undefined && diaSemana !== '') params.diaSemana = diaSemana;
     if (activo !== undefined && activo !== '') params.activo = activo;
 

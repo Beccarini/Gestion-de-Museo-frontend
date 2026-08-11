@@ -3,7 +3,7 @@ import { Box, Typography, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add'; 
 import { AltaPlantilla } from '../components/gestionPlantilla/AltaPlantilla';
 import { MostrarPlantillas } from '../components/gestionPlantilla/MostrarPlantillas';
-import { FiltrosPlantillas } from '../components/gestionPlantilla/FiltrosPlantillas'; // Importamos los filtros
+import { FiltrosPlantillas } from '../components/gestionPlantilla/FiltrosPlantillas'; 
 import { 
     getPlantillas, 
     deletePlantilla, 
@@ -26,16 +26,17 @@ export function GestionPlantilla() {
     function obtenerPlantillas() {
     getPlantillas({ pagina, tipo, diaSemana, frecuencia, activo })
         .then((data) => {
-            console.log('DATA RECIBIDA:', data); 
             setAllPlantillas(data.plantillas || []); 
             setTotalPaginas(data.totalPaginas || 1);
         }).catch((error) => {
             console.error("Error al obtener plantillas:", error);
         });
-}
+    }
+
     useEffect(() => {
         obtenerPlantillas();
     }, [pagina, tipo, diaSemana, frecuencia, activo]);
+
     useEffect(() => {
         setPagina(1);
     }, [tipo, diaSemana, frecuencia, activo]);
@@ -45,7 +46,7 @@ export function GestionPlantilla() {
         peticion
             .then(() => {
                 obtenerPlantillas();
-                setIsModalOpen(false); // Cerramos el modal tras guardar exitosamente
+                setIsModalOpen(false); 
             }).catch((error) => {
                 console.log(error);
             });
@@ -94,11 +95,11 @@ export function GestionPlantilla() {
         setActivo('');
         setPagina(1);
     };
+
     return (
         <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-
                     <Typography variant="h4" sx={{ fontWeight: 800, color: '#1a2027' }}>
                         Programación de Eventos
                     </Typography>
@@ -113,6 +114,7 @@ export function GestionPlantilla() {
                     NUEVO EVENTO PROGRAMADO
                 </Button>
             </Box>
+            
             <FiltrosPlantillas 
                 tipo={tipo} setTipo={setTipo}
                 diaSemana={diaSemana} setDiaSemana={setDiaSemana}
@@ -120,6 +122,7 @@ export function GestionPlantilla() {
                 activo={activo} setActivo={setActivo}
                 onLimpiar={handleLimpiarFiltros}
             />
+            
             <AltaPlantilla 
                 open={isModalOpen} 
                 onClose={() => setIsModalOpen(false)} 

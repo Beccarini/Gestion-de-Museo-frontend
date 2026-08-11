@@ -1,19 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { Box, Typography, Button } from '@mui/material';
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { getEventoById, getRegistrosByEvento } from '../services/eventoService';
-import { MostrarTablaRegistros } from "../components/PerfilEventos/MostrarTablaRegistros";
-import { MostrarEvento } from "../components/PerfilEventos/MostrarEvento";
-import {deleteRegistro} from '../services/registrosService';
+import { getEventoById, getRegistrosByEvento, updateEvento, deleteEvento } from '../services/eventoService';
+import { getIntegranteById } from '../services/integranteService'; 
+import { MostrarTablaRegistros } from "../components/perfilEventos/MostrarTablaRegistros";
+import { MostrarEvento } from "../components/perfilEventos/MostrarEvento";
+import { AltaEvento } from '../components/gestionEventos/AltaEvento';
+
 export function PerfilEvento(){
     const { id } = useParams();
+    const navigate = useNavigate(); 
+
     const [evento, setEvento] = useState(null);
     const [cargando, setCargando] = useState(true);
     const [registros, setRegistros] = useState([]);
     const [pagina, setPagina] = useState(1);
-    const [limite, setLimite] = useState(5);
+    const [totalPaginas, setTotalPaginas] = useState(0);
     const [totalRegistros, setTotalRegistros] = useState(0);
+    const [modalEdicionAbierto, setModalEdicionAbierto] = useState(false);
+
     useEffect(() => {
         getEventoById(id)
             .then((data) => {
@@ -26,42 +32,73 @@ export function PerfilEvento(){
             });
     }, [id]);
 
-    // 2. Cargar Registros (Se dispara al iniciar y cada vez que cambia 'pagina' o 'limite')
     useEffect(() => {
-        cargarRegistros();
-    }, [id, pagina, limite]);
+        if (id) {
+            cargarRegistros();
+        }
+    }, [id, pagina]); 
 
-    const cargarRegistros = () => {
-        getRegistrosByEvento(id, pagina, limite).then((data) => {
-            setRegistros(data.registrosPaginados.registros || []);
-            const total = data.registrosPaginados.totalElementos || 0;
-            setTotalRegistros(total);
-        }).catch((error) => {
-            console.error("Error al obtener registros:", error);
-        });
-    };
-    // 3. Eliminación lógica/física en Base de Datos
-    const handleEliminarRegistro = (registroId) => {
-        if (window.confirm("¿Seguro que deseas eliminar definitivamente este registro de asistencia?")) {
-            deleteRegistro(registroId)
-                .then(() => {
-                    alert("Registro eliminado correctamente.");
-                    // Si quedan registros en la página actual o es la primera, recarga el componente
-                    if (registros.length === 1 && pagina > 1) {
-                        setPagina(prev => prev - 1);
-                    } else {
-                        cargarRegistros(); // Recarga la página actual para traer datos frescos de la BD
+    const cargarRegistros = async () => {
+        try {
+            const data = await getRegistrosByEvento(id, pagina, 10);
+            const registrosRaw = data.registrosPaginados?.registros || data.registros || [];
+            
+            setTotalPaginas(data.registrosPaginados?.totalPaginas || data.totalPaginas || 0);
+            setTotalRegistros(data.registrosPaginados?.totalElementos || 0); 
+
+            const registrosConNombres = await Promise.all(
+                registrosRaw.map(async (reg) => {
+                    let integranteData = null;
+                    if (reg.integranteId) {
+                        try {
+                            integranteData = await getIntegranteById(reg.integranteId);
+                        } catch (err) {
+                            console.warn(`Error obteniendo integrante ${reg.integranteId}`);
+                        }
                     }
+                    return {
+                        ...reg,
+                        Integrante: integranteData || null
+                    };
                 })
-                .catch((error) => {
-                    console.error("Error al eliminar el registro:", error);
-                    alert("No se pudo eliminar el registro en el servidor.");
-                });
+            );
+            setRegistros(registrosConNombres);
+        } catch (error) {
+            console.error("Error al obtener registros:", error);
         }
     };
 
+    const handleGuardarEdicion = async (datosEditados) => {
+        try {
+            const eventoActualizado = await updateEvento(id, datosEditados);
+            setEvento(eventoActualizado);
+            alert("Evento actualizado correctamente.");
+        } catch (error) {
+            console.error("Error al actualizar el evento:", error);
+            alert("Hubo un error al actualizar el evento en el servidor.");
+        }
+    };
+
+    const handleEliminarEvento = async () => {
+        if (window.confirm("¿Estás seguro de que deseás eliminar este evento de forma permanente?")) {
+            try {
+                await deleteEvento(id);
+                navigate('/eventos'); 
+            } catch (error) {
+                console.error("Error al eliminar el evento:", error);
+                alert("Hubo un error al intentar eliminar el evento. Verificá si tiene registros asociados.");
+            }
+        }
+    };
+
+
     if (cargando) {
-        return <Typography sx={{ p: 3 }}>Cargando información del evento...</Typography>;
+        return (
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 10 }}>
+                <CircularProgress />
+                <Typography sx={{ mt: 2 }}>Cargando información del evento...</Typography>
+            </Box>
+        );
     }
 
     if (!evento) {
@@ -69,26 +106,30 @@ export function PerfilEvento(){
     }
 
     return (
-        <Box sx={{ p: 3, maxWidth: 1100, mx: 'auto' }}>
-            <Button startIcon={<ArrowBackIcon />} component={Link} to={`/eventos`} sx={{ mb: 2 }}>
+        <Box sx={{ width: '100%', maxWidth: '1300px', mx: 'auto', px: { xs: 2, md: 3 }, mt: 2, mb: 5 }}>
+            <Button startIcon={<ArrowBackIcon />} component={Link} to={`/integrantes`} sx={{ mb: 2 }} size='small'>
                 Volver al listado
             </Button>
 
-            <MostrarEvento evento={evento}/>
+            <MostrarEvento 
+                evento={evento}
+                onEditar={() => setModalEdicionAbierto(true)}
+                onEliminar={handleEliminarEvento}
+            />
 
-            <Typography variant="h5" component="h2" sx={{ mb: 2, mt: 4, fontWeight: 500 }}>
-                Registros de Asistencia Vinculados
-            </Typography>
-
-            {/* Inyección de props de control a la tabla */}
             <MostrarTablaRegistros 
                 registros={registros}
+                totalPaginas={totalPaginas}
                 totalRegistros={totalRegistros}
                 pagina={pagina}
-                limite={limite}
                 onChangePagina={setPagina}
-                onChangeLimite={setLimite}
-                handleEliminarRegistro={handleEliminarRegistro} 
+            />
+
+            <AltaEvento 
+                open={modalEdicionAbierto}
+                onClose={() => setModalEdicionAbierto(false)}
+                eventoAEditar={evento}
+                nuevoEvento={handleGuardarEdicion} 
             />
         </Box>
     );

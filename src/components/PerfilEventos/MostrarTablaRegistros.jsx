@@ -1,103 +1,124 @@
 import React from "react";
 import { 
-    Box, Paper, Table, TableBody, TableCell, 
-    TableContainer, TableHead, TableRow, IconButton, TablePagination, Typography, Chip, Tooltip 
+    Card, CardContent, Typography, Box, Divider, Chip, Table, 
+    TableBody, TableCell, TableContainer, TableHead, TableRow, Pagination 
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 
 export function MostrarTablaRegistros({
-    handleEliminarRegistro, 
-    registros, 
-    totalRegistros, 
-    pagina, 
-    limite, 
-    onChangePagina, 
-    onChangeLimite
+    registros, totalPaginas, pagina, onChangePagina, totalRegistros 
 }) {
+    
     return(
-        <Paper elevation={0} sx={{ borderRadius: 3, border: '1px solid #f0f0f0', overflow: 'hidden' }}>
-            <TableContainer>
-                <Table>
-                    <TableHead>
-                        <TableRow sx={{ backgroundColor: '#f8fafc' }}>
-                            <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>Fecha y Hora</TableCell>
-                            <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>ID / Token</TableCell>
-                            <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>Nombre Integrante</TableCell>
-                            <TableCell sx={{ fontWeight: 'bold', color: '#475569' }}>Tipo de Registro</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: 'bold', color: '#475569' }}>Acciones</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {registros.length === 0 ? (
-                            <TableRow>
-                                <TableCell colSpan={5} align="center" sx={{ py: 5 }}>
-                                    <Typography variant="body1" color="text.secondary">
-                                        No hay asistencias ni marcas de acceso registradas para este evento.
-                                    </Typography>
-                                </TableCell>
-                            </TableRow>
-                        ) : (
-                            registros.map((row) => (
-                                <TableRow 
-                                    key={row.id} 
-                                    hover
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 }, '&:hover': { backgroundColor: '#fafafa' } }}
-                                >
-                                    <TableCell sx={{ fontWeight: 500, color: '#1e293b' }}>
-                                        {row.fecha ? new Date(row.fecha).toLocaleString('es-AR', { hour: '2-digit', minute:'2-digit', day:'2-digit', month:'2-digit', year:'numeric' }) : '—'}
-                                    </TableCell>
-                                    
-                                    <TableCell sx={{ fontFamily: 'monospace', color: 'text.secondary' }}>
-                                        {row.integranteId || 'Anónimo'}
-                                    </TableCell>
-                                    
-                                    <TableCell sx={{ fontWeight: 'bold', color: '#1e293b' }}>
-                                        {row.integrante ? `${row.integrante.nombre} ${row.integrante.apellido}` : '—'}
-                                    </TableCell>
-                                    
-                                    <TableCell>
-                                        <Chip 
-                                            label={row.esAsistencia ? 'Asistencia' : 'Apertura'} 
-                                            color={row.esAsistencia ? 'success' : 'info'}
-                                            size="small"
-                                            variant="outlined"
-                                            sx={{ fontWeight: 700, borderWidth: '1.5px' }}
-                                        />
-                                    </TableCell>
-                                    
-                                    <TableCell align="center">
-                                        <Tooltip title="Eliminar registro">
-                                            <IconButton 
-                                                color="error" 
-                                                size="small"
-                                                onClick={() => handleEliminarRegistro(row.id)}
-                                                sx={{ mx: 0.5, backgroundColor: '#fff5f5', '&:hover': { backgroundColor: '#fed7d7' } }}
-                                            >
-                                                <DeleteIcon fontSize="small" />
-                                            </IconButton>
-                                        </Tooltip>
-                                    </TableCell>
-                                </TableRow>
-                            ))
+        <Card variant="outlined" sx={{ borderRadius: 2, width: '100%', mb: 4, display: 'flex', flexDirection: 'column' }}>
+            <CardContent sx={{ p: { xs: 2, md: 3 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 1 }}>
+                    <EventNoteIcon color="primary" />
+                    <Typography variant="h6" fontWeight="bold">
+                        Registros
+                    </Typography>
+                    <Chip 
+                        label={totalRegistros || 0} 
+                        color="primary" 
+                        size="small" 
+                        sx={{ fontWeight: 'bold' }} 
+                    />
+                </Box>
+
+                {registros.length === 0 ? (
+                    <Box sx={{ 
+                        flexGrow: 1, 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        textAlign: 'center',
+                        width: '100%',
+                        p: 2
+                    }}>
+                        <Typography variant="body1" color="text.secondary">
+                            No hay asistencias registradas para este evento.
+                        </Typography>
+                    </Box>
+                ) : (
+                    <>
+                        <TableContainer sx={{ flexGrow: 1 }}>
+                            <Table size="small" sx={{ minWidth: 650 }}>
+                                <TableHead>
+                                    <TableRow sx={{ backgroundColor: 'action.hover' }}>
+                                        <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none' }}>Día</TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none' }}>Hora</TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none' }}>Integrante</TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none' }}>Tipo</TableCell>
+                                        <TableCell sx={{ fontWeight: 'bold', borderBottom: 'none' }}>Estado</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {registros.map((row, index) => {
+                                        const fechaObj = row.fecha ? new Date(row.fecha) : null;
+                                        const dia = fechaObj ? fechaObj.toLocaleDateString('es-AR') : '—';
+                                        const hora = fechaObj ? fechaObj.toLocaleTimeString('es-AR', { hour: '2-digit', minute:'2-digit' }) : '—';
+                                        
+                                        const isLast = index === registros.length - 1;
+                                        const borderStyle = isLast ? { borderBottom: 'none' } : {};
+
+                                        return (
+                                            <TableRow key={row.id} hover>
+                                                
+                                                <TableCell sx={{ fontWeight: 500, color: 'text.primary', ...borderStyle }}>
+                                                    {dia}
+                                                </TableCell>
+                                                
+                                                <TableCell sx={{ color: 'text.secondary', ...borderStyle }}>
+                                                    {hora} {hora !== '—' && 'm.'}
+                                                </TableCell>
+                                                
+                                                <TableCell sx={{ color: 'text.secondary', ...borderStyle }}>
+                                                    {row.Integrante ? `${row.Integrante.nombre} ${row.Integrante.apellido || ''}` : '—'}
+                                                </TableCell>
+                                                
+                                                <TableCell sx={{ ...borderStyle }}>
+                                                    <Chip 
+                                                        label={row.esAsistencia ? 'Asistencia' : 'Apertura'} 
+                                                        size="small"
+                                                        variant="outlined"
+                                                        sx={{ 
+                                                            fontWeight: 600, 
+                                                            color: row.esAsistencia ? '#9c27b0' : '#0288d1',
+                                                            borderColor: row.esAsistencia ? '#9c27b0' : '#0288d1'
+                                                        }}
+                                                    />
+                                                </TableCell>
+
+                                                <TableCell sx={{ ...borderStyle }}>
+                                                    <Chip 
+                                                        label="Autorizado" 
+                                                        size="small"
+                                                        variant="outlined"
+                                                        color="success"
+                                                        sx={{ fontWeight: 600 }}
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        
+                        {totalPaginas > 1 && (
+                            <Box sx={{ display: 'flex', justifyContent: 'center', pt: 3 }}>
+                                <Pagination 
+                                    count={totalPaginas} 
+                                    page={pagina} 
+                                    onChange={(event, value) => onChangePagina(value)} 
+                                    color="primary" 
+                                />
+                            </Box>
                         )}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={totalRegistros}
-                rowsPerPage={limite}
-                page={Math.max(0, pagina - 1)}
-                onPageChange={(event, nuevaPagina) => onChangePagina(nuevaPagina + 1)}
-                onRowsPerPageChange={(event) => {
-                    onChangeLimite(parseInt(event.target.value, 10));
-                    onChangePagina(1);
-                }}
-                labelRowsPerPage="Filas por página:"
-                sx={{ borderTop: '1px solid #f0f0f0' }}
-            />
-        </Paper>
+                    </>
+                )}
+            </CardContent>
+        </Card>
     );
-};
+}

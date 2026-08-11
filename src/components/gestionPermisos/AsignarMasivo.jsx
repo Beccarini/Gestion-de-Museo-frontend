@@ -1,11 +1,14 @@
-// src/components/proyectos/AsignarIntegrantesProyecto.jsx
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox, Typography, CircularProgress, Box, TextField, InputAdornment } from '@mui/material';
+import { 
+    Dialog, DialogTitle, DialogContent, DialogActions, Button, 
+    List, ListItem, ListItemButton, ListItemIcon, ListItemText, 
+    Checkbox, Typography, CircularProgress, Box, TextField, InputAdornment 
+} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { getIntegrantes } from '../../services/integranteService'; 
-import { asignarIntegranteAProyecto } from '../../services/proyectoService'; 
+import { getIntegrantes, asignarPermisoMasivo } from '../../services/integranteService';
+import { getIntegrantesPorPermiso } from '../../services/permisoService';
 
-const AsignarIntegrantesProyecto = ({ open, onClose, proyecto, onAsignacionExitosa }) => {
+const AsignarMasivo = ({ open, onClose, permisoSeleccionado, onAsignacionExitosa }) => {
     const [integrantes, setIntegrantes] = useState([]);
     const [busqueda, setBusqueda] = useState('');
     const [seleccionados, setSeleccionados] = useState([]);
@@ -13,19 +16,39 @@ const AsignarIntegrantesProyecto = ({ open, onClose, proyecto, onAsignacionExito
     const [guardando, setGuardando] = useState(false);
 
     useEffect(() => {
-        if (open) {
+        if (open && permisoSeleccionado) {
             cargarIntegrantes();
             setSeleccionados([]);
             setBusqueda('');
         }
-    }, [open]);
+    }, [open, permisoSeleccionado]);
 
     const cargarIntegrantes = async () => {
         setLoading(true);
         try {
+            const [dataTodos, dataAsignados] = await Promise.all([
+                getIntegrantes('', '', 1, 200),
+                getIntegrantesPorPermiso(permisoSeleccionado.id)
+            ]);
 
-            const data = await getIntegrantes('', '', 1, 200);                        
-            setIntegrantes(data.integrantes || []);
+            const todosLosIntegrantes = dataTodos.integrantes || [];
+            
+            let integrantesYaAsignados = [];
+            if (Array.isArray(dataAsignados)) {
+                integrantesYaAsignados = dataAsignados;
+            } else if (dataAsignados && Array.isArray(dataAsignados.integrantes)) {
+                integrantesYaAsignados = dataAsignados.integrantes;
+            } else if (dataAsignados && Array.isArray(dataAsignados.data)) {
+                 integrantesYaAsignados = dataAsignados.data;
+            }
+
+            const idsAsignados = integrantesYaAsignados.map(int => int.id);
+
+            const integrantesDisponibles = todosLosIntegrantes.filter(
+                int => !idsAsignados.includes(int.id)
+            );
+
+            setIntegrantes(integrantesDisponibles);
         } catch (error) {
             console.error("Fallo al cargar integrantes. Motivo:", error);
         } finally {
@@ -45,23 +68,24 @@ const AsignarIntegrantesProyecto = ({ open, onClose, proyecto, onAsignacionExito
         setSeleccionados(nuevosSeleccionados);
     };
 
-const handleGuardar = async () => {
-    setGuardando(true);
-    try {
-        const promesas = seleccionados.map(integranteId =>
-            asignarIntegranteAProyecto(integranteId, proyecto.id)
-        );
-        await Promise.all(promesas);
+    const handleGuardar = async () => {
+        setGuardando(true);
+        try {
 
-        if (onAsignacionExitosa) onAsignacionExitosa();
-        onClose();
-    } catch (error) {
-        console.error("Error al asignar integrantes:", error);
-        alert("Error al intentar asignar los integrantes.");
-    } finally {
-        setGuardando(false);
-    }
-};
+            const promesas = seleccionados.map(integranteId =>
+                asignarPermisoMasivo(integranteId, permisoSeleccionado.id)
+            );
+            await Promise.all(promesas);
+
+            if (onAsignacionExitosa) onAsignacionExitosa();
+            onClose();
+        } catch (error) {
+            console.error("Error al asignar integrantes:", error);
+            alert("Error al intentar asignar los integrantes.");
+        } finally {
+            setGuardando(false);
+        }
+    };
 
     const integrantesFiltrados = integrantes.filter(int => 
         int.nombre.toLowerCase().includes(busqueda.toLowerCase()) || 
@@ -71,7 +95,7 @@ const handleGuardar = async () => {
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
             <DialogTitle fontWeight="bold">
-                Asignar a: {proyecto?.nombre}
+                Asignar a: {permisoSeleccionado?.descripcion}
             </DialogTitle>
             
             <DialogContent dividers sx={{ minHeight: '300px' }}>
@@ -98,7 +122,7 @@ const handleGuardar = async () => {
                     </Box>
                 ) : integrantesFiltrados.length === 0 ? (
                     <Typography color="text.secondary" align="center" sx={{ mt: 4 }}>
-                        No se encontraron integrantes.
+                        No se encontraron integrantes disponibles para asignar.
                     </Typography>
                 ) : (
                     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
@@ -146,4 +170,4 @@ const handleGuardar = async () => {
     );
 };
 
-export default AsignarIntegrantesProyecto;
+export default AsignarMasivo;
