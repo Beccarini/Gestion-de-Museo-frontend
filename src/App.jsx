@@ -18,6 +18,7 @@ import GestionIntegrantes from './pages/GestionIntegrantes';
 import PerfilIntegrante from './pages/PerfilIntegrante';
 import GestionPermisos from './pages/GestionPermisos.jsx';
 import Dashboard from './pages/Dashboard.jsx';
+import { GestionRecurso } from './pages/GestionRecurso.jsx';
 const drawerWidth = 240;
 import { GestionEventos } from './pages/GestionEvento.jsx';
 import { PerfilEvento } from './pages/PerfilEvento.jsx';
@@ -34,17 +35,15 @@ const menuItems = [
   { text: 'Permisos', path: '/permisos', icon: <VpnKeyIcon /> },
   { text: 'Proyectos', path: '/proyectos', icon: <WorkIcon /> },
   { text: 'Eventos', path: '/eventos', icon: <EventIcon /> },
-  { text: 'Plantilla de evento', path: '/plantillas', icon: <GridViewIcon /> }
+  { text: 'Plantilla de evento', path: '/plantillas', icon: <GridViewIcon /> },
+  { text: 'Inventario', path: '/recursos', icon: <WorkIcon />}
 ];
 
 
 const RutaPublica = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
-  
   if (loading) return null;
-  // Si ya está logueado, lo redirigimos a la página principal
   if (isAuthenticated) return <Navigate to="/" replace />;
-  
   return children;
 };
 const RutaProtegida = ({ children }) => {
@@ -152,6 +151,7 @@ const LayoutPrivado = () => {
           <Route path="/eventos/:id" element={<PerfilEvento />} />
           <Route path="/plantillas" element={<GestionPlantilla />} />
           <Route path="/plantillas/:id" element={<PerfilPlantilla />} />
+          <Route path="/recursos" element={<GestionRecurso/>}/>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Box>
