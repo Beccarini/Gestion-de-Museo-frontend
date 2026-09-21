@@ -36,7 +36,7 @@ const menuItems = [
   { text: 'Proyectos', path: '/proyectos', icon: <WorkIcon /> },
   { text: 'Eventos', path: '/eventos', icon: <EventIcon /> },
   { text: 'Plantilla de evento', path: '/plantillas', icon: <GridViewIcon /> },
-  { text: 'Inventario', path: '/recursos', icon: <WorkIcon />}
+  { text: 'Inventario', path: '/recursos', icon: <WorkIcon />},
 ];
 
 

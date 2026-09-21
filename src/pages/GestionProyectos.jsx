@@ -16,10 +16,8 @@ const GestionProyectos = () => {
     const [proyectos, setProyectos] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    
     const [filtroNombre, setFiltroNombre] = useState('');
     const [filtroEstado, setFiltroEstado] = useState('');
-    
     const [openModal, setOpenModal] = useState(false);
     const [proyectoAEditar, setProyectoAEditar] = useState(null);
     const [openModalIntegrantes, setOpenModalIntegrantes] = useState(false);
