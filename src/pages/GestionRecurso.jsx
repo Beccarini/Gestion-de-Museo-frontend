@@ -27,8 +27,10 @@ export function GestionRecurso() {
             setError(err);
         }
     };
-    const nuevoRecurso=async(idRecurso, datosRecurso)=>{
+    const nuevoRecurso=async(datosRecurso)=>{
+        console.log(datosRecurso)
         addRecurso(datosRecurso);
+        obtenerRecursos();
     }
     useEffect(()=>{
         obtenerRecursos();
