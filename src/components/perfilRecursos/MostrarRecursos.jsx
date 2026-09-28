@@ -7,7 +7,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
-export function MostrarRecursos({ recursos, setRecursoAEditar, onReload }) {
+export function MostrarRecursos({recursos, setRecursoAEditar, onReload, borrarRecurso}) {
     if (!recursos || recursos.length === 0) {
         return (
             <Paper elevation={0} sx={{ p: 4, textAlign: 'center', borderRadius: 3, border: '1px solid #f0f0f0' }}>
@@ -17,7 +17,6 @@ export function MostrarRecursos({ recursos, setRecursoAEditar, onReload }) {
             </Paper>
         );
     }
-
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {recursos.map((recurso) => (
@@ -43,6 +42,7 @@ export function MostrarRecursos({ recursos, setRecursoAEditar, onReload }) {
                         </Tooltip>
                         <Tooltip title="Eliminar">
                             <IconButton 
+                                onClick={()=>borrarRecurso(recurso.id)}
                                 size="small"
                                 sx={{ color: '#d32f2f', bgcolor: '#fef2f2', '&:hover': { bgcolor: '#fee2e2' } }}
                             >

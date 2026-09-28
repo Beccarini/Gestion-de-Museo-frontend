@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { getAllRecursos, addRecurso, updateRecurso } from '../services/recursoService';
+import { getAllRecursos, addRecurso, updateRecurso, deleteRecurso } from '../services/recursoService';
 import { AltaModificacionRecursos } from "../components/perfilRecursos/AltaModificacionRecursos";
 import { Filtros } from '../components/perfilRecursos/Filtros';
 import { MostrarRecursos } from "../components/perfilRecursos/MostrarRecursos";
@@ -27,8 +27,12 @@ export function GestionRecurso() {
             setError(err);
         }
     };
+    const borrarRecurso=async(idRecurso)=>{
+        console.log(idRecurso);
+        deleteRecurso(idRecurso);
+        obtenerRecursos();
+    }
     const nuevoRecurso=async(datosRecurso)=>{
-        console.log(datosRecurso)
         addRecurso(datosRecurso);
         obtenerRecursos();
     }
@@ -67,7 +71,8 @@ export function GestionRecurso() {
             <MostrarRecursos 
                 recursos={recursos} 
                 setRecursoAEditar={setRecursoAEditar} 
-                onReload={obtenerRecursos} 
+                onReload={obtenerRecursos}
+                borrarRecurso={borrarRecurso}
             />
         </Box>
     );
