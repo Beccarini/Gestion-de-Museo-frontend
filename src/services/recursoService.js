@@ -5,6 +5,7 @@ export const getAllRecursos=async(params={})=>{
 }
 export const addRecurso=async(dataRecurso)=>{
     const response=await api.post('/recursos',dataRecurso);
+    console.log(dataRecurso);
     return response.data;
 }
 export const getRecursoById=async(id)=>{

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Button, 
     Box, 
@@ -16,9 +16,11 @@ const estadoInicialFormulario = {
     stock: ''
 };
 
-export function AltaModificacionRecursos({ nuevoRecurso, open, onClose, recursoActual }) {
+export function AltaModificacionRecursos({ nuevoRecurso, open, onClose}) {
     const [formData, setFormData] = useState(estadoInicialFormulario);
+    useEffect(()=>{
 
+    },[open])
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -26,14 +28,12 @@ export function AltaModificacionRecursos({ nuevoRecurso, open, onClose, recursoA
             [name]: value
         }));
     };
-
     const handleSubmit = (e) => {
         e.preventDefault();
         const datosParaBackend = {
             ...formData,
             stock: parseInt(formData.stock, 10) 
         };
-        
         nuevoRecurso(datosParaBackend);
         setFormData(estadoInicialFormulario);
         onClose();
