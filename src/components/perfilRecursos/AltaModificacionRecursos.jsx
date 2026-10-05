@@ -13,14 +13,11 @@ const estadoInicialFormulario = {
     nombre: '',
     descripcion: '',
     categoria: '',
-    stock: ''
+    stock: 0
 };
 
-export function AltaModificacionRecursos({ nuevoRecurso, open, onClose}) {
+export function AltaModificacionRecursos({ nuevoRecurso, open, onClose, recursoAEditar, setRecursoAEditar}) {
     const [formData, setFormData] = useState(estadoInicialFormulario);
-    useEffect(()=>{
-
-    },[open])
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -28,6 +25,26 @@ export function AltaModificacionRecursos({ nuevoRecurso, open, onClose}) {
             [name]: value
         }));
     };
+    useEffect(()=>{
+        if(recursoAEditar){
+            setFormData((prev)=>({
+                ...prev,
+                nombre: recursoAEditar.nombre
+            }));
+            setFormData((prev)=>({
+                ...prev,
+                descripcion: recursoAEditar.descripcion
+            }));
+            setFormData((prev)=>({
+                ...prev,
+                categoria: recursoAEditar.categoria
+            }));
+            setFormData((prev)=>({
+                ...prev,
+                stock: recursoAEditar.stock
+            }));
+        }
+    }, [recursoAEditar])
     const handleSubmit = (e) => {
         e.preventDefault();
         const datosParaBackend = {
@@ -38,9 +55,9 @@ export function AltaModificacionRecursos({ nuevoRecurso, open, onClose}) {
         setFormData(estadoInicialFormulario);
         onClose();
     };
-
     const handleClose = () => {
-        setFormData(estadoInicialFormulario); 
+        setFormData(estadoInicialFormulario);
+        setRecursoAEditar();
         onClose();
     };
 

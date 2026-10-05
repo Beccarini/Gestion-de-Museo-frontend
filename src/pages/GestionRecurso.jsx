@@ -9,7 +9,7 @@ import { MostrarRecursos } from "../components/perfilRecursos/MostrarRecursos";
 export function GestionRecurso() {
     const [error, setError]=useState(null);
     const [recursos,setRecursos]=useState([]);
-    const [recursoAEditar, setRecursoAEditar]=useState([]);
+    const [recursoAEditar, setRecursoAEditar]=useState(null);
     const [page, setPage]=useState(1);
     const [filtroNombre, setFiltroNombre]=useState('');
     const [filtroCategoria, setFiltroCategoria]=useState('');
@@ -22,18 +22,21 @@ export function GestionRecurso() {
                 categoria: filtroCategoria
             });
             setRecursos(obtenerRecursosDelBack.recursos);
-            console.log(obtenerRecursosDelBack.recursos);
         }catch(err){
             setError(err);
         }
     };
     const borrarRecurso=async(idRecurso)=>{
-        console.log(idRecurso);
         deleteRecurso(idRecurso);
         obtenerRecursos();
     }
     const nuevoRecurso=async(datosRecurso)=>{
-        addRecurso(datosRecurso);
+        if(recursoAEditar){
+            updateRecurso(recursoAEditar.id, datosRecurso);
+            setRecursoAEditar(null);
+        }else{
+            addRecurso(datosRecurso);
+        }
         obtenerRecursos();
     }
     useEffect(()=>{
@@ -66,13 +69,20 @@ export function GestionRecurso() {
                     NUEVO REGISTRO
                 </Button>
             </Box>
-            <AltaModificacionRecursos nuevoRecurso={nuevoRecurso} open={isModalOpen} onClose={() => setIsModalOpen(false)}/>
+            <AltaModificacionRecursos 
+                nuevoRecurso={nuevoRecurso} 
+                open={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                recursoAEditar={recursoAEditar}
+                setRecursoAEditar={()=>setRecursoAEditar(null)}
+            />
             <Typography variant="h4" gutterBottom>Inventario</Typography>
             <MostrarRecursos 
                 recursos={recursos} 
                 setRecursoAEditar={setRecursoAEditar} 
                 onReload={obtenerRecursos}
                 borrarRecurso={borrarRecurso}
+                abrirModal={() => setIsModalOpen(true)}
             />
         </Box>
     );
