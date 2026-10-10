@@ -1,8 +1,14 @@
 import api from './api.js';
-export const getAllRecursos=async(params={})=>{
-    const response=await api.get('/recursos',{params});
+export const getAllRecursos = async (filtros) => {
+    const params = {};
+    if (filtros.nombre.trim()) params.nombre = filtros.nombre.trim();
+    if (filtros.categoria) params.categoria = filtros.categoria;
+    if (filtros.stock !== null && filtros.stock !== undefined && filtros.stock !== '') {
+        params.stock = filtros.stock;
+    }
+    const response = await api.get('/recursos', { params });
     return response.data;
-}
+};
 export const addRecurso=async(dataRecurso)=>{
     const response=await api.post('/recursos',dataRecurso);
     console.log(dataRecurso);

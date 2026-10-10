@@ -5,30 +5,34 @@ import { getAllRecursos, addRecurso, updateRecurso, deleteRecurso } from '../ser
 import { AltaModificacionRecursos } from "../components/perfilRecursos/AltaModificacionRecursos";
 import { Filtros } from '../components/perfilRecursos/Filtros';
 import { MostrarRecursos } from "../components/perfilRecursos/MostrarRecursos";
-
+const filtrosIniciales={
+    nombre: '',
+    categoria: '',
+    stock: null
+};
 export function GestionRecurso() {
     const [error, setError]=useState(null);
     const [recursos,setRecursos]=useState([]);
     const [recursoAEditar, setRecursoAEditar]=useState(null);
     const [page, setPage]=useState(1);
-    const [filtroNombre, setFiltroNombre]=useState('');
-    const [filtroCategoria, setFiltroCategoria]=useState('');
+    const [filtros, setFiltros]=useState(filtrosIniciales);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const obtenerRecursos=async()=>{
         try{
             const obtenerRecursosDelBack=await getAllRecursos({
                 page: page,
-                nombre: filtroNombre,
-                categoria: filtroCategoria
+                nombre: filtros.nombre,
+                categoria: filtros.categoria,
+                stock: filtros.stock
             });
-            setRecursos(obtenerRecursosDelBack.recursos);
+            setRecursos(obtenerRecursosDelBack.recursos || []);
         }catch(err){
             setError(err);
         }
     };
     const borrarRecurso=async(idRecurso)=>{
-        deleteRecurso(idRecurso);
-        obtenerRecursos();
+        await  deleteRecurso(idRecurso);
+        await obtenerRecursos();
     }
     const nuevoRecurso=async(datosRecurso)=>{
         if(recursoAEditar){
@@ -41,7 +45,10 @@ export function GestionRecurso() {
     }
     useEffect(()=>{
         obtenerRecursos();
-    },[page, filtroCategoria, filtroNombre]);
+    },[page, filtros]);
+    useEffect(()=>{
+        obtenerRecursos();
+    },[])
     return (
         <Box sx={{ p: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
@@ -76,6 +83,7 @@ export function GestionRecurso() {
                 recursoAEditar={recursoAEditar}
                 setRecursoAEditar={()=>setRecursoAEditar(null)}
             />
+            <Filtros filtros={filtros} setFiltros={setFiltros}/>
             <Typography variant="h4" gutterBottom>Inventario</Typography>
             <MostrarRecursos 
                 recursos={recursos} 
