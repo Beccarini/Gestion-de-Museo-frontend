@@ -7,7 +7,7 @@ import { getIntegranteById } from '../services/integranteService';
 import { MostrarTablaRegistros } from "../components/perfilEventos/MostrarTablaRegistros";
 import { MostrarEvento } from "../components/perfilEventos/MostrarEvento";
 import { AltaEvento } from '../components/gestionEventos/AltaEvento';
-
+import {deleteRegistro} from '../services/registrosService';
 export function PerfilEvento(){
     const { id } = useParams();
     const navigate = useNavigate(); 
@@ -31,7 +31,7 @@ export function PerfilEvento(){
                 setCargando(false);
             });
     }, [id]);
-
+    
     useEffect(() => {
         if (id) {
             cargarRegistros();

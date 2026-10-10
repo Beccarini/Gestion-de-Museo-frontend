@@ -14,9 +14,8 @@ export const getPlantillas = async (filtros = {}) => {
 
     if (tipo) params.tipo = tipo;
     if (frecuencia) params.frecuencia = frecuencia; 
-    if (diaSemana !== undefined && diaSemana !== '') params.diaSemana = diaSemana;
-    if (activo !== undefined && activo !== '') params.activo = activo;
-
+    if (diaSemana) params.diaSemana = diaSemana;
+    if (activo) params.activo = activo;
     const response = await api.get('/plantillas', { params });
     return response.data;
 };

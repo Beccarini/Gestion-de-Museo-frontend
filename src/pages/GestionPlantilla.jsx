@@ -129,7 +129,6 @@ export function GestionPlantilla() {
                 guardarPlantilla={guardarPlantilla} 
                 plantillaEdit={plantillaSeleccionada}
             />
-
             <MostrarPlantillas 
                 plantillas={allPlantillas} 
                 deletePlantilla={borrarPlantilla}
